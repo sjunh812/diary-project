@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 일반모드 -->
+    <color name="background">#F8F8FF</color>
+    <color name="background_sub">#FFFFFFFF</color>
+    <color name="border">#DEDEFF</color>
+    <color name="font">#FF000000</color>
+    <color name="font_contents">#333333</color>
+    <color name="font_sub">#CAA6FE</color>
+    <color name="background_button">#DEDEFF</color>
+    <color name="backgroud_button_pressed">#CAA6FE</color>
+    <color name="backgroud_graph">#F8F8FF</color>
+
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="skyblue">#50BCDF</color>
+    <color name="blue">#4B89DC</color>
+    <color name="navy">#000080</color>
+    <color name="red">#FF0000</color>
+    <color name="gray">#808080</color>
+    <color name="lightgreen">#81C147</color>
+    <color name="yellow">#FFD400</color>
+    <color name="orange">#FF7F00</color>
+    <color name="pink">#FFB6C1</color>
+    <color name="azure">#F1FFFF</color>
+    <color name="azure2">#F9FFFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="transparentGray">#88D2D2D2</color>
+    <color name="transparent_purple">#88F8F8FF</color>
+
+    <color name="pastel_700">#CAA6FE</color>
+    <color name="pastel_500">#DEDEFF</color>
+    <color name="pastel_200">#FCFCFF</color>
+
+    <color name="pastel_red">#FFAFB0</color>
+    <color name="pastel_blue">#AEE4FF</color>
+    <color name="pastel_skyblue">#C4F4FE</color>
+    <color name="pastel_green">#BEE9B4</color>
+    <color name="pastel_yellow">#FDFA87</color>
+    <color name="pastel_gray">#DFD4E4</color>
+    <color name="pastel_black">#808080</color>
+    <color name="pastel_orange">#F2CFA5</color>
+    <color name="pastel_pink">#FCC6F7</color>
+
+</resources>

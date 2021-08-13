@@ -1,0 +1,783 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Font Activity 스타일 -->
+    <style name="Theme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/azure</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="toolbarStyle">@style/ToolbarStyle</item>
+    </style>
+
+    <!--Toolbar 스타일-->
+    <style name="ToolbarStyle" parent="Widget.AppCompat.Toolbar">
+        <item name="titleTextAppearance">@style/ToolbarTitleStyle</item> <!-- Toolbar의 타이틀 텍스트-->
+    </style>
+
+    <!-- Toolbar의 타이틀 텍스트-->
+    <style name="ToolbarTitleStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <!-- Calendar Date의 타이틀 텍스트-->
+    <style name="CalendarDateTextStyle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="DatePickerDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="colorAccent">@font/font1</item>
+        <item name="android:fontFamily">@font/font1</item>
+        <item name="android:datePickerStyle">@font/font1</item>
+    </style>
+
+    <!-- custom bottomNavigationView -->
+    <style name="BottomNavigationView">
+        <item name="itemTextAppearanceActive">@style/TextAppearance.BottomNavigationView.Active</item>
+        <item name="itemTextAppearanceInactive">@style/TextAppearance.BottomNavigationView.Inactive</item>
+    </style>
+    <!-- blank styles for better code readability-->
+    <style name="TextAppearance"/>
+    <style name="TextAppearance.BottomNavigationView"/>
+    <!-- inactive tab icon style -->
+    <style name="TextAppearance.BottomNavigationView.Inactive">
+        <item name="android:textSize">11dp</item>
+    </style>
+    <!-- active tab icon style -->
+    <style name="TextAppearance.BottomNavigationView.Active">
+        <item name="android:textSize">11dp</item>
+    </style>
+
+    <!-- -->
+    <!-- 시스템 서체 테마(NoActionBar) -->
+    <!-- -->
+    <style name="Theme.BasicDiaryProject" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorAccent">@color/pastel_700</item>
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/background</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- API 23 이상부터 가능(상태바 위의 상태표시줄 색상) -->
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- Customize your theme here. -->
+        <item name="toolbarStyle">@style/ToolbarStyle</item>
+        <item name="android:buttonStyle">@android:style/Widget.DeviceDefault.Button.Borderless</item>
+        <item name="mcv_headerTextAppearance">@style/customCalenderHeaderFontStyle0</item>
+        <item name="mcv_dateTextAppearance">@style/customCalenderHeaderFontStyle0</item>
+    </style>
+    <style name="customCalenderHeaderFontStyle0">
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <!-- -->
+    <!-- THE얌전해진언니체 폰트 테마(NoActionBar, Default) -->
+    <!-- -->
+    <style name="Theme.DiaryProject" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorAccent">@color/pastel_700</item>
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/background</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- API 23 이상부터 가능(상태바 위의 상태표시줄 색상) -->
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- Customize your theme here. -->
+        <item name="toolbarStyle">@style/ToolbarStyle</item>
+        <!--custom font-family 적용-->
+        <item name="bottomNavigationStyle">@style/Widget.BottomNavigationView</item>
+        <item name="android:textViewStyle">@style/customTextViewFontStyle</item>
+        <item name="android:buttonStyle">@style/customButtonFontStyle</item>
+        <item name="editTextStyle">@style/customEditTextFontStyle</item>
+        <item name="radioButtonStyle">@style/customRadioButtonFontStyle</item>
+        <item name="android:checkboxStyle">@style/customCheckboxFontStyle</item>
+        <item name="android:spinnerStyle">@style/customSpinnerFontStyle</item>
+        <item name="mcv_headerTextAppearance">@style/customCalenderHeaderFontStyle</item>
+        <item name="mcv_dateTextAppearance">@style/customCalenderHeaderFontStyle</item>
+
+    </style>
+    <!-- 커스텀 폰트가 적용된 BottomNavigationView -->
+    <style name="Widget.BottomNavigationView" parent="Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/font</item>
+    </style>
+    <!-- Custom font 적용 -->
+    <style name="customCalenderHeaderFontStyle">
+        <item name="android:fontFamily">@font/font</item>
+    </style>
+
+    <style name="customTextViewFontStyle" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/font</item>
+    </style>
+
+    <style name="customButtonFontStyle" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
+        <item name="android:fontFamily">@font/font</item>
+    </style>
+
+    <style name="customEditTextFontStyle" parent="@android:style/Widget.DeviceDefault.EditText">
+        <item name="android:fontFamily">@font/font</item>
+    </style>
+
+    <style name="customRadioButtonFontStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/font</item>
+    </style>
+
+    <style name="customCheckboxFontStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/font</item>
+    </style>
+
+    <style name="customSpinnerFontStyle" parent="Widget.AppCompat.Spinner">
+        <item name="android:fontFamily">@font/font</item>
+    </style>
+
+    <!-- -->
+    <!-- 교보손글씨체 폰트 테마(NoActionBar) x -->
+    <!-- -->
+    <style name="Theme.DiaryProject1" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorAccent">@color/pastel_700</item>
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/background</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- API 23 이상부터 가능(상태바 위의 상태표시줄 색상) -->
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- Customize your theme here. -->
+        <item name="toolbarStyle">@style/ToolbarStyle</item>
+        <!--custom font-family 적용-->
+        <item name="bottomNavigationStyle">@style/Widget.BottomNavigationView1</item>
+        <item name="android:textViewStyle">@style/customTextViewFontStyle1</item>
+        <item name="android:buttonStyle">@style/customButtonFontStyle1</item>
+        <item name="android:radioButtonStyle">@style/customRadioButtonFontStyle1</item>
+        <item name="editTextStyle">@style/customEditTextFontStyle1</item>
+        <item name="radioButtonStyle">@style/customRadioButtonFontStyle1</item>
+        <item name="android:checkboxStyle">@style/customCheckboxFontStyle1</item>
+        <item name="android:spinnerStyle">@style/customSpinnerFontStyle1</item>
+        <item name="mcv_headerTextAppearance">@style/customCalenderHeaderFontStyle1</item>
+        <item name="mcv_dateTextAppearance">@style/customCalenderHeaderFontStyle1</item>
+    </style>
+    <!-- 커스텀 폰트가 적용된 BottomNavigationView -->
+    <style name="Widget.BottomNavigationView1" parent="Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/font1</item>
+    </style>
+    <!-- Custom font 적용 -->
+    <style name="customCalenderHeaderFontStyle1">
+        <item name="android:fontFamily">@font/font1</item>
+    </style>
+
+    <style name="customTextViewFontStyle1" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/font1</item>
+    </style>
+
+    <style name="customButtonFontStyle1" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
+        <item name="android:fontFamily">@font/font1</item>
+    </style>
+
+    <style name="customEditTextFontStyle1" parent="@android:style/Widget.DeviceDefault.EditText">
+        <item name="android:fontFamily">@font/font1</item>
+    </style>
+
+    <style name="customRadioButtonFontStyle1" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/font1</item>
+    </style>
+
+    <style name="customCheckboxFontStyle1" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/font1</item>
+    </style>
+
+    <style name="customSpinnerFontStyle1" parent="Widget.AppCompat.Spinner">
+        <item name="android:fontFamily">@font/font1</item>
+    </style>
+
+    <!-- -->
+    <!-- 점꼴체 폰트 테마(NoActionBar) -->
+    <!-- -->
+    <style name="Theme.DiaryProject2" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorAccent">@color/pastel_700</item>
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/background</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- API 23 이상부터 가능(상태바 위의 상태표시줄 색상) -->
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- Customize your theme here. -->
+        <!--custom font-family 적용-->
+        <item name="android:textViewStyle">@style/customTextViewFontStyle2</item>
+        <item name="android:buttonStyle">@style/customButtonFontStyle2</item>
+        <item name="editTextStyle">@style/customEditTextFontStyle2</item>
+        <item name="android:radioButtonStyle">@style/customRadioButtonFontStyle2</item>
+        <item name="android:checkboxStyle">@style/customCheckboxFontStyle2</item>
+        <item name="android:spinnerStyle">@style/customSpinnerFontStyle2</item>
+        <item name="radioButtonStyle">@style/customRadioButtonFontStyle2</item>
+        <item name="bottomNavigationStyle">@style/Widget.BottomNavigationView2</item>
+        <item name="mcv_headerTextAppearance">@style/customCalenderHeaderFontStyle2</item>
+        <item name="mcv_dateTextAppearance">@style/customCalenderHeaderFontStyle2</item>
+    </style>
+
+    <!-- 커스텀 폰트가 적용된 BottomNavigationView -->
+    <style name="Widget.BottomNavigationView2" parent="Widget.Design.BottomNavigationView">
+        <item name="android:fontFamily">@font/font2</item>
+    </style>
+    <!-- Custom font 적용 -->
+    <style name="customCalenderHeaderFontStyle2">
+        <item name="android:fontFamily">@font/font2</item>
+    </style>
+
+    <style name="customTextViewFontStyle2" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/font2</item>
+    </style>
+
+    <style name="customButtonFontStyle2" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
+        <item name="android:fontFamily">@font/font2</item>
+    </style>
+
+    <style name="customEditTextFontStyle2" parent="@android:style/Widget.DeviceDefault.EditText">
+        <item name="android:fontFamily">@font/font2</item>
+    </style>
+
+    <style name="customRadioButtonFontStyle2" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/font2</item>
+    </style>
+
+    <style name="customCheckboxFontStyle2" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/font2</item>
+    </style>
+
+    <style name="customSpinnerFontStyle2" parent="Widget.AppCompat.Spinner">
+        <item name="android:fontFamily">@font/font2</item>
+    </style>
+
+    <!-- -->
+    <!-- 넥슨배찌체 폰트테마(NoActionBar) -->
+    <!-- -->
+    <style name="Theme.DiaryProject3" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorAccent">@color/pastel_700</item>
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/background</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- API 23 이상부터 가능(상태바 위의 상태표시줄 색상) -->
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- Customize your theme here. -->
+        <!--custom font-family 적용-->
+        <item name="android:textViewStyle">@style/customTextViewFontStyle3</item>
+        <item name="android:buttonStyle">@style/customButtonFontStyle3</item>
+        <item name="editTextStyle">@style/customEditTextFontStyle3</item>
+        <item name="android:radioButtonStyle">@style/customRadioButtonFontStyle3</item>
+        <item name="android:checkboxStyle">@style/customCheckboxFontStyle3</item>
+        <item name="android:spinnerStyle">@style/customSpinnerFontStyle3</item>
+        <item name="radioButtonStyle">@style/customRadioButtonFontStyle3</item>
+        <item name="bottomNavigationStyle">@style/Widget.BottomNavigationView3</item>
+        <item name="mcv_headerTextAppearance">@style/customCalenderHeaderFontStyle3</item>
+        <item name="mcv_dateTextAppearance">@style/customCalenderHeaderFontStyle3</item>
+    </style>
+
+    <!-- 커스텀 폰트가 적용된 BottomNavigationView -->
+    <style name="Widget.BottomNavigationView3" parent="Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/font2</item>
+    </style>
+    <!-- Custom font 적용 -->
+    <style name="customCalenderHeaderFontStyle3">
+        <item name="android:fontFamily">@font/font3</item>
+    </style>
+
+    <style name="customTextViewFontStyle3" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/font3</item>
+    </style>
+
+    <style name="customButtonFontStyle3" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
+        <item name="android:fontFamily">@font/font3</item>
+    </style>
+
+    <style name="customEditTextFontStyle3" parent="@android:style/Widget.DeviceDefault.EditText">
+        <item name="android:fontFamily">@font/font3</item>
+    </style>
+
+    <style name="customRadioButtonFontStyle3" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/font3</item>
+    </style>
+
+    <style name="customCheckboxFontStyle3" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/font3</item>
+    </style>
+
+    <style name="customSpinnerFontStyle3" parent="Widget.AppCompat.Spinner">
+        <item name="android:fontFamily">@font/font3</item>
+    </style>
+
+    <!-- -->
+    <!-- 미니콩다방체 폰트테마(NoActionBar) -->
+    <!-- -->
+    <style name="Theme.DiaryProject4" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorAccent">@color/pastel_700</item>
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/background</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- API 23 이상부터 가능(상태바 위의 상태표시줄 색상) -->
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- Customize your theme here. -->
+        <!--custom font-family 적용-->
+        <item name="android:textViewStyle">@style/customTextViewFontStyle4</item>
+        <item name="android:buttonStyle">@style/customButtonFontStyle4</item>
+        <item name="editTextStyle">@style/customEditTextFontStyle4</item>
+        <item name="android:radioButtonStyle">@style/customRadioButtonFontStyle4</item>
+        <item name="android:checkboxStyle">@style/customCheckboxFontStyle4</item>
+        <item name="android:spinnerStyle">@style/customSpinnerFontStyle4</item>
+        <item name="radioButtonStyle">@style/customRadioButtonFontStyle4</item>
+        <item name="bottomNavigationStyle">@style/Widget.BottomNavigationView4</item>
+        <item name="mcv_headerTextAppearance">@style/customCalenderHeaderFontStyle4</item>
+        <item name="mcv_dateTextAppearance">@style/customCalenderHeaderFontStyle4</item>
+    </style>
+
+    <!-- 커스텀 폰트가 적용된 BottomNavigationView -->
+    <style name="Widget.BottomNavigationView4" parent="Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/font4</item>
+    </style>
+
+    <!-- Custom font 적용 -->
+    <style name="customCalenderHeaderFontStyle4">
+        <item name="android:fontFamily">@font/font4</item>
+    </style>
+
+    <style name="customTextViewFontStyle4" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/font4</item>
+    </style>
+
+    <style name="customButtonFontStyle4" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
+        <item name="android:fontFamily">@font/font4</item>
+    </style>
+
+    <style name="customEditTextFontStyle4" parent="@android:style/Widget.DeviceDefault.EditText">
+        <item name="android:fontFamily">@font/font4</item>
+    </style>
+
+    <style name="customRadioButtonFontStyle4" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/font4</item>
+    </style>
+
+    <style name="customCheckboxFontStyle4" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/font4</item>
+    </style>
+
+    <style name="customSpinnerFontStyle4" parent="Widget.AppCompat.Spinner">
+        <item name="android:fontFamily">@font/font4</item>
+    </style>
+
+    <!-- -->
+    <!-- 꼬마나비체 폰트테마(NoActionBar) -->
+    <!-- -->
+    <style name="Theme.DiaryProject5" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorAccent">@color/pastel_700</item>
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/background</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- API 23 이상부터 가능(상태바 위의 상태표시줄 색상) -->
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- Customize your theme here. -->
+        <!--custom font-family 적용-->
+        <item name="bottomNavigationStyle">@style/Widget.BottomNavigationView5</item>
+        <item name="android:textViewStyle">@style/customTextViewFontStyle5</item>
+        <item name="android:buttonStyle">@style/customButtonFontStyle5</item>
+        <item name="editTextStyle">@style/customEditTextFontStyle5</item>
+        <item name="radioButtonStyle">@style/customRadioButtonFontStyle5</item>
+        <item name="android:checkboxStyle">@style/customCheckboxFontStyle5</item>
+        <item name="android:spinnerStyle">@style/customSpinnerFontStyle5</item>
+        <item name="mcv_headerTextAppearance">@style/customCalenderHeaderFontStyle5</item>
+        <item name="mcv_dateTextAppearance">@style/customCalenderHeaderFontStyle5</item>
+    </style>
+
+    <!-- 커스텀 폰트가 적용된 BottomNavigationView -->
+    <style name="Widget.BottomNavigationView5" parent="Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/font5</item>
+    </style>
+
+    <!-- Custom font 적용 -->
+    <style name="customCalenderHeaderFontStyle5">
+        <item name="android:fontFamily">@font/font5</item>
+    </style>
+
+    <style name="customTextViewFontStyle5" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/font5</item>
+    </style>
+
+    <style name="customButtonFontStyle5" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
+        <item name="android:fontFamily">@font/font5</item>
+    </style>
+
+    <style name="customEditTextFontStyle5" parent="@android:style/Widget.DeviceDefault.EditText">
+        <item name="android:fontFamily">@font/font5</item>
+    </style>
+
+    <style name="customRadioButtonFontStyle5" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/font5</item>
+    </style>
+
+    <style name="customCheckboxFontStyle5" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/font5</item>
+    </style>
+
+    <style name="customSpinnerFontStyle5" parent="Widget.AppCompat.Spinner">
+        <item name="android:fontFamily">@font/font5</item>
+    </style>
+
+    <!-- -->
+    <!-- IM혜민체 폰트테마(NoActionBar) -->
+    <!-- -->
+    <style name="Theme.DiaryProject6" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorAccent">@color/pastel_700</item>
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/background</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- API 23 이상부터 가능(상태바 위의 상태표시줄 색상) -->
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- Customize your theme here. -->
+        <!--custom font-family 적용-->
+        <item name="bottomNavigationStyle">@style/Widget.BottomNavigationView6</item>
+        <item name="android:textViewStyle">@style/customTextViewFontStyle6</item>
+        <item name="android:buttonStyle">@style/customButtonFontStyle6</item>
+        <item name="editTextStyle">@style/customEditTextFontStyle6</item>
+        <item name="radioButtonStyle">@style/customRadioButtonFontStyle6</item>
+        <item name="android:checkboxStyle">@style/customCheckboxFontStyle6</item>
+        <item name="android:spinnerStyle">@style/customSpinnerFontStyle6</item>
+        <item name="mcv_headerTextAppearance">@style/customCalenderHeaderFontStyle6</item>
+        <item name="mcv_dateTextAppearance">@style/customCalenderHeaderFontStyle6</item>
+    </style>
+
+    <!-- 커스텀 폰트가 적용된 BottomNavigationView -->
+    <style name="Widget.BottomNavigationView6" parent="Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/font6</item>
+    </style>
+
+    <!-- Custom font 적용 -->
+    <style name="customCalenderHeaderFontStyle6">
+        <item name="android:fontFamily">@font/font6</item>
+    </style>
+
+    <style name="customTextViewFontStyle6" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/font6</item>
+    </style>
+
+    <style name="customButtonFontStyle6" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
+        <item name="android:fontFamily">@font/font6</item>
+    </style>
+
+    <style name="customEditTextFontStyle6" parent="@android:style/Widget.DeviceDefault.EditText">
+        <item name="android:fontFamily">@font/font6</item>
+    </style>
+
+    <style name="customRadioButtonFontStyle6" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/font6</item>
+    </style>
+
+    <style name="customCheckboxFontStyle6" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/font6</item>
+    </style>
+
+    <style name="customSpinnerFontStyle6" parent="Widget.AppCompat.Spinner">
+        <item name="android:fontFamily">@font/font6</item>
+    </style>
+
+    <!-- -->
+    <!-- 칠곡할매 이원순체 폰트테마(NoActionBar) -->
+    <!-- -->
+    <style name="Theme.DiaryProject7" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorAccent">@color/pastel_700</item>
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/background</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- API 23 이상부터 가능(상태바 위의 상태표시줄 색상) -->
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- Customize your theme here. -->
+        <!--custom font-family 적용-->
+        <item name="bottomNavigationStyle">@style/Widget.BottomNavigationView7</item>
+        <item name="android:textViewStyle">@style/customTextViewFontStyle7</item>
+        <item name="android:buttonStyle">@style/customButtonFontStyle7</item>
+        <item name="editTextStyle">@style/customEditTextFontStyle7</item>
+        <item name="radioButtonStyle">@style/customRadioButtonFontStyle7</item>
+        <item name="android:checkboxStyle">@style/customCheckboxFontStyle7</item>
+        <item name="android:spinnerStyle">@style/customSpinnerFontStyle7</item>
+        <item name="mcv_headerTextAppearance">@style/customCalenderHeaderFontStyle7</item>
+        <item name="mcv_dateTextAppearance">@style/customCalenderHeaderFontStyle7</item>
+    </style>
+
+    <!-- 커스텀 폰트가 적용된 BottomNavigationView -->
+    <style name="Widget.BottomNavigationView7" parent="Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/font7</item>
+    </style>
+
+    <!-- Custom font 적용 -->
+    <style name="customCalenderHeaderFontStyle7">
+        <item name="android:fontFamily">@font/font7</item>
+    </style>
+
+    <style name="customTextViewFontStyle7" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/font7</item>
+    </style>
+
+    <style name="customButtonFontStyle7" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
+        <item name="android:fontFamily">@font/font7</item>
+    </style>
+
+    <style name="customEditTextFontStyle7" parent="@android:style/Widget.DeviceDefault.EditText">
+        <item name="android:fontFamily">@font/font7</item>
+    </style>
+
+    <style name="customRadioButtonFontStyle7" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/font7</item>
+    </style>
+
+    <style name="customCheckboxFontStyle7" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/font7</item>
+    </style>
+
+    <style name="customSpinnerFontStyle7" parent="Widget.AppCompat.Spinner">
+        <item name="android:fontFamily">@font/font7</item>
+    </style>
+
+    <!-- -->
+    <!-- 카페24 숑숑체 폰트테마(NoActionBar) -->
+    <!-- -->
+    <style name="Theme.DiaryProject8" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorAccent">@color/pastel_700</item>
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/background</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- API 23 이상부터 가능(상태바 위의 상태표시줄 색상) -->
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- Customize your theme here. -->
+        <!--custom font-family 적용-->
+        <item name="bottomNavigationStyle">@style/Widget.BottomNavigationView8</item>
+        <item name="android:textViewStyle">@style/customTextViewFontStyle8</item>
+        <item name="android:buttonStyle">@style/customButtonFontStyle8</item>
+        <item name="editTextStyle">@style/customEditTextFontStyle8</item>
+        <item name="radioButtonStyle">@style/customRadioButtonFontStyle8</item>
+        <item name="android:checkboxStyle">@style/customCheckboxFontStyle8</item>
+        <item name="android:spinnerStyle">@style/customSpinnerFontStyle8</item>
+        <item name="mcv_headerTextAppearance">@style/customCalenderHeaderFontStyle8</item>
+        <item name="mcv_dateTextAppearance">@style/customCalenderHeaderFontStyle8</item>
+    </style>
+
+    <!-- 커스텀 폰트가 적용된 BottomNavigationView -->
+    <style name="Widget.BottomNavigationView8" parent="Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/font8</item>
+    </style>
+
+    <!-- Custom font 적용 -->
+    <style name="customCalenderHeaderFontStyle8">
+        <item name="android:fontFamily">@font/font8</item>
+    </style>
+
+    <style name="customTextViewFontStyle8" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/font8</item>
+    </style>
+
+    <style name="customButtonFontStyle8" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
+        <item name="android:fontFamily">@font/font8</item>
+    </style>
+
+    <style name="customEditTextFontStyle8" parent="@android:style/Widget.DeviceDefault.EditText">
+        <item name="android:fontFamily">@font/font8</item>
+    </style>
+
+    <style name="customRadioButtonFontStyle8" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/font8</item>
+    </style>
+
+    <style name="customCheckboxFontStyle8" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/font8</item>
+    </style>
+
+    <style name="customSpinnerFontStyle8" parent="Widget.AppCompat.Spinner">
+        <item name="android:fontFamily">@font/font8</item>
+    </style>
+
+    <!-- -->
+    <!-- 온글잎 만두몽키체 폰트테마(NoActionBar) -->
+    <!-- -->
+    <style name="Theme.DiaryProject9" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorAccent">@color/pastel_700</item>
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/background</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- API 23 이상부터 가능(상태바 위의 상태표시줄 색상) -->
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- Customize your theme here. -->
+        <!--custom font-family 적용-->
+        <item name="bottomNavigationStyle">@style/Widget.BottomNavigationView9</item>
+        <item name="android:textViewStyle">@style/customTextViewFontStyle9</item>
+        <item name="android:buttonStyle">@style/customButtonFontStyle9</item>
+        <item name="editTextStyle">@style/customEditTextFontStyle9</item>
+        <item name="radioButtonStyle">@style/customRadioButtonFontStyle9</item>
+        <item name="android:checkboxStyle">@style/customCheckboxFontStyle9</item>
+        <item name="android:spinnerStyle">@style/customSpinnerFontStyle9</item>
+        <item name="mcv_headerTextAppearance">@style/customCalenderHeaderFontStyle9</item>
+        <item name="mcv_dateTextAppearance">@style/customCalenderHeaderFontStyle9</item>
+    </style>
+
+    <!-- 커스텀 폰트가 적용된 BottomNavigationView -->
+    <style name="Widget.BottomNavigationView9" parent="Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/font9</item>
+    </style>
+
+    <!-- Custom font 적용 -->
+    <style name="customCalenderHeaderFontStyle9">
+        <item name="android:fontFamily">@font/font9</item>
+    </style>
+
+    <style name="customTextViewFontStyle9" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/font9</item>
+    </style>
+
+    <style name="customButtonFontStyle9" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
+        <item name="android:fontFamily">@font/font9</item>
+    </style>
+
+    <style name="customEditTextFontStyle9" parent="@android:style/Widget.DeviceDefault.EditText">
+        <item name="android:fontFamily">@font/font9</item>
+    </style>
+
+    <style name="customRadioButtonFontStyle9" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/font9</item>
+    </style>
+
+    <style name="customCheckboxFontStyle9" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/font9</item>
+    </style>
+
+    <style name="customSpinnerFontStyle9" parent="Widget.AppCompat.Spinner">
+        <item name="android:fontFamily">@font/font9</item>
+    </style>
+
+    <!-- -->
+    <!-- 밍기적체 폰트테마(NoActionBar) -->
+    <!-- -->
+    <style name="Theme.DiaryProject10" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorAccent">@color/pastel_700</item>
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/background</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- API 23 이상부터 가능(상태바 위의 상태표시줄 색상) -->
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- Customize your theme here. -->
+        <!--custom font-family 적용-->
+        <item name="bottomNavigationStyle">@style/Widget.BottomNavigationView10</item>
+        <item name="android:textViewStyle">@style/customTextViewFontStyle10</item>
+        <item name="android:buttonStyle">@style/customButtonFontStyle10</item>
+        <item name="editTextStyle">@style/customEditTextFontStyle10</item>
+        <item name="radioButtonStyle">@style/customRadioButtonFontStyle10</item>
+        <item name="android:checkboxStyle">@style/customCheckboxFontStyle10</item>
+        <item name="android:spinnerStyle">@style/customSpinnerFontStyle10</item>
+        <item name="mcv_headerTextAppearance">@style/customCalenderHeaderFontStyle10</item>
+        <item name="mcv_dateTextAppearance">@style/customCalenderHeaderFontStyle10</item>
+    </style>
+
+    <!-- 커스텀 폰트가 적용된 BottomNavigationView -->
+    <style name="Widget.BottomNavigationView10" parent="Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/font10</item>
+    </style>
+
+    <!-- Custom font 적용 -->
+    <style name="customCalenderHeaderFontStyle10">
+        <item name="android:fontFamily">@font/font10</item>
+    </style>
+
+    <style name="customTextViewFontStyle10" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/font10</item>
+    </style>
+
+    <style name="customButtonFontStyle10" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
+        <item name="android:fontFamily">@font/font10</item>
+    </style>
+
+    <style name="customEditTextFontStyle10" parent="@android:style/Widget.DeviceDefault.EditText">
+        <item name="android:fontFamily">@font/font10</item>
+    </style>
+
+    <style name="customRadioButtonFontStyle10" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/font10</item>
+    </style>
+
+    <style name="customCheckboxFontStyle10" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/font10</item>
+    </style>
+
+    <style name="customSpinnerFontStyle10" parent="Widget.AppCompat.Spinner">
+        <item name="android:fontFamily">@font/font10</item>
+    </style>
+
+</resources>

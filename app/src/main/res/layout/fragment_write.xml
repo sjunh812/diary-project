@@ -1,0 +1,661 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="13dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp">
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="일기작성"
+            android:textColor="@color/font"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/starButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="2dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/deleteButton"
+            android:background="@drawable/circle_view"
+            android:scaleType="centerInside"
+            android:src="@drawable/star_icon" />
+
+        <ImageButton
+            android:id="@+id/deleteButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="2dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/saveButton"
+            android:background="@drawable/circle_view"
+            android:scaleType="centerInside"
+            android:src="@drawable/trash_icon" />
+
+        <ImageButton
+            android:id="@+id/saveButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/circle_view"
+            android:scaleType="centerInside"
+            android:src="@drawable/check_icon" />
+
+    </RelativeLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:elevation="1dp">
+
+                <ImageView
+                    android:id="@+id/weatherImageView"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_alignParentLeft="true" />
+
+                <ImageView
+                    android:id="@+id/weatherAddImageView"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_toRightOf="@id/weatherImageView"
+                    android:paddingLeft="7dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/navigate_down" />
+
+                <TextView
+                    android:id="@+id/dateTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:clickable="true"
+                    android:textColor="@color/font"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/dateTextImageView"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_toRightOf="@id/dateTextView"
+                    android:paddingLeft="7dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/navigate_down" />
+
+                <EditText
+                    android:id="@+id/locationTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@color/background"
+                    android:hint="위치정보 입력"
+                    android:textColorHint="@color/pastel_700"
+                    android:textSize="12dp"
+                    android:maxLines="1"
+                    android:textColor="@color/pastel_700" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/weatherView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:background="@color/background_sub"
+                android:visibility="gone">
+
+                <ImageButton
+                    android:id="@+id/weatherButton"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/circle_view"
+                    android:padding="10dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/weather_icon_1" />
+
+                <ImageButton
+                    android:id="@+id/weatherButton2"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/circle_view"
+                    android:padding="10dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/weather_icon_2" />
+
+                <ImageButton
+                    android:id="@+id/weatherButton3"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/circle_view"
+                    android:padding="10dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/weather_icon_3" />
+
+                <ImageButton
+                    android:id="@+id/weatherButton4"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/circle_view"
+                    android:padding="10dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/weather_icon_4" />
+
+                <ImageButton
+                    android:id="@+id/weatherButton5"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/circle_view"
+                    android:padding="10dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/weather_icon_5" />
+
+                <ImageButton
+                    android:id="@+id/weatherButton6"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/circle_view"
+                    android:padding="10dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/weather_icon_6" />
+
+                <ImageButton
+                    android:id="@+id/weatherButton7"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/circle_view"
+                    android:padding="10dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/weather_icon_7" />
+
+            </LinearLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="5dp"
+                        app:cardBackgroundColor="@color/background_sub"
+                        app:cardElevation="1dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:text="기분 선택"
+                                android:textColor="@color/font"
+                                android:textStyle="bold"
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginBottom="30dp"
+                                android:text="오늘의 기분을 선택해주세요."
+                                android:textColor="@color/pastel_700"
+                                android:textSize="16sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="20dp"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="80dp"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:id="@+id/angryView"
+                                        android:layout_width="60dp"
+                                        android:layout_height="78dp"
+                                        android:layout_marginRight="50dp"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+
+                                        <Button
+                                            android:id="@+id/button1"
+                                            android:layout_width="35dp"
+                                            android:layout_height="35dp"
+                                            android:clickable="false"
+                                            android:background="@drawable/mood_angry_color"
+                                            app:backgroundTint="@color/cardview_shadow_end_color"
+                                            app:backgroundTintMode="add" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="5dp"
+                                            android:text="화남"
+                                            android:textColor="@color/font"
+                                            android:textSize="16dp" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/coolView"
+                                        android:layout_width="60dp"
+                                        android:layout_height="78dp"
+                                        android:layout_marginRight="50dp"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+
+                                        <Button
+                                            android:id="@+id/button2"
+                                            android:layout_width="35dp"
+                                            android:layout_height="35dp"
+                                            android:clickable="false"
+                                            android:background="@drawable/mood_cool_color"
+                                            app:backgroundTint="@color/cardview_shadow_end_color"
+                                            app:backgroundTintMode="add" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="5dp"
+                                            android:text="쿨"
+                                            android:textColor="@color/font"
+                                            android:textSize="16dp" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/cryingView"
+                                        android:layout_width="60dp"
+                                        android:layout_height="78dp"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+
+                                        <Button
+                                            android:id="@+id/button3"
+                                            android:layout_width="35dp"
+                                            android:layout_height="35dp"
+                                            android:clickable="false"
+                                            android:background="@drawable/mood_crying_color"
+                                            app:backgroundTint="@color/cardview_shadow_end_color"
+                                            app:backgroundTintMode="add" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="5dp"
+                                            android:text="슬픔"
+                                            android:textColor="@color/font"
+                                            android:textSize="16dp" />
+
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="80dp"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:id="@+id/illView"
+                                        android:layout_width="60dp"
+                                        android:layout_height="78dp"
+                                        android:layout_marginRight="50dp"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+
+                                        <Button
+                                            android:id="@+id/button4"
+                                            android:layout_width="35dp"
+                                            android:layout_height="35dp"
+                                            android:clickable="false"
+                                            android:background="@drawable/mood_ill_color"
+                                            app:backgroundTint="@color/cardview_shadow_end_color"
+                                            app:backgroundTintMode="add" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="5dp"
+                                            android:text="아픔"
+                                            android:textColor="@color/font"
+                                            android:textSize="16dp" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/laughView"
+                                        android:layout_width="60dp"
+                                        android:layout_height="78dp"
+                                        android:layout_marginRight="50dp"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+
+                                        <Button
+                                            android:id="@+id/button5"
+                                            android:layout_width="35dp"
+                                            android:layout_height="35dp"
+                                            android:clickable="false"
+                                            android:background="@drawable/mood_laugh_color"
+                                            app:backgroundTint="@color/cardview_shadow_end_color"
+                                            app:backgroundTintMode="add" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="5dp"
+                                            android:text="웃음"
+                                            android:textColor="@color/font"
+                                            android:textSize="16dp" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/mehView"
+                                        android:layout_width="60dp"
+                                        android:layout_height="78dp"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+
+                                        <Button
+                                            android:id="@+id/button6"
+                                            android:layout_width="35dp"
+                                            android:layout_height="35dp"
+                                            android:clickable="false"
+                                            android:background="@drawable/mood_meh_color"
+                                            app:backgroundTint="@color/cardview_shadow_end_color"
+                                            app:backgroundTintMode="add" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="5dp"
+                                            android:text="보통"
+                                            android:textColor="@color/font"
+                                            android:textSize="16dp" />
+
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="80dp"
+                                    android:layout_marginBottom="10dp"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:id="@+id/sadView"
+                                        android:layout_width="60dp"
+                                        android:layout_height="78dp"
+                                        android:layout_marginRight="50dp"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+
+                                        <Button
+                                            android:id="@+id/button7"
+                                            android:layout_width="35dp"
+                                            android:layout_height="35dp"
+                                            android:background="@drawable/mood_sad"
+                                            android:clickable="false"
+                                            app:backgroundTint="@color/cardview_shadow_end_color"
+                                            app:backgroundTintMode="add" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="5dp"
+                                            android:text="나쁨"
+                                            android:textColor="@color/font"
+                                            android:textSize="16dp" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/smileView"
+                                        android:layout_width="60dp"
+                                        android:layout_height="78dp"
+                                        android:layout_marginRight="50dp"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+
+                                        <Button
+                                            android:id="@+id/button8"
+                                            android:layout_width="35dp"
+                                            android:layout_height="35dp"
+                                            android:clickable="false"
+                                            android:background="@drawable/mood_smile_color"
+                                            app:backgroundTint="@color/cardview_shadow_end_color"
+                                            app:backgroundTintMode="add" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="5dp"
+                                            android:text="좋음"
+                                            android:textColor="@color/font"
+                                            android:textSize="16dp" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/yawnView"
+                                        android:layout_width="60dp"
+                                        android:layout_height="78dp"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+
+                                        <Button
+                                            android:id="@+id/button9"
+                                            android:layout_width="35dp"
+                                            android:layout_height="35dp"
+                                            android:clickable="false"
+                                            android:background="@drawable/mood_yawn_color"
+                                            app:backgroundTint="@color/cardview_shadow_end_color"
+                                            app:backgroundTintMode="add" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="5dp"
+                                            android:text="피곤"
+                                            android:textColor="@color/font"
+                                            android:textSize="16dp" />
+
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="2dp"
+                        app:cardBackgroundColor="@color/background_sub"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="500dp"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="5dp"
+                                android:text="일기 입력"
+                                android:textStyle="bold"
+                                android:textColor="@color/font"
+                                android:textSize="20sp" />
+
+                            <androidx.core.widget.NestedScrollView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <EditText
+                                    android:id="@+id/contentsEditText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="10dp"
+                                    android:background="@color/background_sub"
+                                    android:gravity="top"
+                                    android:hint="이곳을 터치해주세요."
+                                    android:lineSpacingExtra="5dp"
+                                    android:padding="10dp"
+                                    android:textColor="@color/font"
+                                    android:textColorHint="@color/pastel_700"
+                                    android:textSize="16sp" />
+
+                            </androidx.core.widget.NestedScrollView>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="1dp"
+                        app:cardBackgroundColor="@color/background_sub"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:text="사진 선택"
+                                android:textStyle="bold"
+                                android:textColor="@color/font"
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:text="탭하여 사진을 추가해주세요.\n(삭제하려면 길게 눌렀다가 떼주세요.)"
+                                android:textColor="@color/pastel_700"
+                                android:textSize="16sp" />
+
+                            <FrameLayout
+                                android:id="@+id/pictureContainer"
+                                android:layout_width="match_parent"
+                                android:layout_height="300dp"
+                                android:clickable="true">
+
+                                <ImageView
+                                    android:id="@+id/pictureImageView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="270dp"
+                                    android:layout_marginBottom="10dp"
+                                    android:layout_gravity="center"
+                                    android:longClickable="true"
+                                    android:scaleType="centerInside"
+                                    android:visibility="gone" />
+
+                                <ImageView
+                                    android:id="@+id/addPictureImageView"
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:visibility="visible"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/add_image_64_color" />
+
+                            </FrameLayout>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</LinearLayout>

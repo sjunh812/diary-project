@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">1일 1일기</string>
+    <string name="write"><u>작성하기</u></string>
+    <string name="email">sjunh812@naver.com</string>
+    <string name="report">피드백</string>
+</resources>

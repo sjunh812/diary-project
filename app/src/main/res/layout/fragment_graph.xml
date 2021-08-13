@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="기분통계"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="@color/font"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="13dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="5dp"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <org.sjhstudio.diary.custom.MyRadioButton
+                android:id="@+id/allButton"
+                android:layout_width="50dp"
+                android:layout_height="22dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/radio_button"
+                android:gravity="center"
+                android:text="전체"
+                android:textStyle="bold"
+                android:textColor="@drawable/radio_button_text"
+                android:textSize="13dp" />
+
+            <org.sjhstudio.diary.custom.MyRadioButton
+                android:id="@+id/yearButton"
+                android:layout_width="50dp"
+                android:layout_height="22dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/radio_button"
+                android:gravity="center"
+                android:text="올해"
+                android:textStyle="bold"
+                android:textColor="@drawable/radio_button_text"
+                android:textSize="13dp" />
+
+            <org.sjhstudio.diary.custom.MyRadioButton
+                android:id="@+id/monthButton"
+                android:layout_width="50dp"
+                android:layout_height="22dp"
+                android:background="@drawable/radio_button"
+                android:gravity="center"
+                android:text="이번달"
+                android:textStyle="bold"
+                android:textColor="@drawable/radio_button_text"
+                android:textSize="13dp" />
+
+        </RadioGroup>
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:background="@drawable/backgroud_graph"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="17dp"
+                        android:layout_marginBottom="8dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/moodTitleTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="5dp"
+                            android:text="전체"
+                            android:textColor="@color/font"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/moodTotalCountTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="(총 24개 중)"
+                            android:textColor="@color/pastel_700"
+                            android:textSize="15sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/describeTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="전체 기분통계 중 제일 많은 기분은 "
+                            android:textColor="@color/gray"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:id="@+id/moodTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="'화남'"
+                            android:textColor="@color/red"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" 입니다"
+                            android:textColor="@color/gray"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="55dp"
+                            android:layout_height="72dp"
+                            android:layout_marginRight="40dp"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/crown"
+                                android:layout_width="17dp"
+                                android:layout_height="17dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/crown"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                android:id="@+id/angryImageView"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/mood_angry_color" />
+
+                            <TextView
+                                android:id="@+id/angryCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="1"
+                                android:textColor="@color/red"
+                                android:textSize="16dp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="55dp"
+                            android:layout_height="72dp"
+                            android:layout_marginRight="40dp"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/crown2"
+                                android:layout_width="17dp"
+                                android:layout_height="17dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/crown"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                android:id="@+id/coolImageView"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/mood_cool_color" />
+
+                            <TextView
+                                android:id="@+id/coolCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="2"
+                                android:textColor="@color/blue"
+                                android:textSize="16dp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="55dp"
+                            android:layout_height="72dp"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/crown3"
+                                android:layout_width="17dp"
+                                android:layout_height="17dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/crown"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                android:id="@+id/cryingImageView"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/mood_crying_color" />
+
+                            <TextView
+                                android:id="@+id/cryingCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="18"
+                                android:textColor="@color/skyblue"
+                                android:textSize="16dp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="55dp"
+                            android:layout_height="72dp"
+                            android:layout_marginRight="40dp"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/crown4"
+                                android:layout_width="17dp"
+                                android:layout_height="17dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/crown"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                android:id="@+id/illImageView"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/mood_ill_color" />
+
+                            <TextView
+                                android:id="@+id/illCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="4"
+                                android:textColor="@color/lightgreen"
+                                android:textSize="16dp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="55dp"
+                            android:layout_height="72dp"
+                            android:layout_marginRight="40dp"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/crown5"
+                                android:layout_width="17dp"
+                                android:layout_height="17dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/crown"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                android:id="@+id/laughImageView"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/mood_laugh_color" />
+
+                            <TextView
+                                android:id="@+id/laughCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="5"
+                                android:textColor="@color/yellow"
+                                android:textSize="16dp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="55dp"
+                            android:layout_height="72dp"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/crown6"
+                                android:layout_width="17dp"
+                                android:layout_height="17dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/crown"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                android:id="@+id/mehImageView"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/mood_meh_color" />
+
+                            <TextView
+                                android:id="@+id/mehCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="6"
+                                android:textColor="@color/gray"
+                                android:textSize="16dp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="30dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="55dp"
+                            android:layout_height="72dp"
+                            android:layout_marginRight="40dp"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/crown7"
+                                android:layout_width="17dp"
+                                android:layout_height="17dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/crown"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                android:id="@+id/sadImageView"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/mood_sad" />
+
+                            <TextView
+                                android:id="@+id/sadCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="7"
+                                android:textColor="@color/black"
+                                android:textSize="16dp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="55dp"
+                            android:layout_height="72dp"
+                            android:layout_marginRight="40dp"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/crown8"
+                                android:layout_width="17dp"
+                                android:layout_height="17dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/crown"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                android:id="@+id/smileImageView"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/mood_smile_color" />
+
+                            <TextView
+                                android:id="@+id/smileCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="8"
+                                android:textColor="@color/orange"
+                                android:textSize="16dp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="55dp"
+                            android:layout_height="72dp"
+                            android:gravity="bottom|center_horizontal"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/crown9"
+                                android:layout_width="17dp"
+                                android:layout_height="17dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/crown"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                android:id="@+id/yawnImageView"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:src="@drawable/mood_yawn_color" />
+
+                            <TextView
+                                android:id="@+id/yawnCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:text="9"
+                                android:textColor="@color/pink"
+                                android:textSize="16dp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- android:background="@drawable/backgroud_graph" -->
+                <FrameLayout
+                    android:id="@+id/background_graph"
+                    android:layout_marginTop="8dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp">
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/chart1"
+                        android:layout_width="match_parent"
+                        android:layout_height="280dp"
+                        android:layout_gravity="center_horizontal" />
+
+                </FrameLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>
