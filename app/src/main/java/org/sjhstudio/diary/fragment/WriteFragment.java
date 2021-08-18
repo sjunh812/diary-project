@@ -575,20 +575,6 @@ public class WriteFragment extends Fragment {
         deleteDialog.show();
         deleteDialog.setCancelable(true);
 
-        deleteDialog.setCancelButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteDialog.dismiss();
-            }
-        });
-
-        deleteDialog.setCancelButton2OnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteDialog.dismiss();
-            }
-        });
-
         deleteDialog.setDeleteButtonOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -622,21 +608,6 @@ public class WriteFragment extends Fragment {
 
         deleteNoteDialog.setTitleTextView("일기 삭제");
         deleteNoteDialog.setDeleteTextView("일기를 삭제하시겠습니까?");
-
-        deleteNoteDialog.setCancelButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteNoteDialog.dismiss();
-            }
-        });
-
-        deleteNoteDialog.setCancelButton2OnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteNoteDialog.dismiss();
-            }
-        });
-
         deleteNoteDialog.setDeleteButtonOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

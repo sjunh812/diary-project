@@ -34,6 +34,7 @@ public class CustomAlignDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.align_dialog_custom);
+        setCancelable(true);
 
         cancelButton = (ImageButton)findViewById(R.id.cancelButton);
         yesButton = (Button)findViewById(R.id.yesButton);
@@ -41,10 +42,13 @@ public class CustomAlignDialog extends Dialog {
 
         yearSpinner = (Spinner)findViewById(R.id.yearSpinner);
         monthSpinner = (Spinner)findViewById(R.id.monthSpinner);
-    }
 
-    public void setCancelButtonOnClickListener(View.OnClickListener listener) {
-        cancelButton.setOnClickListener(listener);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
     }
 
     public void setYesButtonOnClickListener(View.OnClickListener listener) {

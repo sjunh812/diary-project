@@ -28,14 +28,18 @@ public class CustomUpdateDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.update_dialog_custom);
+        setCancelable(true);
 
         cancelButton = (ImageButton)findViewById(R.id.cancelButton);
         deleteButton = (Button)findViewById(R.id.deleteButton);
         updateButton = (Button)findViewById(R.id.updateButton);
-    }
 
-    public void setCancelButtonOnClickListener(View.OnClickListener listener) {
-        cancelButton.setOnClickListener(listener);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
     }
 
     public void setDeleteButtonOnClickListener(View.OnClickListener listener) {

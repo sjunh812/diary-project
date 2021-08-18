@@ -90,6 +90,9 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
     private GraphFragment graphFragment;                // 일기 통계
     private OptionFragment optionFragment;              // 더보기
 
+    /** location manager **/
+    private LocationManager locationManager;
+
     /** listener **/
     private GPSListener gpsListener;                    // 위치 정보를 가져오기 위해 필요한 리스너
     private LowVersionGPSListener lowVersionGPSListener;// 위치 정보를 가져오기 위해 필요한 리스너 (api 29 이전 버전)
@@ -135,6 +138,9 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         listFragment = new ListFragment();
         graphFragment = new GraphFragment();
         optionFragment = new OptionFragment();
+
+        // location manager
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
         // bottom navigation
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottomNavigation);
@@ -256,21 +262,23 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         /* GPSListener 라는 이름으로 LocationListener 를 재정의 */
         try {
             if(checkLocationPermission()) {
-                LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
                 //curLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);   // 제일 최근 위치 정보를
-                long minTime = 10000;                                          // 업데이트 주기 10초
+                long minTime = 1000;                                          // 업데이트 주기 10초
                 float minDistance = 0;                                         // 업데이트 거리간격 0
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     gpsListener = new GPSListener();                           // 위치정보를 가져오기 위해 리스너 설정
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, gpsListener);    // 위치 업데이트
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDistance, gpsListener);    // 위치 업데이트
                 } else {
                     lowVersionGPSListener = new LowVersionGPSListener();       // 위치정보를 가져오기 위해 리스너 설정
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, lowVersionGPSListener);    // 위치 업데이트
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDistance, lowVersionGPSListener);    // 위치 업데이트
                 }
 
-                getCurrentAddress();                                           // 위치정보를 주소로 반환 (작성 프래그먼트의 locationTextView 갱신)
-                getCurrentWeather();                                           // 위치정보를 이용해 날씨 반환 (작성 프래그먼트의 weatherImageView 갱신)
+//                getCurrentAddress();                                           // 위치정보를 주소로 반환 (작성 프래그먼트의 locationTextView 갱신)
+//                getCurrentWeather();                                           // 위치정보를 이용해 날씨 반환 (작성 프래그먼트의 weatherImageView 갱신)`
             }
         } catch(Exception e) {
             e.printStackTrace();
@@ -281,7 +289,8 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         Geocoder geoCoder = new Geocoder(this);
 
         try {
-            List<Address> list = geoCoder.getFromLocation(curLocation.getLatitude(), curLocation.getLongitude(), 1);
+            List<Address> list = geoCoder.getFromLocation(curLocation.getLatitude(), curLocation.getLongitude(), 5);
+            Log.d(LOG, "latitude : " + curLocation.getLatitude() + " longitude : " + curLocation.getLongitude());
 
             if(list != null && list.size() > 0) {
                 Address address = list.get(0);                          // 현재 주소 정보를 가진 Address 객체
@@ -307,6 +316,7 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
                 }
 
                 StringBuilder stringBuilder = new StringBuilder().append(locality).append(" ").append(subStr);
+                Log.d(LOG, stringBuilder.toString());
                 if(writeFragment != null) {
                     writeFragment.setLocationTextView(stringBuilder.toString());
                 }
@@ -333,10 +343,12 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
     }
 
     public void stopLocationService() {
-        LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-
         try {
-            locationManager.removeUpdates(gpsListener);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                locationManager.removeUpdates(gpsListener);
+            } else {
+                locationManager.removeUpdates(lowVersionGPSListener);
+            }
             Log.d(LOG, "위치 업데이트 종료");
         } catch(Exception e) {
             e.printStackTrace();
@@ -651,7 +663,7 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         return false;
     }
 
-    /* OnRequestListener 구현 */
+    /** OnRequestListener 구현 **/
     @Override
     public void onRequest(String command) {
         if(command.equals("getCurrentLocation")) {
@@ -666,8 +678,8 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         }
     }
 
-    /* OnRequestListener 구현 */
-    /* 기분달력으로부터 일기작성으로 넘어간 경우에 호출 */
+    /** OnRequestListener 구현
+     *  기분달력으로부터 일기작성으로 넘어간 경우에 호출 **/
     @Override
     public void onRequest(String command, Date date) {
         if(command.equals("getCurrentLocation")) {
@@ -675,8 +687,8 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         }
     }
 
-    /* OnRequestListener 구현 */
-    /* 일기목록에서 일기 클릭시 상세보기 액티비티로 전환 */
+    /** OnRequestListener 구현
+     *  일기목록에서 일기 클릭시 상세보기 액티비티로 전환 **/
     @Override
     public void onRequestDetailActivity(Note item) {
         Intent intent = new Intent(this, DetailActivity.class);
@@ -685,15 +697,15 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         startActivityForResult(intent, REQUEST_DETAIL_ACTIVITY);
     }
 
-    /* OnRequestListener 구현 */
-    /* 기분달력에서 일기가 없는 특정 날짜 데이터를 가지고 일기작성 액티비티로 전환 */
+    /** OnRequestListener 구현
+     *  기분달력에서 일기가 없는 특정 날짜 데이터를 가지고 일기작성 액티비티로 전환 **/
     @Override
     public void onRequestWriteFragmentFromCal(Date date) {
         calDate = date;
         onTabSelected(2);
     }
 
-    /* OnResponseListener 구현 (Volley 응답시 호출) */
+    /** OnResponseListener 구현 (Volley 응답시 호출) **/
     @Override
     public void onResponse(int reqeustCode, int responseCode, String response) {
         if(responseCode == MyApplication.RESPONSE_OK) {
@@ -814,10 +826,9 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
                 break;
 
             case OptionFragment.REQUEST_FONT_CHANGE:
-                if(resultCode == RESULT_OK) {
-                    recreate();
-                }
+                if(resultCode == RESULT_OK) recreate();
                 break;
+
             case REQUEST_DETAIL_ACTIVITY:
                 if(resultCode == DetailActivity.RESULT_DELETE) {
                     int id = data.getIntExtra("id", -1);
@@ -846,7 +857,6 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         Log.d(LOG, "onSaveInstanceState()호출됨");
-
         outState.putInt(SELECTED_TAB_INDEX, selectedTabIndex);
     }
 
@@ -860,31 +870,29 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
     public void onDenied(int i, String[] strings) {
         for(String permission : strings) {
             if(permission.equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
-                Toast.makeText(getApplicationContext(), "날씨 및 작성 위치를 가져오기 위해 위치정보가 필요합니다.\n" +
-                        "설정->위치->앱 권한에서 허용해주세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),
+                        "날씨 및 작성 위치를 가져오기 위해 위치정보가 필요합니다.\n" + "설정->위치->앱 권한에서 허용해주세요.",
+                        Toast.LENGTH_LONG)
+                        .show();
             }
         }
     }
 
     @Override
-    public void onGranted(int i, String[] strings) {
-    }
+    public void onGranted(int i, String[] strings) { }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    /* 위치 관리자 (LocationManager)에서 위치정보를 가져오기 위해 필요한 리스너 */
-    /* LocationListener 를 상속받은 커스텀 GPSListener 클래스 선언 */
+    /** 위치 관리자 (LocationManager)에서 위치정보를 가져오기 위해 필요한 리스너
+     * LocationListener 를 상속받은 커스텀 GPSListener 클래스 선언 **/
     class GPSListener implements LocationListener {
         @Override
         public void onLocationChanged(@NonNull Location location) {
             curLocation = location;                                 // 가져온 위치정보를 curLocation 객체에 대입
-            locationCount++;                                        // 위치정보를 찾았기 때문에 카운팅해 더이상 update 하지않게 함
+//            locationCount++;                                        // 위치정보를 찾았기 때문에 카운팅해 더이상 update 하지않게 함
 
             getCurrentAddress();                                    // 갱신된 위치정보를 주소로 반환 (작성 프래그먼트의 locationTextView 갱신)
             getCurrentWeather();                                    // 갱신된 위치정보를 날씨로 반환 (작성 프래그먼트의 weatherImageView 갱신)
+
+            stopLocationService();
         }
         @Override
         public void onProviderEnabled(@NonNull String provider) { }
@@ -896,10 +904,12 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         @Override
         public void onLocationChanged(@NonNull Location location) {
             curLocation = location;                                 // 가져온 위치정보를 curLocation 객체에 대입
-            locationCount++;                                        // 위치정보를 찾았기 때문에 카운팅해 더이상 update 하지않게 함
+//            locationCount++;                                        // 위치정보를 찾았기 때문에 카운팅해 더이상 update 하지않게 함
 
             getCurrentAddress();                                    // 갱신된 위치정보를 주소로 반환 (작성 프래그먼트의 locationTextView 갱신)
             getCurrentWeather();                                    // 갱신된 위치정보를 날씨로 반환 (작성 프래그먼트의 weatherImageView 갱신)
+
+            stopLocationService();
         }
 
         @Override

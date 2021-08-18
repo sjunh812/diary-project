@@ -3,12 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable-v21/border_view.xml" value="0.26875" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable-v21/ripple_effect_view.xml" value="0.3764102564102564" />
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable-v21/view.xml" value="0.26875" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable/backgroud_graph.xml" value="0.24791666666666667" />
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable/border_view.xml" value="0.26875" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable/photo_button.xml" value="0.25972222222222224" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable/ripple_effect_view.xml" value="0.166015625" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable/ripple_view.xml" value="0.2833976833976834" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable/star_button.xml" value="0.25972222222222224" />
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable/view.xml" value="0.26875" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/activity_alarm.xml" value="0.274609375" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/activity_detail.xml" value="0.26953125" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/activity_font.xml" value="0.2659722222222222" />

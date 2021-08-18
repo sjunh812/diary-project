@@ -38,18 +38,19 @@ public class CustomDeleteDialog extends Dialog {
         cancelButton = (ImageButton)findViewById(R.id.cancelButton);
         deleteButton = (Button)findViewById(R.id.deleteButton);
         cancelButton2 = (Button)findViewById(R.id.cancelButton2);
-    }
 
-    public void setCancelButtonOnClickListener(View.OnClickListener listener) {
-        cancelButton.setOnClickListener(listener);
-    }
-
-    public void setDeleteButtonOnClickListener(View.OnClickListener listener) {
-        deleteButton.setOnClickListener(listener);
-    }
-
-    public void setCancelButton2OnClickListener(View.OnClickListener listener) {
-        cancelButton2.setOnClickListener(listener);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+        cancelButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
     }
 
     public void setTitleTextView(String text) {
@@ -66,5 +67,9 @@ public class CustomDeleteDialog extends Dialog {
 
     public void setCancelButton2Text(String text) {
         cancelButton2.setText(text);
+    }
+
+    public void setDeleteButtonOnClickListener(View.OnClickListener listener) {
+        deleteButton.setOnClickListener(listener);
     }
 }

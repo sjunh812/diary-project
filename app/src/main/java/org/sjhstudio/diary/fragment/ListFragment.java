@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.sjhstudio.diary.MainActivity;
 import org.sjhstudio.diary.custom.CustomAlignDialog;
 import org.sjhstudio.diary.R;
+import org.sjhstudio.diary.custom.CustomDeleteDialog;
 import org.sjhstudio.diary.custom.CustomUpdateDialog;
 import org.sjhstudio.diary.helper.OnNoteItemClickListener;
 import org.sjhstudio.diary.helper.OnNoteItemLongClickListener;
@@ -42,30 +43,25 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class ListFragment extends Fragment {
-    /* 상수 */
-    private static final String LOG = "ListFragment";  // Debug 용 Log
-
-    /* UI */
+    /** UI **/
     private TextView titleTextView;                    // 타이틀 텍스트 (default : 일기목록)
     private LinearLayout showDiaryStateView;           // DB 조회시 일기가 없는 경우에 나타나는 상태 뷰 (일기없음)
     private RecyclerView listRecyclerView;             // 일기를 보여주는 리사이클러 뷰
     private TextView selectedDateTextView;             // 일기 기간별 정렬에 따라 나타나는 텍스트 (ex) 전체보기)
-    private CustomAlignDialog alignDialog;             // 일기 기간별 정렬 다이얼로그
-    private CustomUpdateDialog deleteDialog;           // 일기 삭제(수정) 다이얼로그
     private ImageButton photoButton;                   // 내용, 사진레이아웃을 선택하는 버튼
     private ImageButton starButton;                    // 즐겨찾기 정렬 여부를 선택하는 버튼
 
-    /* Helper */
-    private NoteAdapter adapter;                       // 일기 목록을 담은 리사이클러 뷰의 어뎁터
+    /** listener **/
     private OnTabItemSelectedListener tabListener;     // 메인 액티비티 하단 탭의 탭선택 콜백함수를 호출 해주는 리스너
-    private NoteDatabaseCallback callback;             // DB 콜백 인터페이스
     private OnRequestListener requestListener;         // MainActivity 에 특정 이벤트를 요청하는 리스너
-    private MyArrayAdapter yearAdapter;                // 일기 기간별 정렬시 년도 스피너의 어뎁터
-    private MyArrayAdapter monthAdapter;               // 일기 기간별 정렬시 월 스피너의 어뎁터
-    private GestureDetector detector;                  // 일기 목록을 길게 눌렀을 때의 이벤트를 위한 제스처 객체
     private GestureListener gestureListener;           // 제스처 객체에 필요한 리스너
 
-    /* Data */
+    /** adapter **/
+    private NoteAdapter adapter;                       // 일기 목록을 담은 리사이클러 뷰의 어뎁터
+    private MyArrayAdapter yearAdapter;                // 일기 기간별 정렬시 년도 스피너의 어뎁터
+    private MyArrayAdapter monthAdapter;               // 일기 기간별 정렬시 월 스피너의 어뎁터
+
+    /** data **/
     private int curYear;                               // 현재 년도 (ex)2021)
     private int lastYear;                              // 마지막 년도 (DB 안에 있는)
     private int layoutType = 0;                        // 0 : 내용 레이아웃, 1 : 사진 레이아웃
@@ -81,6 +77,10 @@ public class ListFragment extends Fragment {
     private boolean isStar = false;                    // 즐겨찾기 여부
     private ArrayList<Note> savedItems = null;         // 즐겨찾기 탐색 이전 adapter 로 돌아가기 위해 저장해둔 adapter
     private Animation translateRightAnim;              // 타이틀 애니메이션 객체
+
+    /** 기타 **/
+    private NoteDatabaseCallback callback;             // DB 콜백 인터페이스
+    private GestureDetector detector;                  // 일기 목록을 길게 눌렀을 때의 이벤트를 위한 제스처 객체
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -112,6 +112,33 @@ public class ListFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(isPhoto) {
+            photoButton.setImageDrawable(getResources().getDrawable(R.drawable.photo_clicked_icon));
+            adapter.setLayoutType(1);
+        } else {
+            photoButton.setImageDrawable(getResources().getDrawable(R.drawable.photo_icon));
+            adapter.setLayoutType(0);
+        }
+
+        if(isStar) {
+            starButton.setImageDrawable(getResources().getDrawable(R.drawable.star_icon_color));
+            if(adapter != null) {
+                adapter.setStar();
+            }
+            titleTextView.setText("즐겨찾기");
+        } else {
+            starButton.setImageDrawable(getResources().getDrawable(R.drawable.star_icon));
+            titleTextView.setText("일기목록");
+        }
+
+        adapter.notifyDataSetChanged();
+        setShowDiaryStateView();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -119,27 +146,42 @@ public class ListFragment extends Fragment {
 
         translateRightAnim = AnimationUtils.loadAnimation(getContext(), R.anim.translate_right_animation);
         translateRightAnim.setDuration(350);
+
         curYear = getCurrentYear();     // 현재년도 가져오기
-        caluclateYearArray();           // 현재년도와 DB 내 마지막 년도를 이용하여 years 배열 설정 (년도 스피너의 어뎁터에 사용될)
+        calculateYearArray();           // 현재년도와 DB 내 마지막 년도를 이용하여 years 배열 설정 (년도 스피너의 어뎁터에 사용될)
         initSpinnerPosition();          // 초기 스피너 포지션 값을 지정하기위해 selectedYearPos 와 selectedMonthPos 초기화 (금년, 금월로 지정)
 
         gestureListener = new GestureListener();        // GestureDetector.OnGestureListener 를 상속받은 객체
         detector = new GestureDetector(getContext(), gestureListener);  // 리스트 아이템 별 길게 누르는 이벤트를 위해 필요한 제스처 객체
+
+        yearAdapter = new MyArrayAdapter(getContext(), android.R.layout.simple_spinner_item, years);
+        monthAdapter = new MyArrayAdapter(getContext(), android.R.layout.simple_spinner_item, months);
+
+        initUI(rootView);
+        initListener();
+        initRecyclerView(rootView);     // 리사이클러 뷰에 관한 초기설정
+        setShowDiaryStateView();        // 일기목록이 비어있는 확인
+
+        return rootView;
+    }
+
+    private void initUI(View rootView) {
         titleTextView = (TextView)rootView.findViewById(R.id.titleTextView);
         titleTextView.startAnimation(translateRightAnim);
         showDiaryStateView = (LinearLayout)rootView.findViewById(R.id.showDiaryStateView);
         selectedDateTextView = (TextView)rootView.findViewById(R.id.selectedDateTextView);
+        photoButton = (ImageButton)rootView.findViewById(R.id.photoButton);
+        starButton = (ImageButton)rootView.findViewById(R.id.starButton);
+    }
+
+    private void initListener() {
         selectedDateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setAlignDialog();
+                showAlignDialog();
             }
         });
 
-        initRecyclerView(rootView);     // 리사이클러 뷰에 관한 초기설정
-        setShowDiaryStateView();        // 일기목록이 비어있는 확인
-
-        photoButton = (ImageButton)rootView.findViewById(R.id.photoButton);
         photoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,7 +198,6 @@ public class ListFragment extends Fragment {
             }
         });
 
-        starButton = (ImageButton)rootView.findViewById(R.id.starButton);
         starButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,17 +217,19 @@ public class ListFragment extends Fragment {
             }
         });
 
-        yearAdapter = new MyArrayAdapter(getContext(), android.R.layout.simple_spinner_item, years);
-        monthAdapter = new MyArrayAdapter(getContext(), android.R.layout.simple_spinner_item, months);
+    }
 
-        return rootView;
+    private void backupAdapter() {
+        if(!isAligned) {
+            adapter.setItems(callback.selectAllDB());
+        } else {
+            adapter.setItems(callback.selectPart(selectedYear, selectedMonth));
+        }
     }
 
     private void initRecyclerView(View rootView) {
         listRecyclerView = (RecyclerView)rootView.findViewById(R.id.listRecyclerView);
-        LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-
-        listRecyclerView.setLayoutManager(manager);
+        listRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         listRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -223,20 +266,12 @@ public class ListFragment extends Fragment {
                 selectedItem = adapter.getItem(position);
 
                 if(selectedItem != null) {
-                    setDeleteDialog();
+                    showUpdateDialog();
                 }
             }
         });
 
         listRecyclerView.setAdapter(adapter);
-    }
-
-    private void backupAdapter() {
-        if(!isAligned) {
-            adapter.setItems(callback.selectAllDB());
-        } else {
-            adapter.setItems(callback.selectPart(selectedYear, selectedMonth));
-        }
     }
 
     private void setShowDiaryStateView() {
@@ -254,19 +289,38 @@ public class ListFragment extends Fragment {
         selectedMonthPos = getCurrentMonth() - 1;       // ex) 4월 -> 3 (pos)
     }
 
-    public void setDeleteDialog() {
-        deleteDialog = new CustomUpdateDialog(getContext());
-        deleteDialog.show();
-        deleteDialog.setCancelable(true);
+    /** 일기 수정 다이얼로그 **/
+    public void showUpdateDialog() {
+        CustomUpdateDialog dialog = new CustomUpdateDialog(getContext());
+        dialog.show();
 
-        deleteDialog.setCancelButtonOnClickListener(new View.OnClickListener() {
+        dialog.setDeleteButtonOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteDialog.dismiss();
+                dialog.dismiss();
+                showDeleteDialog();
             }
         });
 
-        deleteDialog.setDeleteButtonOnClickListener(new View.OnClickListener() {
+        dialog.setUpdateButtonOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                tabListener.showWriteFragment(selectedItem);
+            }
+        });
+    }
+
+    /** 일기 삭제 다이얼로그 **/
+    private void showDeleteDialog() {
+        CustomDeleteDialog dialog = new CustomDeleteDialog(getContext());
+        dialog.show();
+
+        dialog.setTitleTextView("일기 삭제");
+        dialog.setDeleteTextView("일기를 삭제하시겠습니까?\n삭제한 일기는 복구가 불가능합니다.");
+        dialog.setDeleteButtonText("삭제");
+        dialog.setCancelButton2Text("취소");
+        dialog.setDeleteButtonOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(selectedItem != null) {
@@ -289,33 +343,18 @@ public class ListFragment extends Fragment {
                     checkStar();
                     adapter.notifyDataSetChanged();
                     setShowDiaryStateView();
-                    deleteDialog.dismiss();
+                    dialog.dismiss();
                 }
-            }
-        });
-
-        deleteDialog.setUpdateButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteDialog.dismiss();
-                tabListener.showWriteFragment(selectedItem);
             }
         });
     }
 
-    public void setAlignDialog() {
-        alignDialog = new CustomAlignDialog(getContext());
-        alignDialog.show();
-        alignDialog.setCancelable(true);                     // 다이얼로그외 공간 클릭시 취소 가능 여부
+    /** 일기 정렬 다이얼로그 **/
+    public void showAlignDialog() {
+        CustomAlignDialog dialog = new CustomAlignDialog(getContext());
+        dialog.show();
 
-        alignDialog.setCancelButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alignDialog.dismiss();
-            }
-        });
-
-        alignDialog.setYesButtonOnClickListener(new View.OnClickListener() {
+        dialog.setYesButtonOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectedDateTextView.setText(selectedYear + "년 " + selectedMonth + "월");
@@ -327,11 +366,11 @@ public class ListFragment extends Fragment {
                 adapter.notifyDataSetChanged();
                 setShowDiaryStateView();
 
-                alignDialog.dismiss();
+                dialog.dismiss();
             }
         });
 
-        alignDialog.setAllButtonOnClickListener(new View.OnClickListener() {
+        dialog.setAllButtonOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectedDateTextView.setText("전체");
@@ -347,13 +386,13 @@ public class ListFragment extends Fragment {
                 adapter.notifyDataSetChanged();
                 setShowDiaryStateView();
 
-                alignDialog.dismiss();
+                dialog.dismiss();
             }
         });
 
-        alignDialog.setYearSpinnerAdapter(yearAdapter);
-        alignDialog.setSelectedYearSpinner(selectedYearPos);
-        alignDialog.setYearSpinnerItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        dialog.setYearSpinnerAdapter(yearAdapter);
+        dialog.setSelectedYearSpinner(selectedYearPos);
+        dialog.setYearSpinnerItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 int size = years.length;
@@ -364,14 +403,12 @@ public class ListFragment extends Fragment {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) { }
         });
 
-        alignDialog.setMonthSpinnerAdapter(monthAdapter);
-        alignDialog.setSelectMonthSpinner(selectedMonthPos);
-        alignDialog.setMonthSpinnerItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        dialog.setMonthSpinnerAdapter(monthAdapter);
+        dialog.setSelectMonthSpinner(selectedMonthPos);
+        dialog.setMonthSpinnerItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedMonthPos = position;
@@ -379,9 +416,7 @@ public class ListFragment extends Fragment {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) { }
         });
     }
 
@@ -401,7 +436,7 @@ public class ListFragment extends Fragment {
         return month;
     }
 
-    public void caluclateYearArray() {
+    public void calculateYearArray() {
         lastYear = callback.selectLastYear();
         if(lastYear == 0) {
             lastYear = curYear;
@@ -433,33 +468,6 @@ public class ListFragment extends Fragment {
         if(isStar) {
             adapter.setStar();
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if(isPhoto) {
-            photoButton.setImageDrawable(getResources().getDrawable(R.drawable.photo_clicked_icon));
-            adapter.setLayoutType(1);
-        } else {
-            photoButton.setImageDrawable(getResources().getDrawable(R.drawable.photo_icon));
-            adapter.setLayoutType(0);
-        }
-
-        if(isStar) {
-            starButton.setImageDrawable(getResources().getDrawable(R.drawable.star_icon_color));
-            if(adapter != null) {
-                adapter.setStar();
-            }
-            titleTextView.setText("즐겨찾기");
-        } else {
-            starButton.setImageDrawable(getResources().getDrawable(R.drawable.star_icon));
-            titleTextView.setText("일기목록");
-        }
-
-        adapter.notifyDataSetChanged();
-        setShowDiaryStateView();
     }
 
     class MyArrayAdapter extends ArrayAdapter<String> {
@@ -494,36 +502,26 @@ public class ListFragment extends Fragment {
     private class GestureListener implements GestureDetector.OnGestureListener {
 
         @Override
-        public boolean onDown(MotionEvent e) {
-            return false;
-        }
+        public boolean onDown(MotionEvent e) { return false; }
 
         @Override
-        public void onShowPress(MotionEvent e) {
-
-        }
+        public void onShowPress(MotionEvent e) { }
 
         @Override
-        public boolean onSingleTapUp(MotionEvent e) {
-            return false;
-        }
+        public boolean onSingleTapUp(MotionEvent e) { return false; }
 
         @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            return false;
-        }
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) { return false; }
 
         @Override
         public void onLongPress(MotionEvent e) {
             // 길게 터치한 경우
             if(selectedItem != null) {
-                setDeleteDialog();
+                showUpdateDialog();
             }
         }
 
         @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            return false;
-        }
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) { return false; }
     }
 }

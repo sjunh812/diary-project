@@ -196,13 +196,10 @@ public class DetailActivity extends AppCompatActivity {
         deleteDialog = new CustomDeleteDialog(this);
         deleteDialog.show();
 
-        deleteDialog.setCancelButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteDialog.dismiss();
-            }
-        });
-
+        deleteDialog.setTitleTextView("일기 삭제");
+        deleteDialog.setDeleteTextView("일기를 삭제하시겠습니까?\n삭제한 일기는 복구가 불가능합니다.");
+        deleteDialog.setDeleteButtonText("삭제");
+        deleteDialog.setCancelButton2Text("취소");
         deleteDialog.setDeleteButtonOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -222,18 +219,6 @@ public class DetailActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        deleteDialog.setCancelButton2OnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteDialog.dismiss();
-            }
-        });
-
-        deleteDialog.setTitleTextView("일기 삭제");
-        deleteDialog.setDeleteTextView("일기를 삭제하시겠습니까?\n삭제한 일기는 복구가 불가능합니다.");
-        deleteDialog.setDeleteButtonText("삭제");
-        deleteDialog.setCancelButton2Text("취소");
     }
 
     @Override
