@@ -3,7 +3,7 @@
     android:id="@+id/itemView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/border_view"
+    android:background="@drawable/border_view_calendar"
     android:orientation="vertical"
     android:paddingLeft="25dp"
     android:paddingRight="25dp"

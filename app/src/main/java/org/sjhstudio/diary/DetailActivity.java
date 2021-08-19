@@ -3,6 +3,7 @@ package org.sjhstudio.diary;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -12,17 +13,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import org.sjhstudio.diary.adapters.PhotoAdapter;
 import org.sjhstudio.diary.custom.CustomDeleteDialog;
 import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.note.Note;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DetailActivity extends AppCompatActivity {
     public static final int RESULT_DELETE = -10;
@@ -33,12 +39,20 @@ public class DetailActivity extends AppCompatActivity {
     private TextView dateTextView;
     private TextView weekTextView;
     private TextView timeTextView;
-    private ImageView pictureImageView;
+//    private ImageView pictureImageView;
     private TextView contentsTextView;
     private ImageView weatherImageView;
     private TextView locationTextView;
     private CustomDeleteDialog deleteDialog;
     private ImageView starImageView;
+
+    /** 사진 관련 **/
+    private FrameLayout photoContainer;
+    private ViewPager2 photoViewPager;
+    private PhotoAdapter photoAdapter;
+    private LinearLayout photoIndicator;
+    private TextView currentBanner;
+    private TextView totalBanner;
 
     /* Data */
     private Intent intent;
@@ -59,6 +73,7 @@ public class DetailActivity extends AppCompatActivity {
         moodAnim = AnimationUtils.loadAnimation(this, R.anim.mood_icon_animation);
 
         initUI();
+        initPhotoUI();
 
         intent = getIntent();
         processIntent();
@@ -72,17 +87,17 @@ public class DetailActivity extends AppCompatActivity {
         weekTextView = (TextView)findViewById(R.id.weekTextView);
         timeTextView = (TextView)findViewById(R.id.timeTextView);
 
-        pictureImageView = (ImageView)findViewById(R.id.pictureImageView);
-        pictureImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(item.getPicture() != null && !item.getPicture().equals("")) {
-                    Intent intent  = new Intent(getApplicationContext(), PhotoActivity.class);
-                    intent.putExtra("picturePath", item.getPicture());
-                    startActivity(intent);
-                }
-            }
-        });
+//        pictureImageView = (ImageView)findViewById(R.id.pictureImageView);
+//        pictureImageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(item.getPicture() != null && !item.getPicture().equals("")) {
+//                    Intent intent  = new Intent(getApplicationContext(), PhotoActivity.class);
+//                    intent.putExtra("picturePath", item.getPicture());
+//                    startActivity(intent);
+//                }
+//            }
+//        });
 
         contentsTextView = (TextView)findViewById(R.id.contentsTextView);
         weatherImageView = (ImageView)findViewById(R.id.weatherImageView);
@@ -90,9 +105,38 @@ public class DetailActivity extends AppCompatActivity {
         starImageView = (ImageView)findViewById(R.id.starImageView);
     }
 
+    private void initPhotoUI() {
+        photoContainer = findViewById(R.id.photo_container);
+        photoIndicator = findViewById(R.id.photo_indicator);
+        currentBanner = findViewById(R.id.current_banner);
+        totalBanner = findViewById(R.id.total_banner);
+
+        photoViewPager = findViewById(R.id.photo_view_pager);
+        photoViewPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+        photoAdapter = new PhotoAdapter(this, null);
+        photoViewPager.setAdapter(photoAdapter);
+        photoViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                currentBanner.setText(String.valueOf(position + 1));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
+            }
+        });
+    }
+
     private void processIntent() {
-        if(intent != null) {
-            item = (Note)intent.getSerializableExtra("item");
+        if (intent != null) {
+            item = (Note) intent.getSerializableExtra("item");
             int moodIndex = item.getMood();
             int weatherIndex = item.getWeather();
             int starIndex = item.getStarIndex();
@@ -111,12 +155,30 @@ public class DetailActivity extends AppCompatActivity {
             contentsTextView.setText(contents);
             locationTextView.setText(location);
 
-            if(item.getPicture() != null && !item.getPicture().equals("")) {
-                pictureImageView.setVisibility(View.VISIBLE);
-                Glide.with(this).load(Uri.parse("file://" + item.getPicture())).apply(RequestOptions.bitmapTransform(MainActivity.option)).into(pictureImageView);
+//            if (item.getPicture() != null && !item.getPicture().equals("")) {
+//                photoContainer.setVisibility(View.VISIBLE);
+//
+//                Glide.with(this).load(Uri.parse("file://" + item.getPicture())).apply(RequestOptions.bitmapTransform(MainActivity.option)).into(pictureImageView);
+//            } else {
+//                photoContainer.setVisibility(View.GONE);
+//            }
+            setPhoto(item.getPicture());
+        }
+    }
+
+    public void setPhoto(String paths) {
+        if(paths != null && !paths.equals("")) {
+            String picturePaths[] = paths.split(",");
+            if(picturePaths.length > 0) {
+                photoAdapter.setItems(new ArrayList<String>(Arrays.asList(picturePaths)));
+                photoAdapter.notifyDataSetChanged();
+                totalBanner.setText(String.valueOf(photoAdapter.getItemCount()));
+                photoContainer.setVisibility(View.VISIBLE);
             } else {
-                pictureImageView.setVisibility(View.GONE);
+                photoContainer.setVisibility(View.GONE);
             }
+        } else {
+            photoContainer.setVisibility(View.GONE);
         }
     }
 

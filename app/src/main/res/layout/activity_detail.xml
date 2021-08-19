@@ -93,13 +93,66 @@
                 android:textColor="@color/gray"
                 android:text="오전 00:30" />
 
-            <ImageView
-                android:id="@+id/pictureImageView"
+            <FrameLayout
+                android:id="@+id/photo_container"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginBottom="30dp"
-                android:visibility="gone"
-                android:src="@drawable/app_icon" />
+                android:visibility="gone">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/photo_view_pager"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <LinearLayout
+                    android:id="@+id/photo_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom"
+                    android:layout_marginRight="30dp"
+                    android:orientation="horizontal"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:background="@drawable/gray_ellipse">
+
+                    <TextView
+                        android:id="@+id/current_banner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1"
+                        android:textSize="13sp"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="/"
+                        android:textSize="13sp"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:id="@+id/total_banner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2"
+                        android:textSize="13sp"
+                        android:textColor="@color/white" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+<!--            <ImageView-->
+<!--                android:id="@+id/pictureImageView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="200dp"-->
+<!--                android:layout_marginBottom="30dp"-->
+<!--                android:visibility="gone"-->
+<!--                android:src="@drawable/app_icon" />-->
 
             <ScrollView
                 android:layout_width="match_parent"

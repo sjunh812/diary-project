@@ -812,13 +812,14 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
                 if(resultCode == RESULT_OK) {
                     Log.d(LOG, "onActivityResult : CROP_IMAGE_ACTIVITY_REQUEST_CODE (RESULT_OK)");
 
-                    writeFragment.deleteFileCache();
+//                    writeFragment.deleteFileCache();
                     CropImage.ActivityResult result = CropImage.getActivityResult(data);
                     String filePath = result.getUri().getPath();
 
                     if (writeFragment != null) {
-                        writeFragment.setFilePath(filePath);
-                        writeFragment.setPictureImageView(null, result.getUri(), -1);
+//                        writeFragment.setFilePath(filePath);
+                        writeFragment.setPhotoAdapter(filePath);
+//                        writeFragment.setPictureImageView(null, result.getUri(), -1);
                     }
                 } else {
                     Log.d(LOG, "onActivityResult : CROP_IMAGE_ACTIVITY_REQUEST_CODE (NOT RESULT_OK)");

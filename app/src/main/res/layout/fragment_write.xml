@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="13dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
 
         <TextView
@@ -20,6 +20,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:text="일기작성"
             android:textColor="@color/font"
             android:textSize="25sp"
@@ -73,7 +75,6 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
@@ -127,10 +128,10 @@
                     android:layout_centerVertical="true"
                     android:background="@color/background"
                     android:hint="위치정보 입력"
-                    android:textColorHint="@color/pastel_700"
-                    android:textSize="12dp"
                     android:maxLines="1"
-                    android:textColor="@color/pastel_700" />
+                    android:textColor="@color/pastel_700"
+                    android:textColorHint="@color/pastel_700"
+                    android:textSize="12dp" />
 
             </RelativeLayout>
 
@@ -631,17 +632,54 @@
                                 android:id="@+id/pictureContainer"
                                 android:layout_width="match_parent"
                                 android:layout_height="300dp"
+                                android:layout_marginBottom="10dp"
                                 android:clickable="true">
 
-                                <ImageView
-                                    android:id="@+id/pictureImageView"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="270dp"
-                                    android:layout_marginBottom="10dp"
+                                <androidx.viewpager2.widget.ViewPager2
+                                    android:id="@+id/photo_view_pager"
                                     android:layout_gravity="center"
-                                    android:longClickable="true"
-                                    android:scaleType="centerInside"
-                                    android:visibility="gone" />
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:visibility="gone"/>
+
+                                <LinearLayout
+                                    android:id="@+id/photo_indicator"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="right|bottom"
+                                    android:layout_marginRight="10dp"
+                                    android:visibility="gone"
+                                    android:orientation="horizontal"
+                                    android:paddingTop="3dp"
+                                    android:paddingBottom="3dp"
+                                    android:paddingLeft="10dp"
+                                    android:paddingRight="10dp"
+                                    android:background="@drawable/gray_ellipse">
+
+                                    <TextView
+                                        android:id="@+id/current_banner"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="1"
+                                        android:textSize="13sp"
+                                        android:textColor="@color/white" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="/"
+                                        android:textSize="13sp"
+                                        android:textColor="@color/white" />
+
+                                    <TextView
+                                        android:id="@+id/total_banner"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="2"
+                                        android:textSize="13sp"
+                                        android:textColor="@color/white" />
+
+                                </LinearLayout>
 
                                 <ImageView
                                     android:id="@+id/addPictureImageView"

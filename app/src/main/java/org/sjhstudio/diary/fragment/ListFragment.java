@@ -325,11 +325,15 @@ public class ListFragment extends Fragment {
             public void onClick(View v) {
                 if(selectedItem != null) {
                     int id = selectedItem.get_id();
-                    String path = selectedItem.getPicture();
+                    String paths = selectedItem.getPicture();
 
-                    if(path != null && !path.equals("")) {
-                        File file = new File(path);
-                        file.delete();
+                    if(paths != null && !paths.equals("")) {
+                        String picturePaths[] = paths.split(",");
+
+                        for(int i = 0; i < picturePaths.length; i++) {
+                            File file = new File(picturePaths[i]);
+                            file.delete();
+                        }
                     }
 
                     callback.deleteDB(id);          // 해당 db 삭제

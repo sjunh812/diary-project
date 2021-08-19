@@ -14,15 +14,15 @@
             android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="기분통계"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            android:textColor="@color/font"
             android:layout_alignParentLeft="true"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="13dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="13dp"
+            android:text="기분통계"
+            android:textColor="@color/font"
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
         <RadioGroup
             android:id="@+id/radioGroup"

@@ -31,6 +31,13 @@ public class CustomDialog extends Dialog {
         cancelButton = (ImageButton)findViewById(R.id.cancelButton);
         cameraButton = (Button)findViewById(R.id.cameraButton);
         albumButton = (Button)findViewById(R.id.albumButton);
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
     }
 
     public void setCancelButtonOnClickListener(View.OnClickListener listener) {

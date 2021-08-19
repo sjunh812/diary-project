@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:color="@color/transparent_purple"
+    tools:targetApi="lollipop">
+
+    <item android:id="@+id/background"
+        android:drawable="@drawable/border_pastel_calendar">
+        <shape android:shape="rectangle">
+        </shape>
+    </item>
+
+</ripple>

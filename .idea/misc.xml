@@ -4,10 +4,17 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable-v21/border_view.xml" value="0.26875" />
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable-v21/border_view_calendar.xml" value="0.2833976833976834" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable-v21/ripple_effect_view.xml" value="0.3764102564102564" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable-v21/view.xml" value="0.26875" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable/backgroud_graph.xml" value="0.24791666666666667" />
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable/border_pastel_calendar.xml" value="0.2833976833976834" />
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable/border_pastel_pressed.xml" value="0.2833976833976834" />
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable/border_pastel_pressed_calendar.xml" value="0.2833976833976834" />
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable/border_pressed.xml" value="0.2833976833976834" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable/border_view.xml" value="0.26875" />
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable/border_view2.xml" value="0.2833976833976834" />
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable/border_view_calendar.xml" value="0.2833976833976834" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable/photo_button.xml" value="0.25972222222222224" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable/ripple_effect_view.xml" value="0.166015625" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/drawable/ripple_view.xml" value="0.2833976833976834" />
@@ -19,14 +26,16 @@
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/activity_main.xml" value="0.23097826086956522" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/activity_main_password.xml" value="0.26953125" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/activity_password.xml" value="0.26953125" />
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/calendar_item.xml" value="0.274609375" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/delete_dialog_custom.xml" value="0.274609375" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/dialog_custom.xml" value="0.26953125" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/fragment_calendar.xml" value="0.2749094202898551" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/fragment_graph.xml" value="0.21597222222222223" />
-        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/fragment_list.xml" value="0.21597222222222223" />
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/fragment_list.xml" value="0.2714285714285714" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/fragment_option.xml" value="0.26180555555555557" />
-        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/fragment_write.xml" value="0.22" />
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/fragment_write.xml" value="0.2714285714285714" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/gps_dialog_custom.xml" value="0.25" />
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/item_photo.xml" value="0.274609375" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/list_item.xml" value="0.22" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/stop_write_dialog_custom.xml" value="0.2848731884057971" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/menu/menu_bottom.xml" value="0.26953125" />

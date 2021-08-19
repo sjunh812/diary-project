@@ -1,11 +1,10 @@
 package org.sjhstudio.diary.note;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,17 +14,17 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-
-import org.sjhstudio.diary.MainActivity;
-import org.sjhstudio.diary.PhotoActivity;
 import org.sjhstudio.diary.R;
+import org.sjhstudio.diary.adapters.PhotoAdapter;
 import org.sjhstudio.diary.helper.OnNoteItemClickListener;
 import org.sjhstudio.diary.helper.OnNoteItemLongClickListener;
 import org.sjhstudio.diary.helper.OnNoteItemTouchListener;
 import org.sjhstudio.diary.helper.OnRequestListener;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class NoteViewHolder extends RecyclerView.ViewHolder {
     // 내용버튼 선택시 보일 뷰 UI
@@ -45,7 +44,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
     private LinearLayout photoLayout;
     private ImageView moodImageView2;
     private ImageView weatherImageView2;
-    private ImageView pictureImageView;
+//    private ImageView pictureImageView;
     private TextView contentsTextView2;
     private TextView locationTextView2;
     private TextView dateTextView2;
@@ -53,6 +52,13 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
     private TextView weekTextView2;
     private LinearLayout showPhotoStateView;
     private ImageView starImageView2;
+
+    /** 사진 여러장 관련 **/
+    private ViewPager2 photoViewPager;
+    private PhotoAdapter photoAdapter;
+    private LinearLayout photoIndicator;
+    private TextView currentBanner;
+    private TextView totalBanner;
 
     private OnNoteItemClickListener clickListener;
     private OnNoteItemTouchListener touchListener;
@@ -64,9 +70,9 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
 
         this.context = context;
-        if(context instanceof OnRequestListener) {
-            requestListener = (OnRequestListener)context;
-        }
+        if(context instanceof OnRequestListener) requestListener = (OnRequestListener)context;
+
+        initPhoto();
 
         contentsLayout = (LinearLayout)itemView.findViewById(R.id.contentsLayout);
         moodImageView = (ImageView)itemView.findViewById(R.id.moodImageView);
@@ -83,7 +89,6 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         photoLayout = (LinearLayout)itemView.findViewById(R.id.photoLayout);
         moodImageView2 = (ImageView)itemView.findViewById(R.id.moodImageView2);
         weatherImageView2 = (ImageView)itemView.findViewById(R.id.weatherImageView2);
-        pictureImageView = (ImageView)itemView.findViewById(R.id.pictureImageView);
         contentsTextView2 = (TextView)itemView.findViewById(R.id.contentsTextView2);
         locationTextView2 = (TextView)itemView.findViewById(R.id.locationTextView2);
         dateTextView2 = (TextView)itemView.findViewById(R.id.dateTextView2);
@@ -154,38 +159,89 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
 
     }
 
+    private void initPhoto() {
+        //        pictureImageView = (ImageView)itemView.findViewById(R.id.pictureImageView);
+        photoIndicator = itemView.findViewById(R.id.photo_indicator);
+        currentBanner = itemView.findViewById(R.id.current_banner);
+        totalBanner = itemView.findViewById(R.id.total_banner);
+
+        photoViewPager = itemView.findViewById(R.id.photo_view_pager);
+        photoViewPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+        photoAdapter = new PhotoAdapter(context, null);
+        photoViewPager.setAdapter(photoAdapter);
+        photoViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                Log.d("Log", "onPageScrolled");
+                photoViewPager.getParent().requestDisallowInterceptTouchEvent(true);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                currentBanner.setText(String.valueOf(position + 1));
+
+                Log.d("LOG", photoAdapter.getItems().get(position));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
+            }
+        });
+    }
+
     public void setItem(Note item) {
         // 기분 설정
         int moodIndex = item.getMood();
         setMoodImage(moodIndex);
 
         // 사진 설정
-        String picturePath = item.getPicture();
+        if(item.getPicture() != null && !item.getPicture().equals("")) {
+            String picturePaths[] = item.getPicture().split(",");
+            if(picturePaths.length > 0) {
+                photoAdapter.setItems(new ArrayList<String>(Arrays.asList(picturePaths)));
+//                photoAdapter.getItems().remove(photoAdapter.getItemCount()-1);
+                photoAdapter.notifyDataSetChanged();
+                totalBanner.setText(String.valueOf(photoAdapter.getItemCount()));
 
-        pictureImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(picturePath != null && !picturePath.equals("")) {
-                    Intent intent  = new Intent(context, PhotoActivity.class);
-                    intent.putExtra("picturePath", picturePath);
-                    context.startActivity(intent);
-                }
+                existPictureImageView.setVisibility(View.VISIBLE);
+                photoViewPager.setVisibility(View.VISIBLE);
+                photoIndicator.setVisibility(View.VISIBLE);
+                showPhotoStateView.setVisibility(View.GONE);
             }
-        });
-
-        if(picturePath != null && !picturePath.equals("")) {
-            existPictureImageView.setVisibility(View.VISIBLE);
-            //pictureImageView.setImageURI(Uri.parse("file://" + picturePath));
-            //Glide.with(context).load(Uri.parse("file://" + picturePath)).into(pictureImageView);
-            Glide.with(context).load(Uri.parse("file://" + picturePath)).apply(RequestOptions.bitmapTransform(MainActivity.option)).into(pictureImageView);
-            pictureImageView.setVisibility(View.VISIBLE);
-            showPhotoStateView.setVisibility(View.GONE);
         } else {
             existPictureImageView.setVisibility(View.GONE);
-            pictureImageView.setVisibility(View.GONE);
+            photoViewPager.setVisibility(View.GONE);
+            photoIndicator.setVisibility(View.GONE);
             showPhotoStateView.setVisibility(View.VISIBLE);
-            //pictureImageView.setImageResource(R.drawable.no_image_64_color);
         }
+
+//        pictureImageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(picturePath != null && !picturePath.equals("")) {
+//                    Intent intent  = new Intent(context, PhotoActivity.class);
+//                    intent.putExtra("picturePath", picturePath);
+//                    context.startActivity(intent);
+//                }
+//            }
+//        });
+
+//        if(picturePath != null && !picturePath.equals("")) {
+//            existPictureImageView.setVisibility(View.VISIBLE);
+//            //pictureImageView.setImageURI(Uri.parse("file://" + picturePath));
+//            //Glide.with(context).load(Uri.parse("file://" + picturePath)).into(pictureImageView);
+//            Glide.with(context).load(Uri.parse("file://" + picturePath)).apply(RequestOptions.bitmapTransform(MainActivity.option)).into(pictureImageView);
+//            pictureImageView.setVisibility(View.VISIBLE);
+//            showPhotoStateView.setVisibility(View.GONE);
+//        } else {
+//            existPictureImageView.setVisibility(View.GONE);
+//            pictureImageView.setVisibility(View.GONE);
+//            showPhotoStateView.setVisibility(View.VISIBLE);
+//            //pictureImageView.setImageResource(R.drawable.no_image_64_color);
+//        }
 
         // 날씨 설정
         int weatherIndex = item.getWeather();
