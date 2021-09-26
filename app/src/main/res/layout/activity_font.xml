@@ -72,6 +72,7 @@
             android:background="@color/background_sub"
             android:orientation="vertical"
             android:paddingTop="20dp"
+            android:paddingBottom="20dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
 
@@ -197,7 +198,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
                         android:fontFamily="@font/font7"
-                        android:text=" 칠곡할매 이원순체"
+                        android:text=" 타닥타닥체"
                         android:textColor="@color/font"
                         android:textSize="15dp" />
 
@@ -207,7 +208,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
                         android:fontFamily="@font/font8"
-                        android:text=" 카페24 숑숑체"
+                        android:text=" 쿠키런체"
                         android:textColor="@color/font"
                         android:textSize="15dp" />
 
@@ -227,7 +228,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
                         android:fontFamily="@font/font10"
-                        android:text=" 봄이조아체"
+                        android:text=" 온글잎 윤우체"
                         android:textColor="@color/font"
                         android:textSize="15dp" />
 

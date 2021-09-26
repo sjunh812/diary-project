@@ -18,6 +18,7 @@ import androidx.core.app.NotificationCompat;
 import org.sjhstudio.diary.AlarmActivity;
 import org.sjhstudio.diary.MainPasswordActivity;
 import org.sjhstudio.diary.R;
+import org.sjhstudio.diary.SplashActivity;
 
 import java.util.Calendar;
 
@@ -75,7 +76,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             builder = new NotificationCompat.Builder(context);
         }
 
-        Intent clickIntent = new Intent(context, MainPasswordActivity.class);
+        Intent clickIntent = new Intent(context, SplashActivity.class);
         //clickIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         clickIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, clickIntent, PendingIntent.FLAG_CANCEL_CURRENT);

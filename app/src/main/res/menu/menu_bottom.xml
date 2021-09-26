@@ -4,31 +4,31 @@
     <item
         android:id="@+id/tab1"
         android:title="목록"
-        android:icon="@drawable/list_icon"
+        android:icon="@drawable/ic_book"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/tab2"
         android:title="달력"
-        android:icon="@drawable/calendar_icon"
+        android:icon="@drawable/ic_calendar"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/tab3"
         android:title="작성"
-        android:icon="@drawable/write_icon"
+        android:icon="@drawable/ic_write"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/tab4"
         android:title="통계"
-        android:icon="@drawable/graph_icon"
+        android:icon="@drawable/ic_chart"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/tab5"
         android:title="옵션"
-        android:icon="@drawable/more_icon"
+        android:icon="@drawable/ic_settings"
         app:showAsAction="ifRoom" />
 
 

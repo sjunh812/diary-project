@@ -1,6 +1,5 @@
 package org.sjhstudio.diary.helper;
 
-
 import org.sjhstudio.diary.note.Note;
 
 import java.util.Date;
@@ -12,4 +11,5 @@ public interface OnRequestListener {
     public void onRequestWriteFragmentFromCal(Date date);
     public boolean checkLocationPermission();
     public void getDateOnly(Date date);
+    public void stopLocationService();
 }

@@ -13,6 +13,8 @@ import com.github.chrisbanes.photoview.PhotoView;
 
 import org.sjhstudio.diary.helper.MyTheme;
 
+import java.util.Objects;
+
 public class PhotoActivity extends AppCompatActivity {
     private String picturePath;
 
@@ -25,10 +27,9 @@ public class PhotoActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("사진보기");
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         PhotoView photoView = (PhotoView)findViewById(R.id.photoView);
-
         Intent intent = getIntent();
         picturePath = intent.getStringExtra("picturePath");
         photoView.setImageURI(Uri.parse("file://" + picturePath));
@@ -38,7 +39,7 @@ public class PhotoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        if(id == android.R.id.home) {   // back 버튼 (상단 바)
+        if(id == android.R.id.home) {
             finish();
             return true;
         }

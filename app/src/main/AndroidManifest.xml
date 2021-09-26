@@ -29,21 +29,27 @@
         tools:replace="android:allowBackup">
 
         <activity android:name=".MainPasswordActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
 
         <activity android:name=".PasswordActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
 
         <activity android:name=".BackupActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
 
         <activity android:name=".DetailActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
 
         <activity android:name=".PhotoActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
 
         <activity android:name=".DarkModeActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
 
         <!--
@@ -78,9 +84,11 @@
         </receiver>
 
         <activity android:name=".AlarmActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
 
         <activity android:name=".SplashActivity"
+            android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -90,16 +98,19 @@
         </activity>
 
         <activity android:name=".FontActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustResize"
+            android:exported="false"
             android:screenOrientation="portrait" />
 
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:screenOrientation="portrait"
+            android:exported="false"
             android:theme="@style/Base.Theme.AppCompat" /> <!-- 크롭 액티비티 -->
 
         <provider

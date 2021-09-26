@@ -18,16 +18,21 @@ import android.widget.TextView;
 import org.sjhstudio.diary.custom.CustomPasswordCautionDialog;
 import org.sjhstudio.diary.helper.MyTheme;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
+
 public class PasswordActivity extends AppCompatActivity {
     private TextView subTitleTextView;
 
-    /** passwrod image **/
+    /** password image **/
     private ImageView passwordImage1;
     private ImageView passwordImage2;
     private ImageView passwordImage3;
     private ImageView passwordImage4;
 
     /** data **/
+    private ArrayList<Button> keypadArrayList;
     private String input = "";
     private String reInput = "";
 
@@ -44,14 +49,13 @@ public class PasswordActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("잠금 설정");
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         subTitleTextView = findViewById(R.id.sub_title);
         passwordImage1 = findViewById(R.id.password_image_1);
         passwordImage2 = findViewById(R.id.password_image_2);
         passwordImage3 = findViewById(R.id.password_image_3);
         passwordImage4 = findViewById(R.id.password_image_4);
-
         Button keypad0 = findViewById(R.id.keypad_0);
         Button keypad1 = findViewById(R.id.keypad_1);
         Button keypad2 = findViewById(R.id.keypad_2);
@@ -62,18 +66,13 @@ public class PasswordActivity extends AppCompatActivity {
         Button keypad7 = findViewById(R.id.keypad_7);
         Button keypad8 = findViewById(R.id.keypad_8);
         Button keypad9 = findViewById(R.id.keypad_9);
+        keypadArrayList = new ArrayList<>(Arrays.asList(keypad0, keypad1, keypad2, keypad3, keypad4, keypad5, keypad6, keypad7, keypad8, keypad9));
         ImageButton eraseKeypad = findViewById(R.id.keypad_erase);
 
-        keypad0.setOnClickListener(new NumberKeypadClickListener(0));
-        keypad1.setOnClickListener(new NumberKeypadClickListener(1));
-        keypad2.setOnClickListener(new NumberKeypadClickListener(2));
-        keypad3.setOnClickListener(new NumberKeypadClickListener(3));
-        keypad4.setOnClickListener(new NumberKeypadClickListener(4));
-        keypad5.setOnClickListener(new NumberKeypadClickListener(5));
-        keypad6.setOnClickListener(new NumberKeypadClickListener(6));
-        keypad7.setOnClickListener(new NumberKeypadClickListener(7));
-        keypad8.setOnClickListener(new NumberKeypadClickListener(8));
-        keypad9.setOnClickListener(new NumberKeypadClickListener(9));
+        for(int i = 0; i < keypadArrayList.size(); i++) {
+            keypadArrayList.get(i).setOnClickListener(new NumberKeypadClickListener(i));
+        }
+
         eraseKeypad.setOnClickListener(v -> {
             if(input.length() == 4) {       // 비밀번호를 다시 입력하는 경우
                 if(reInput.length() > 0) {
@@ -94,7 +93,7 @@ public class PasswordActivity extends AppCompatActivity {
             SharedPreferences pref = getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
             SharedPreferences.Editor editor = pref.edit();
             editor.putString(MyTheme.PASSWORD, input);
-            editor.commit();
+            editor.apply();
 
             startPasswordCautionDialog();
         } else {

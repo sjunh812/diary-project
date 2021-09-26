@@ -17,8 +17,8 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MyTheme.applyTheme(this);   // 사용자가 설정한 테마적용 (폰트 및 다크모드)
-        setContentView(R.layout.activity_splash);   // 인플레이션 (Xml -> Java)
+        MyTheme.applyTheme(this);
+        setContentView(R.layout.activity_splash);
 
         SharedPreferences pref = getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
         if(pref != null) {
@@ -26,15 +26,13 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         handler.postDelayed(()->{
-            if(password.equals("") || password == null) {
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            } else {
-                Intent intent = new Intent(this, MainPasswordActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        }, 500);    // 0.5초 뒤, 메인 액티비티로 전환
+            Intent intent;
+
+            if(password == null || password.equals("")) intent = new Intent(this, MainActivity.class);
+            else intent = new Intent(this, MainPasswordActivity.class);
+
+            startActivity(intent);
+            finish();
+        }, 800);    // 0.8초 뒤, 메인 액티비티로 전환
     }
 }

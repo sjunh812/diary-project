@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class Pref {
-    public static SharedPreferences pref;
-
     public static final String PREF_NAME = "pref";              // SharedPreferences 이름
     public static final String ASK_LOCATION = "ask_location";   // 위치설정 알림 여부
 

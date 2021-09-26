@@ -147,11 +147,12 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     @Override
     public void onDetach() {
         super.onDetach();
-
         if(needDeleteCache) {
             if(filePaths == null || filePaths.equals("")) combineFilePath();
             deleteFilesCache();          // 남아있는 파일캐시 삭제
         }
+
+        requestListener.stopLocationService();  // 작성프래그먼트 종료시, 위치탐색 종료
 
         if(context != null) {
             context = null;

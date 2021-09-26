@@ -19,11 +19,11 @@
         android:layout_gravity="bottom"
         android:background="@color/background"
         style="@style/BottomNavigationView"
-        app:itemIconSize="23dp"
+        app:itemIconSize="21dp"
         app:elevation="10dp"
         app:itemIconTint="@drawable/item_color"
         app:itemTextColor="@drawable/item_color"
-        app:labelVisibilityMode="labeled"
+        app:labelVisibilityMode="unlabeled"
         app:menu="@menu/menu_bottom" />
 
 </RelativeLayout>
