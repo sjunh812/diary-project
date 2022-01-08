@@ -531,7 +531,7 @@ public class GraphFragment extends Fragment {
                 typeface = Typeface.createFromAsset(context.getAssets(), "font5.ttf");
                 break;
             case 5:
-                typeface = Typeface.createFromAsset(context.getAssets(), "font6.ttf");
+                typeface = Typeface.createFromAsset(context.getAssets(), "font6.otf");
                 break;
             case 6:
                 typeface = Typeface.createFromAsset(context.getAssets(), "font7.ttf");
@@ -544,6 +544,9 @@ public class GraphFragment extends Fragment {
                 break;
             case 9:
                 typeface = Typeface.createFromAsset(context.getAssets(), "font10.ttf");
+                break;
+            case 10:
+                typeface = Typeface.createFromAsset(context.getAssets(), "font11.ttf");
                 break;
             default:
                 typeface = Typeface.createFromAsset(context.getAssets(), "font1.ttf");

@@ -37,6 +37,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
     private TextView dateTextView;
     private TextView timeTextView;
     private TextView weekTextView;
+    private LinearLayout bookmarkView;
     private ImageView starImageView;
     private RelativeLayout weatherAndLocationLayout;
 
@@ -83,6 +84,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         dateTextView = (TextView)itemView.findViewById(R.id.dateTextView);
         timeTextView = (TextView)itemView.findViewById(R.id.timeTextView);
         weekTextView = (TextView)itemView.findViewById(R.id.weekTextView);
+        bookmarkView = (LinearLayout)itemView.findViewById(R.id.bookmark_view);
         starImageView = (ImageView)itemView.findViewById(R.id.starImageView);
         weatherAndLocationLayout = (RelativeLayout)itemView.findViewById(R.id.weatherAndLocationLayout);
 
@@ -256,6 +258,8 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         String location = item.getAddress();
         locationTextView.setText(location);
         locationTextView2.setText(location);
+        locationTextView.setSelected(true);
+        locationTextView2.setSelected(true);
 
         // 날짜 설정
         String date = item.getCreateDateStr();
@@ -404,11 +408,13 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
 
     private void setStarImage(int index) {
         if(index == 0) {
-            starImageView.setVisibility(View.GONE);
-            starImageView2.setVisibility(View.GONE);
+            bookmarkView.setVisibility(View.GONE);
+//            starImageView.setVisibility(View.GONE);
+//            starImageView2.setVisibility(View.GONE);
         } else {
-            starImageView.setVisibility(View.VISIBLE);
-            starImageView2.setVisibility(View.VISIBLE);
+            bookmarkView.setVisibility(View.VISIBLE);
+//            starImageView.setVisibility(View.VISIBLE);
+//            starImageView2.setVisibility(View.VISIBLE);
         }
     }
 

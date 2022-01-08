@@ -1,5 +1,7 @@
 package org.sjhstudio.diary;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -69,32 +71,25 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements OnTabItemSelectedListener,
         AutoPermissionsListener, OnRequestListener, MyApplication.OnResponseListener, NoteDatabaseCallback {
-    /** 상수 **/
-    private static final String LOG = "MainActivity";                       // 로그 명
-    private static final String SELECTED_TAB_INDEX = "selected_tab_index";  // 일시적으로 액티비티가 닫힌 순간 선택되어있던 탭 번호
-    private static final int REQUEST_ALL_PERMISSIONS = 11;                  // 모든 위험권한 허용 요청시 사용(AutoPermissions)
-    private static final int REQUEST_WEATHER_BY_GRID = 1;                   // 받아온 위도, 경도 정보를 기상청 격자포멧에 맞게 변경 요청시 사용
-    private static final int REQUEST_DETAIL_ACTIVITY = 2;                   // 일기 상세 액티비티 요청시 사용
 
-    /** UI **/
+    private static final String LOG = "MainActivity";
+
     private BottomNavigationView bottomNavigationView;  // 하단 탭
     private CustomStopWriteDialog stopWriteDialog;      // 일기 작성 프래그먼트에서 back 키를 누르면 띄워지는 Dialog
 
-    /** fragment **/
     private ListFragment listFragment;                  // 일기 목록
     private CalendarFragment calendarFragment;          // 기분 달력
     private WriteFragment writeFragment;                // 일기 작성
     private GraphFragment graphFragment;                // 일기 통계
     private OptionFragment optionFragment;              // 더보기
 
-    /** location manager **/
     private LocationManager locationManager;
 
-    /** listener **/
     private GPSListener gpsListener;                    // 위치 정보를 가져오기 위해 필요한 리스너
     private LowVersionGPSListener lowVersionGPSListener;// 위치 정보를 가져오기 위해 필요한 리스너 (api 29 이전 버전)
 
-    /** date format **/
+    // date format
+    // 추후 Utils 클래스에 정리필요..
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
     public static SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
     public static SimpleDateFormat timeFormat = new SimpleDateFormat("a HH:mm");
@@ -103,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
     public static SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
     public static SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
 
-    /** data **/
     private NoteDatabase db;                            // 일기 목록을 담은 db
     private Location curLocation;                       // 현재 위치
     private String curWeatherStr;                       // 현재 날씨 String
@@ -122,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         MyTheme.applyTheme(this);
         setContentView(R.layout.activity_main);
 
-        AutoPermissions.Companion.loadAllPermissions(this, REQUEST_ALL_PERMISSIONS);    // 위험권한 체크
+        AutoPermissions.Companion.loadAllPermissions(this, Val.REQUEST_ALL_PERMISSIONS);    // 위험권한 체크
 
         // DB
         db = new NoteDatabase(this);         // DB 객체 생성
@@ -195,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         } else {
             // 폰트설정 or 다크모드 설정 후 recreate() 호출, 기존 프래그먼트로 돌아와야하는 상황
             // onSaveInstanceState() 호출됨
-            onTabSelected(savedInstanceState.getInt(SELECTED_TAB_INDEX));
+            onTabSelected(savedInstanceState.getInt(Val.SELECTED_TAB_INDEX));
         }
 
         // broadcast receiver (앱 제거시, 비밀번호 데이터 삭제)
@@ -330,7 +324,7 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         url += "&gridy=" + Math.round(gridY);
 
         Map<String, String> params = new HashMap<>();
-        MyApplication.request(REQUEST_WEATHER_BY_GRID, Request.Method.GET, url, params, this);
+        MyApplication.request(Val.REQUEST_WEATHER_BY_GRID, Request.Method.GET, url, params, this);
     }
 
     @Override
@@ -692,7 +686,8 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra("item", item);
 
-        startActivityForResult(intent, REQUEST_DETAIL_ACTIVITY);
+//        startActivityForResult(intent, Val.REQUEST_DETAIL_ACTIVITY);
+        detailActivityResult.launch(intent);
     }
 
     /** OnRequestListener (3)
@@ -706,9 +701,9 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
     /** OnResponseListener
      *  Volley 응답시 호출 **/
     @Override
-    public void onResponse(int reqeustCode, int responseCode, String response) {
-        if(responseCode == MyApplication.RESPONSE_OK) {
-            if(reqeustCode == REQUEST_WEATHER_BY_GRID) {                // 기상청으로 날씨 요청
+    public void onResponse(int requestCode, int responseCode, String response) {
+        if(responseCode == Val.VOLLEY_RESPONSE_OK) {
+            if(requestCode == Val.REQUEST_WEATHER_BY_GRID) {                // 기상청으로 날씨 요청
                 XmlParserCreator creator = new XmlParserCreator() {     // Xml -> Gson
                     @Override
                     public XmlPullParser createParser() {
@@ -768,6 +763,117 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         }
     }
 
+    /**
+     * ActivityResultLauncher
+     * startActivityForResult()가 deprecated 됨에 따라
+     * Activity Result 에 콜백등록 및 Launch
+     */
+    private final ActivityResultLauncher<Intent> cameraResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        // 카메라 콜백
+        int resultCode = result.getResultCode();
+
+        switch(resultCode) {
+            case RESULT_OK:
+                Log.d(LOG, "xxx cameraResult: RESULT_OK");
+
+                if (writeFragment != null) {
+                    CropImage.activity(writeFragment.getFileUri()).setGuidelines(CropImageView.Guidelines.ON).start(this);
+                }
+                break;
+            default:
+                Log.d(LOG, "xxx cameraResult: RESULT_NOT_OK");
+
+                if (writeFragment != null) {
+                    Objects.requireNonNull(getContentResolver()).delete(writeFragment.getFileUri(), null, null);
+                }
+                break;
+        }
+    });
+
+    private final ActivityResultLauncher<Intent> albumResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        // 앨범 콜백
+        int resultCode = result.getResultCode();
+        Intent data = result.getData();
+
+        switch(resultCode) {
+            case RESULT_OK:
+                Log.d(LOG, "xxx albumResult: RESULT_OK");
+
+                Uri uri = Objects.requireNonNull(data).getData();
+                CropImage.activity(uri).setGuidelines(CropImageView.Guidelines.ON).start(this);
+                break;
+            default:
+                Log.d(LOG, "xxx albumResult: RESULT_NOT_OK");
+                break;
+        }
+    });
+
+    private final ActivityResultLauncher<Intent> cropImageActivityResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        // crop image activity 콜백
+        int resultCode = result.getResultCode();
+        Intent data = result.getData();
+
+        switch(resultCode) {
+            case RESULT_OK:
+                Log.d(LOG, "xxx cropImageActivityResult: RESULT_OK");
+
+                CropImage.ActivityResult activityResult = CropImage.getActivityResult(data);
+                String filePath = Objects.requireNonNull(activityResult).getUri().getPath();
+
+                if (writeFragment != null) writeFragment.setPhotoAdapter(filePath);
+                break;
+            default:
+                Log.d(LOG, "xxx cropImageActivityResult: RESULT_NOT_OK");
+                break;
+        }
+    });
+
+    private final ActivityResultLauncher<Intent> fontChangeResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        int resultCode = result.getResultCode();
+
+        switch(resultCode) {
+            case RESULT_OK:
+                recreate();
+                break;
+            default:
+                Log.d(LOG, "xxx fontChangeResult: RESULT_NOT_OK");
+                break;
+        }
+    });
+
+    private final ActivityResultLauncher<Intent> detailActivityResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        int resultCode = result.getResultCode();
+        Intent data = result.getData();
+
+        switch(resultCode) {
+            case Val.DETAIL_ACTIVITY_RESULT_DELETE:
+                Log.d(LOG, "xxx detailActivityResult: 일기삭제됨");
+
+                int id = Objects.requireNonNull(data).getIntExtra("id", -1);
+
+                if (id != -1) {
+                    deleteDB(id);
+
+                    if (selectedTabIndex == 0) {
+                        if(listFragment != null) listFragment.update();
+                    } else {
+                        if (calendarFragment != null) onTabSelected(1);
+                    }
+                }
+                break;
+            case Val.DETAIL_ACTIVITY_RESULT_UPDATE:
+                Log.d(LOG, "xxx detailActivityResult: 일기수정됨");
+
+                Note item = (Note)(Objects.requireNonNull(data).getSerializableExtra("item"));
+
+                if(item != null) showWriteFragment(item);
+                break;
+            default:
+                Log.d(LOG, "xxx detailActivityResult: 예외 응답");
+                break;
+        }
+    });
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -818,35 +924,13 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
             case OptionFragment.REQUEST_FONT_CHANGE:
                 if (resultCode == RESULT_OK) recreate();
                 break;
-
-            case REQUEST_DETAIL_ACTIVITY:
-                if (resultCode == DetailActivity.RESULT_DELETE) {
-                    int id = Objects.requireNonNull(data).getIntExtra("id", -1);
-                    if (id != -1) {
-                        deleteDB(id);
-                        if (selectedTabIndex == 0) {
-                            if (listFragment != null) {
-                                listFragment.update();
-                            }
-                        } else {
-                            if (calendarFragment != null) {
-                                onTabSelected(1);
-                            }
-                        }
-                    }
-                } else if (resultCode == DetailActivity.RESULT_UPDATE) {
-                    Note item = (Note) (Objects.requireNonNull(data).getSerializableExtra("item"));
-                    if (item != null) {
-                        showWriteFragment(item);
-                    }
-                }
         }
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(SELECTED_TAB_INDEX, selectedTabIndex);
+        outState.putInt(Val.SELECTED_TAB_INDEX, selectedTabIndex);
     }
 
     @Override
@@ -854,6 +938,7 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         AutoPermissions.Companion.parsePermissions(this, requestCode, permissions, this);
     }
+
     @Override
     public void onDenied(int i, String[] strings) {
         for(String permission : strings) {
@@ -868,9 +953,11 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
     @Override
     public void onGranted(int i, String[] strings) {}
 
-    /** 위치 관리자 (LocationManager)에서 위치정보를 가져오기 위해 필요한 리스너
-     * LocationListener 를 상속받은 커스텀 GPSListener 클래스 선언 **/
+    /**
+     * LocationListener
+     */
     class GPSListener implements LocationListener {
+
         @Override
         public void onLocationChanged(@NonNull Location location) {
             curLocation = location;                                 // 가져온 위치정보를 curLocation 객체에 대입
@@ -878,13 +965,16 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
             getCurrentWeather();                                    // 갱신된 위치정보를 날씨로 반환 (작성 프래그먼트의 weatherImageView 갱신)
             stopLocationService();
         }
+
         @Override
         public void onProviderEnabled(@NonNull String provider) {}
+
         @Override
         public void onProviderDisabled(@NonNull String provider) {}
     }
 
     class LowVersionGPSListener implements LocationListener {
+
         @Override
         public void onLocationChanged(@NonNull Location location) {
             curLocation = location;                                 // 가져온 위치정보를 curLocation 객체에 대입
@@ -895,8 +985,10 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {}
+
         @Override
         public void onProviderEnabled(@NonNull String provider) {}
+
         @Override
         public void onProviderDisabled(@NonNull String provider) {}
     }

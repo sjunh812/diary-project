@@ -26,18 +26,23 @@
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/activity_main.xml" value="0.23097826086956522" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/activity_main_password.xml" value="0.26953125" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/activity_password.xml" value="0.26953125" />
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/activity_photo.xml" value="0.26640625" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/activity_splash.xml" value="0.26953125" />
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/align_dialog_custom.xml" value="0.26640625" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/calendar_item.xml" value="0.274609375" />
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/date_picker_dialog.xml" value="0.26640625" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/delete_dialog_custom.xml" value="0.274609375" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/dialog_custom.xml" value="0.26953125" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/fragment_calendar.xml" value="0.2749094202898551" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/fragment_graph.xml" value="0.21597222222222223" />
-        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/fragment_list.xml" value="0.2714285714285714" />
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/fragment_list.xml" value="0.2625" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/fragment_option.xml" value="0.26180555555555557" />
-        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/fragment_write.xml" value="0.2714285714285714" />
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/fragment_write.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/gps_dialog_custom.xml" value="0.25" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/item_photo.xml" value="0.274609375" />
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/item_photo_detail.xml" value="0.26640625" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/list_item.xml" value="0.22" />
+        <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/msg_dialog.xml" value="0.26640625" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/stop_write_dialog_custom.xml" value="0.2848731884057971" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/menu/menu_bottom.xml" value="0.26953125" />
       </map>

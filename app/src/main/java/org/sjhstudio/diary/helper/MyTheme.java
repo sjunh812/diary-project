@@ -117,5 +117,10 @@ public class MyTheme {
             context.setTheme(R.style.Theme_DiaryProject10);
             return;
         }
+
+        if(fontIndex == 10) {
+            context.setTheme(R.style.Theme_DiaryProject11);
+            return;
+        }
     }
 }

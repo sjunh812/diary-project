@@ -50,6 +50,7 @@ public class CalendarViewHolder extends RecyclerView.ViewHolder {
         setWeatherImage(item.getWeather());             // 날씨 이미지 설정
         setStarImage(item.getStarIndex());              // 즐겨찾기 설정
         locationTextView.setText(item.getAddress());    // 위치 설정
+        locationTextView.setSelected(true);             // 위치 marquee 처리
         timeTextView.setText(item.getTime());           // 시간 설정
         contentsTextView.setText(item.getContents());   // 내용 설정
 

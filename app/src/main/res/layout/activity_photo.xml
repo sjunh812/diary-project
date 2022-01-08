@@ -25,12 +25,58 @@
         android:background="@color/background"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.github.chrisbanes.photoview.PhotoView
-            android:id="@+id/photoView"
-            android:layout_marginTop="100dp"
-            android:layout_marginBottom="100dp"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/photo_view_view_pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="80dp"
+            android:layout_marginBottom="120dp" />
+
+        <LinearLayout
+            android:id="@+id/photo_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:layout_marginRight="30dp"
+            android:orientation="horizontal"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/gray_ellipse">
+
+            <TextView
+                android:id="@+id/current_pos_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textSize="13sp"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="/"
+                android:textSize="13sp"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/total_pos_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2"
+                android:textSize="13sp"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+<!--        <com.github.chrisbanes.photoview.PhotoView-->
+<!--            android:id="@+id/photoView"-->
+<!--            android:layout_marginTop="100dp"-->
+<!--            android:layout_marginBottom="100dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent" />-->
 
     </FrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

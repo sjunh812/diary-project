@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="13dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
 
@@ -24,7 +24,7 @@
             android:layout_marginRight="10dp"
             android:text="일기목록"
             android:textColor="@color/font"
-            android:textSize="25sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         <TextView
@@ -32,22 +32,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="3dp"
             android:layout_toLeftOf="@+id/starButton"
             android:background="@drawable/border_button_view"
             android:clickable="true"
-            android:paddingLeft="10dp"
+            android:paddingLeft="9dp"
             android:paddingTop="3dp"
-            android:paddingRight="10dp"
+            android:paddingRight="9dp"
             android:paddingBottom="3dp"
             android:text="전체보기"
             android:textColor="@color/font"
-            android:textSize="13sp" />
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/starButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/photoButton"
             android:background="@drawable/circle_view"
@@ -56,8 +57,8 @@
 
         <ImageButton
             android:id="@+id/photoButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"

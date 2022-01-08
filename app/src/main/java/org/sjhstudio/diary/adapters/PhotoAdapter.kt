@@ -46,8 +46,10 @@ class PhotoAdapter(val context: Context, val fragment: Fragment?): RecyclerView.
                 if(fragment != null) {
                     listener?.setDialog()
                 } else {
-                    val intent  = Intent(context, PhotoActivity::class.java);
-                    intent.putExtra("picturePath", filePath);
+                    val intent  = Intent(context, PhotoActivity::class.java)
+//                    intent.putExtra("picturePath", filePath)
+                    intent.putExtra("position", adapterPosition)
+                    intent.putExtra("picturePaths", items)
                     context.startActivity(intent);
                 }
             }

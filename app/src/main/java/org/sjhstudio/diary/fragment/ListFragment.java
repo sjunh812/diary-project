@@ -236,7 +236,7 @@ public class ListFragment extends Fragment {
                 super.getItemOffsets(outRect, view, parent, state);
 
                 if(parent.getChildAdapterPosition(view) != 0) {
-                    outRect.top = 40;
+                    outRect.top = 30;
                 }
             }
         });

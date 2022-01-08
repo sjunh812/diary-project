@@ -10,74 +10,90 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/titleTextView"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="13dp"
-            android:text="기분통계"
-            android:textColor="@color/font"
-            android:textSize="25sp"
-            android:textStyle="bold" />
-
-        <RadioGroup
-            android:id="@+id/radioGroup"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
             android:layout_marginBottom="5dp"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
 
-            <org.sjhstudio.diary.custom.MyRadioButton
-                android:id="@+id/allButton"
-                android:layout_width="50dp"
-                android:layout_height="22dp"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/radio_button"
+            <TextView
+                android:id="@+id/titleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="기분통계"
+                android:textColor="@color/font"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/title_margin_view"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp" />
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
                 android:gravity="center"
-                android:text="전체"
-                android:textStyle="bold"
-                android:textColor="@drawable/radio_button_text"
-                android:textSize="13dp" />
+                android:orientation="horizontal">
 
-            <org.sjhstudio.diary.custom.MyRadioButton
-                android:id="@+id/yearButton"
-                android:layout_width="50dp"
-                android:layout_height="22dp"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/radio_button"
-                android:gravity="center"
-                android:text="올해"
-                android:textStyle="bold"
-                android:textColor="@drawable/radio_button_text"
-                android:textSize="13dp" />
+                <org.sjhstudio.diary.custom.MyRadioButton
+                    android:id="@+id/allButton"
+                    android:layout_width="45dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@drawable/radio_button"
+                    android:gravity="center"
+                    android:text="전체"
+                    android:textStyle="bold"
+                    android:textColor="@drawable/radio_button_text"
+                    android:textSize="11dp" />
 
-            <org.sjhstudio.diary.custom.MyRadioButton
-                android:id="@+id/monthButton"
-                android:layout_width="50dp"
-                android:layout_height="22dp"
-                android:background="@drawable/radio_button"
-                android:gravity="center"
-                android:text="이번달"
-                android:textStyle="bold"
-                android:textColor="@drawable/radio_button_text"
-                android:textSize="13dp" />
+                <org.sjhstudio.diary.custom.MyRadioButton
+                    android:id="@+id/yearButton"
+                    android:layout_width="45dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@drawable/radio_button"
+                    android:gravity="center"
+                    android:text="올해"
+                    android:textStyle="bold"
+                    android:textColor="@drawable/radio_button_text"
+                    android:textSize="11dp" />
 
-        </RadioGroup>
+                <org.sjhstudio.diary.custom.MyRadioButton
+                    android:id="@+id/monthButton"
+                    android:layout_width="45dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/radio_button"
+                    android:gravity="center"
+                    android:text="이번달"
+                    android:textStyle="bold"
+                    android:textColor="@drawable/radio_button_text"
+                    android:textSize="11dp" />
+
+            </RadioGroup>
+
+        </RelativeLayout>
+
     </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
@@ -96,7 +112,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:background="@drawable/backgroud_graph"
+                    android:background="@color/background"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -106,7 +122,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginTop="17dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="8dp"
                         android:orientation="horizontal">
 
@@ -169,7 +185,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="10dp"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -489,7 +505,7 @@
                 <!-- android:background="@drawable/backgroud_graph" -->
                 <FrameLayout
                     android:id="@+id/background_graph"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="15dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:layout_width="match_parent"

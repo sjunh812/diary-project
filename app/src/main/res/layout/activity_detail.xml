@@ -28,13 +28,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_above="@+id/container"
-            android:orientation="vertical"
+            android:layout_alignParentTop="true"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:layout_marginBottom="30dp"
-            android:background="@color/background">
+            android:layout_marginBottom="20dp"
+            android:background="@color/background"
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/moodImageView"
@@ -48,37 +48,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/dateTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
+                    android:layout_gravity="center"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="7dp"
                     android:text="2021년 05월 10일"
                     android:textColor="@color/font"
-                    android:layout_gravity="center" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/weekTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:text="월"
                     android:textColor="@color/pastel_700"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:text="월" />
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/starImageView"
-                    android:layout_marginLeft="10dp"
                     android:layout_width="17dp"
                     android:layout_height="17dp"
                     android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
                     android:src="@drawable/star" />
 
             </LinearLayout>
@@ -87,88 +87,88 @@
                 android:id="@+id/timeTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:textSize="13sp"
                 android:layout_gravity="center"
-                android:textColor="@color/gray"
-                android:text="오전 00:30" />
-
-            <FrameLayout
-                android:id="@+id/photo_container"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
                 android:layout_marginBottom="30dp"
-                android:visibility="gone">
-
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/photo_view_pager"
-                    android:layout_gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <LinearLayout
-                    android:id="@+id/photo_indicator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|bottom"
-                    android:layout_marginRight="30dp"
-                    android:orientation="horizontal"
-                    android:paddingTop="3dp"
-                    android:paddingBottom="3dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:background="@drawable/gray_ellipse">
-
-                    <TextView
-                        android:id="@+id/current_banner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1"
-                        android:textSize="13sp"
-                        android:textColor="@color/white" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="/"
-                        android:textSize="13sp"
-                        android:textColor="@color/white" />
-
-                    <TextView
-                        android:id="@+id/total_banner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="2"
-                        android:textSize="13sp"
-                        android:textColor="@color/white" />
-
-                </LinearLayout>
-
-            </FrameLayout>
-
-<!--            <ImageView-->
-<!--                android:id="@+id/pictureImageView"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="200dp"-->
-<!--                android:layout_marginBottom="30dp"-->
-<!--                android:visibility="gone"-->
-<!--                android:src="@drawable/app_icon" />-->
+                android:text="오전 00:30"
+                android:textColor="@color/gray"
+                android:textSize="13sp" />
 
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:background="@color/background"
-                android:scrollbarThumbVertical="@color/transparentGray">
+                android:scrollbarThumbVertical="@color/transparent">
 
-                <TextView
-                    android:id="@+id/contentsTextView"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:lineSpacingExtra="7dp"
-                    android:textColor="@color/font_contents"
-                    android:text="내용입니다.\n줄바꿈입니다."
-                    android:textSize="16sp" />
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:id="@+id/photo_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="30dp"
+                        android:visibility="gone">
+
+                        <androidx.viewpager2.widget.ViewPager2
+                            android:id="@+id/photo_view_pager"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center" />
+
+                        <LinearLayout
+                            android:id="@+id/photo_indicator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|bottom"
+                            android:layout_marginRight="30dp"
+                            android:background="@drawable/gray_ellipse"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="3dp"
+                            android:paddingRight="10dp"
+                            android:paddingBottom="3dp">
+
+                            <TextView
+                                android:id="@+id/current_banner"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1"
+                                android:textColor="@color/white"
+                                android:textSize="13sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="/"
+                                android:textColor="@color/white"
+                                android:textSize="13sp" />
+
+                            <TextView
+                                android:id="@+id/total_banner"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="2"
+                                android:textColor="@color/white"
+                                android:textSize="13sp" />
+
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/contentsTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="5dp"
+                        android:text="내용입니다.\n줄바꿈입니다."
+                        android:textColor="@color/font_contents"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
             </ScrollView>
         </LinearLayout>
 
@@ -178,7 +178,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="30dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="25dp"
             android:layout_alignParentBottom="true">
 
             <TextView
@@ -187,9 +187,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="7dp"
-                android:textSize="15sp"
+                android:text="고양시 일산서구"
                 android:textColor="@color/pastel_700"
-                android:text="고양시 일산서구" />
+                android:textSize="15sp" />
 
             <ImageView
                 android:id="@+id/weatherImageView"
@@ -198,7 +198,5 @@
                 android:layout_toLeftOf="@+id/locationTextView" />
 
         </RelativeLayout>
-
     </RelativeLayout>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

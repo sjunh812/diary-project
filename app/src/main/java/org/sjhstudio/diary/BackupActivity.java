@@ -24,7 +24,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-//import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
@@ -34,12 +33,18 @@ import com.google.api.services.drive.model.File;
 
 import org.jetbrains.annotations.NotNull;
 import org.sjhstudio.diary.custom.CustomBackupDialog;
+import org.sjhstudio.diary.custom.MsgDialog;
 import org.sjhstudio.diary.googledrive.DriveServiceHelper;
+import org.sjhstudio.diary.helper.DialogUtils;
 import org.sjhstudio.diary.helper.MyTheme;
+import org.sjhstudio.diary.helper.PermissionUtils;
 import org.sjhstudio.diary.note.NoteDatabase;
 
 import java.util.Collections;
 import java.util.Date;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 
 public class BackupActivity extends AppCompatActivity {
     /** 상수 **/
@@ -70,6 +75,18 @@ public class BackupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         MyTheme.applyTheme(this);
         setContentView(R.layout.activity_backup);
+
+        if(!PermissionUtils.Companion.checkGoogleDrivePermission(this)) {
+            DialogUtils.Companion.showGoogleDrivePermissionDialog(this, new Function0<Unit>() {
+                @Override
+                public Unit invoke() {
+                    finish();
+                    return Unit.INSTANCE;
+                }
+            });
+
+            return;
+        }
 
         startProgressDialog("잠시만 기다려주세요.");
         initUI();

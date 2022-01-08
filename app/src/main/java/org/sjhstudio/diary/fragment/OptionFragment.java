@@ -30,6 +30,8 @@ import org.sjhstudio.diary.helper.AppHelper;
 import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.note.NoteDatabaseCallback;
 
+import java.util.Objects;
+
 public class OptionFragment extends Fragment {
     /** 상수 **/
     public static final int REQUEST_FONT_CHANGE = 101;
@@ -98,8 +100,8 @@ public class OptionFragment extends Fragment {
         });
 
         /* 다크모드 설정 */
-        RelativeLayout darkmodLayout = (RelativeLayout)rootView.findViewById(R.id.darkmodeLayout);
-        darkmodLayout.setOnClickListener(new View.OnClickListener() {
+        RelativeLayout darkmodeLayout = (RelativeLayout)rootView.findViewById(R.id.darkmodeLayout);
+        darkmodeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), DarkModeActivity.class);
@@ -213,12 +215,12 @@ public class OptionFragment extends Fragment {
 
     private void setCurFontText(View rootView) {
         Log.d("LOG", "index : " + curFontIndex);
-        SharedPreferences pref = getContext().getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences pref = requireContext().getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
         if(pref != null) {
             curFontIndex = pref.getInt(MyTheme.FONT_KEY, 0);
         }
 
-        curFontTextView = (TextView)rootView.findViewById(R.id.curFontTextView);
+        curFontTextView = rootView.findViewById(R.id.curFontTextView);
         switch(curFontIndex) {
             case 100:
                 curFontTextView.setText("시스템 서체");
@@ -242,7 +244,7 @@ public class OptionFragment extends Fragment {
                 curFontTextView.setText("꼬마나비체");
                 break;
             case 5:
-                curFontTextView.setText("IM혜민체");
+                curFontTextView.setText("J개구쟁이체");
                 break;
             case 6:
                 curFontTextView.setText("타닥타닥체");
@@ -255,6 +257,9 @@ public class OptionFragment extends Fragment {
                 break;
             case 9:
                 curFontTextView.setText("온글잎 윤우체");
+                break;
+            case 10:
+                curFontTextView.setText("코트라 희망체");
                 break;
             default:
                 curFontTextView.setText("THE얌전해진언니체");

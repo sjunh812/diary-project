@@ -37,6 +37,7 @@ public class FontActivity extends AppCompatActivity {
     private RadioButton fontButton8;
     private RadioButton fontButton9;
     private RadioButton fontButton10;
+    private RadioButton fontButton11;
 
     /** data **/
     private int curFontIndex = 0;
@@ -81,6 +82,7 @@ public class FontActivity extends AppCompatActivity {
         fontButton8 = (RadioButton)findViewById(R.id.fontButton8);
         fontButton9 = (RadioButton)findViewById(R.id.fontButton9);
         fontButton10 = (RadioButton)findViewById(R.id.fontButton10);
+        fontButton11 = (RadioButton)findViewById(R.id.fontButton11);
     }
 
     private void initRadioButtonListener() {
@@ -121,7 +123,7 @@ public class FontActivity extends AppCompatActivity {
                         selectedFontIndex = 4;
                         break;
                     case R.id.fontButton6:
-                        font = Typeface.createFromAsset(getAssets(), "font6.ttf");
+                        font = Typeface.createFromAsset(getAssets(), "font6.otf");
                         selectedFontIndex = 5;
                         break;
                     case R.id.fontButton7:
@@ -139,6 +141,10 @@ public class FontActivity extends AppCompatActivity {
                     case R.id.fontButton10:
                         font = Typeface.createFromAsset(getAssets(), "font10.ttf");
                         selectedFontIndex = 9;
+                        break;
+                    case R.id.fontButton11:
+                        font = Typeface.createFromAsset(getAssets(), "font11.ttf");
+                        selectedFontIndex = 10;
                         break;
                 }
 
@@ -208,6 +214,9 @@ public class FontActivity extends AppCompatActivity {
                 break;
             case 9:
                 fontButton10.setChecked(true);
+                break;
+            case 10:
+                fontButton11.setChecked(true);
                 break;
             default:
                 Log.e(LOG, "SharedPreferences 로부터 잘못된 폰트 인덱스 가져옴");

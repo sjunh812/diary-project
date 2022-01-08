@@ -6,8 +6,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,11 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 
 import org.sjhstudio.diary.adapters.PhotoAdapter;
 import org.sjhstudio.diary.custom.CustomDeleteDialog;
@@ -31,31 +27,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DetailActivity extends AppCompatActivity {
-    public static final int RESULT_DELETE = -10;
-    public static final int RESULT_UPDATE = -11;
 
-    /* UI */
+    private static final String LOG = "DetailActivity";
+
     private ImageView moodImageView;
     private TextView dateTextView;
     private TextView weekTextView;
     private TextView timeTextView;
-//    private ImageView pictureImageView;
     private TextView contentsTextView;
     private ImageView weatherImageView;
     private TextView locationTextView;
     private CustomDeleteDialog deleteDialog;
     private ImageView starImageView;
-
-    /** 사진 관련 **/
     private FrameLayout photoContainer;
-    private ViewPager2 photoViewPager;
     private PhotoAdapter photoAdapter;
-    private LinearLayout photoIndicator;
     private TextView currentBanner;
     private TextView totalBanner;
 
-    /* Data */
-    private Intent intent;
     private Note item;
     private Animation moodAnim;
 
@@ -72,46 +60,30 @@ public class DetailActivity extends AppCompatActivity {
 
         moodAnim = AnimationUtils.loadAnimation(this, R.anim.mood_icon_animation);
 
-        initUI();
-        initPhotoUI();
-
-        intent = getIntent();
+        init();
         processIntent();
     }
 
-    private void initUI() {
-        moodImageView = (ImageView)findViewById(R.id.moodImageView);
+    private void init() {
+        moodImageView = findViewById(R.id.moodImageView);
+        dateTextView = findViewById(R.id.dateTextView);
+        weekTextView = findViewById(R.id.weekTextView);
+        timeTextView = findViewById(R.id.timeTextView);
+        contentsTextView = findViewById(R.id.contentsTextView);
+        weatherImageView = findViewById(R.id.weatherImageView);
+        locationTextView = findViewById(R.id.locationTextView);
+        starImageView = findViewById(R.id.starImageView);
+
         moodImageView.startAnimation(moodAnim);
-
-        dateTextView = (TextView)findViewById(R.id.dateTextView);
-        weekTextView = (TextView)findViewById(R.id.weekTextView);
-        timeTextView = (TextView)findViewById(R.id.timeTextView);
-
-//        pictureImageView = (ImageView)findViewById(R.id.pictureImageView);
-//        pictureImageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(item.getPicture() != null && !item.getPicture().equals("")) {
-//                    Intent intent  = new Intent(getApplicationContext(), PhotoActivity.class);
-//                    intent.putExtra("picturePath", item.getPicture());
-//                    startActivity(intent);
-//                }
-//            }
-//        });
-
-        contentsTextView = (TextView)findViewById(R.id.contentsTextView);
-        weatherImageView = (ImageView)findViewById(R.id.weatherImageView);
-        locationTextView = (TextView)findViewById(R.id.locationTextView);
-        starImageView = (ImageView)findViewById(R.id.starImageView);
+        initPhoto();
     }
 
-    private void initPhotoUI() {
+    private void initPhoto() {
+        ViewPager2 photoViewPager = findViewById(R.id.photo_view_pager);
         photoContainer = findViewById(R.id.photo_container);
-        photoIndicator = findViewById(R.id.photo_indicator);
         currentBanner = findViewById(R.id.current_banner);
         totalBanner = findViewById(R.id.total_banner);
 
-        photoViewPager = findViewById(R.id.photo_view_pager);
         photoViewPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         photoAdapter = new PhotoAdapter(this, null);
         photoViewPager.setAdapter(photoAdapter);
@@ -135,40 +107,27 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void processIntent() {
+        Intent intent = getIntent();
+
         if (intent != null) {
             item = (Note) intent.getSerializableExtra("item");
-            int moodIndex = item.getMood();
-            int weatherIndex = item.getWeather();
-            int starIndex = item.getStarIndex();
-            String date = item.getCreateDateStr();
-            String week = item.getDayOfWeek();
-            String time = item.getTime();
-            String contents = item.getContents();
-            String location = item.getAddress();
 
-            setMoodImage(moodIndex);
-            setWeatherImage(weatherIndex);
-            setStarImage(starIndex);
-            dateTextView.setText(date);
-            weekTextView.setText(week);
-            timeTextView.setText(time);
-            contentsTextView.setText(contents);
-            locationTextView.setText(location);
-
-//            if (item.getPicture() != null && !item.getPicture().equals("")) {
-//                photoContainer.setVisibility(View.VISIBLE);
-//
-//                Glide.with(this).load(Uri.parse("file://" + item.getPicture())).apply(RequestOptions.bitmapTransform(MainActivity.option)).into(pictureImageView);
-//            } else {
-//                photoContainer.setVisibility(View.GONE);
-//            }
+            setMoodImage(item.getMood());
+            setWeatherImage(item.getWeather());
+            setStarImage(item.getStarIndex());
+            dateTextView.setText(item.getCreateDateStr());
+            weekTextView.setText(item.getDayOfWeek());
+            timeTextView.setText(item.getTime());
+            contentsTextView.setText(item.getContents());
+            locationTextView.setText(item.getAddress());
             setPhoto(item.getPicture());
         }
     }
 
     public void setPhoto(String paths) {
         if(paths != null && !paths.equals("")) {
-            String picturePaths[] = paths.split(",");
+            String[] picturePaths = paths.split(",");
+
             if(picturePaths.length > 0) {
                 photoAdapter.setItems(new ArrayList<String>(Arrays.asList(picturePaths)));
                 photoAdapter.notifyDataSetChanged();
@@ -212,6 +171,7 @@ public class DetailActivity extends AppCompatActivity {
                 moodImageView.setImageResource(R.drawable.mood_yawn_color);
                 break;
             default:    // default(미소)
+                Log.d(LOG, "xxx 기분 이미지 에러: index(" + index + ")");
                 moodImageView.setImageResource(R.drawable.mood_smile_color);
                 break;
         }
@@ -241,52 +201,45 @@ public class DetailActivity extends AppCompatActivity {
                 weatherImageView.setImageResource(R.drawable.weather_icon_7);
                 break;
             default:
-                //weatherImageView.setImageResource(R.drawable.weather_icon_1);
+                Log.d(LOG, "xxx 날씨 이미지 에러: index(" + index + ")");
                 break;
         }
     }
 
     private void setStarImage(int index) {
-        if(index == 0) {
-            starImageView.setVisibility(View.GONE);
-        } else {
-            starImageView.setVisibility(View.VISIBLE);
-        }
+        if(index == 0)  starImageView.setVisibility(View.GONE);
+        else starImageView.setVisibility(View.VISIBLE);
     }
 
     private void showDeleteDialog() {
         deleteDialog = new CustomDeleteDialog(this);
         deleteDialog.show();
-
         deleteDialog.setTitleTextView("일기 삭제");
         deleteDialog.setDeleteTextView("일기를 삭제하시겠습니까?\n삭제한 일기는 복구가 불가능합니다.");
         deleteDialog.setDeleteButtonText("삭제");
         deleteDialog.setCancelButton2Text("취소");
-        deleteDialog.setDeleteButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int id = item.get_id();
-                String path = item.getPicture();
+        deleteDialog.setDeleteButtonOnClickListener( v -> {
+            int id = item.get_id();
+            String path = item.getPicture();
 
-                if(path != null && !path.equals("")) {
-                    File file = new File(path);
-                    file.delete();
-                }
-                deleteDialog.dismiss();
-
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra("id", id);
-
-                setResult(RESULT_DELETE, intent);
-                finish();
+            if(path != null && !path.equals("")) {
+                File file = new File(path);
+                file.delete();
             }
+
+            deleteDialog.dismiss();
+
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.putExtra("id", id);
+
+            setResult(Val.DETAIL_ACTIVITY_RESULT_DELETE, intent);
+            finish();
         });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_top, menu);
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -294,18 +247,21 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        if(id == android.R.id.home) {       // back
-            finish();
-            return true;
-        } else if(id == R.id.tab1) {        // delete
-            showDeleteDialog();
-        } else if(id == R.id.tab2) {        // edit
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("item", this.item);
+        switch(id) {
+            case android.R.id.home: // 뒤로가기
+                finish();
+                return true;
+            case R.id.tab1: // 일기삭제
+                showDeleteDialog();
+                break;
+            case R.id.tab2: // 일기수정
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("item", this.item);
 
-            setResult(RESULT_UPDATE, intent);
-            finish();
+                setResult(Val.DETAIL_ACTIVITY_RESULT_UPDATE, intent);
+                finish();
         }
+
         return super.onOptionsItemSelected(item);
     }
 }
