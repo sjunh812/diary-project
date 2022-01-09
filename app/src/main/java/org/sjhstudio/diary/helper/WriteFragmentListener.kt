@@ -1,6 +1,6 @@
 package org.sjhstudio.diary.helper
 
 interface WriteFragmentListener {
-    fun setDialog()
+    fun showAddPhotoDialog()
     fun setDeletePictureDialog(position: Int)
 }

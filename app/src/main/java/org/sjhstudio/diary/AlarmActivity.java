@@ -20,7 +20,6 @@ import android.widget.TextView;
 import org.sjhstudio.diary.custom.CustomTimePickerDialog;
 import org.sjhstudio.diary.helper.AlarmHelper;
 import org.sjhstudio.diary.helper.MyTheme;
-import org.sjhstudio.diary.helper.Pref;
 
 import java.util.Calendar;
 import java.util.Date;

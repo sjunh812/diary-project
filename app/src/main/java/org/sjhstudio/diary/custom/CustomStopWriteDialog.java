@@ -11,10 +11,7 @@ import androidx.annotation.NonNull;
 
 import org.sjhstudio.diary.R;
 
-public class CustomStopWriteDialog extends Dialog {
-    ImageButton cancelButton;
-    Button backButton;
-    Button continueButton;
+public class CustomStopWriteDialog extends Dialog implements View.OnClickListener {
 
     public CustomStopWriteDialog(@NonNull Context context) {
         super(context);
@@ -29,20 +26,31 @@ public class CustomStopWriteDialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stop_write_dialog_custom);
 
-        cancelButton = (ImageButton)findViewById(R.id.cancelButton);
-        backButton = (Button)findViewById(R.id.backButton);
-        continueButton = (Button)findViewById(R.id.continueButton);
+        findViewById(R.id.cancelButton).setOnClickListener(this);
+        findViewById(R.id.backButton).setOnClickListener(this);
+        findViewById(R.id.continueButton).setOnClickListener(this);
     }
 
     public void setCancelButtonOnClickListener(View.OnClickListener listener) {
-        cancelButton.setOnClickListener(listener);
+        findViewById(R.id.cancelButton).setOnClickListener(listener);
     }
 
     public void setBackButtonOnClickListener(View.OnClickListener listener) {
-        backButton.setOnClickListener(listener);
+        findViewById(R.id.backButton).setOnClickListener(listener);
     }
 
     public void setContinueButtonOnClickListener(View.OnClickListener listener) {
-        continueButton.setOnClickListener(listener);
+        findViewById(R.id.continueButton).setOnClickListener(listener);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.cancelButton:
+            case R.id.backButton:
+            case R.id.continueButton:
+                dismiss();
+                break;
+        }
     }
 }

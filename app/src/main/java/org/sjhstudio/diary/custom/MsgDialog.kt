@@ -31,7 +31,15 @@ class MsgDialog(context: Context, val title: String, val contents: String): Dial
         findViewById<Button>(R.id.yes_btn).text = text
     }
 
+    fun setNoBtnText(text: String) {
+        findViewById<Button>(R.id.no_btn).text = text
+    }
+
     fun setOnYesBtnClickListener(listener: View.OnClickListener) {
         findViewById<Button>(R.id.yes_btn).setOnClickListener(listener)
+    }
+
+    fun setOnNoBtnClickListener(listener: View.OnClickListener) {
+        findViewById<Button>(R.id.no_btn).setOnClickListener(listener)
     }
 }

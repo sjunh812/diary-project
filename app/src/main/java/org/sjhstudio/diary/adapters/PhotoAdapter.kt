@@ -18,24 +18,19 @@ import org.sjhstudio.diary.PhotoActivity
 import org.sjhstudio.diary.R
 import org.sjhstudio.diary.helper.WriteFragmentListener
 
-class PhotoAdapter(val context: Context, val fragment: Fragment?): RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>(){
+class PhotoAdapter(val context: Context, val fragment: Fragment?): RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
+
     var items: ArrayList<String> = arrayListOf()
     private var listener: WriteFragmentListener? = null
 
     init {
-        if(fragment is WriteFragmentListener) {
-            listener = fragment
-        }
+        if(fragment is WriteFragmentListener) listener = fragment
     }
 
     inner class PhotoViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        private var container: FrameLayout
-        private var photo: ImageView
 
-        init {
-            container = itemView.findViewById(R.id.container)
-            photo = itemView.findViewById(R.id.photo)
-        }
+        private var container: FrameLayout = itemView.findViewById(R.id.container)
+        private var photo: ImageView = itemView.findViewById(R.id.photo)
 
         fun setPhoto(filePath: String) {
             Glide.with(context).load(Uri.parse("file://$filePath")).transform(FitCenter(), RoundedCorners(20)).into(photo)
@@ -44,7 +39,7 @@ class PhotoAdapter(val context: Context, val fragment: Fragment?): RecyclerView.
                 println("click!!")
 
                 if(fragment != null) {
-                    listener?.setDialog()
+                    listener?.showAddPhotoDialog()
                 } else {
                     val intent  = Intent(context, PhotoActivity::class.java)
 //                    intent.putExtra("picturePath", filePath)

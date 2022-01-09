@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -45,20 +47,23 @@ import org.sjhstudio.diary.helper.OnTabItemSelectedListener;
 import org.sjhstudio.diary.helper.WriteFragmentListener;
 import org.sjhstudio.diary.note.Note;
 import org.sjhstudio.diary.note.NoteDatabaseCallback;
+import org.sjhstudio.diary.utils.DialogUtils;
+import org.sjhstudio.diary.utils.PermissionUtils;
+import org.sjhstudio.diary.utils.Utils;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
+
+import kotlin.Unit;
 
 public class WriteFragment extends Fragment implements WriteFragmentListener {
-    /** 상수 **/
-    private static final String LOG = "WriteFragment";  // log
-    public static final int REQUEST_CAMERA = 21;        // 카메라 액티비티에 보내는 요청
-    public static final int REQUEST_ALBUM = 22;         // 갤러리 액티비티에 보내는 요청
 
-    /** UI **/
+    private static final String LOG = "WriteFragment";  // log
+
     private TextView titleTextView;
     private ImageView weatherImageView;
     private ImageView weatherAddImageView;
@@ -86,7 +91,6 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     private SwipeRefreshLayout swipeRefreshLayout;      // 새로고침 뷰
 
     /** 사진관련 **/
-    //    private ImageView pictureImageView;
     private ImageView addPictureImageView;
     private FrameLayout pictureContainer;               // 아무 사진도 넣지않은 경우, 사진 추가시 클릭 이벤트가 발생하는 container
     private ViewPager2 photoViewPager;
@@ -137,6 +141,7 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+
         this.context = context;
 
         if(context instanceof OnTabItemSelectedListener) tabListener = (OnTabItemSelectedListener)context;
@@ -147,12 +152,13 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     @Override
     public void onDetach() {
         super.onDetach();
+
+        requestListener.stopLocationService();  // 위치탐색종료
+
         if(needDeleteCache) {
             if(filePaths == null || filePaths.equals("")) combineFilePath();
-            deleteFilesCache();          // 남아있는 파일캐시 삭제
+            deleteFilesCache(); // 남아있는 파일캐시 삭제
         }
-
-        requestListener.stopLocationService();  // 작성프래그먼트 종료시, 위치탐색 종료
 
         if(context != null) {
             context = null;
@@ -162,13 +168,16 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         }
     }
 
-    /** 전체 파일캐쉬 삭제 (사진경로 분리 후) **/
+    /**
+     * 파일캐쉬 삭제
+     * (여러개 사진경로)
+     */
     public void deleteFilesCache() {
         if(filePaths != null && !filePaths.equals("")) {
-            String picturePaths[] = filePaths.split(",");
+            String[] picturePaths = filePaths.split(",");
 
-            for(int i = 0; i < picturePaths.length; i++) {
-                File file = new File(picturePaths[i]);
+            for (String picturePath : picturePaths) {
+                File file = new File(picturePath);
                 file.delete();
             }
 
@@ -176,7 +185,11 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         }
     }
 
-    /** 단일 파일캐쉬 삭제 (단일 사진경로) **/
+    /**
+     * 파일캐쉬 삭제
+     * (단일 경로)
+     * @param filePath // 경로명
+     */
     public void deleteFileCache(String filePath) {
         if(filePath != null && !filePath.equals("")) {
             File file = new File(filePath);
@@ -207,26 +220,20 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         initPhoto(rootView);;
 
         if(requestListener != null && updateItem == null) {
-            if(requestListener.checkLocationPermission()) {                             // 위치권한을 허용
-              if(calDate == null) {
-                requestListener.onRequest("getCurrentLocation");              // 메인 액티비티로부터 현재 위치 정보 가져오기
-              } else {
-                  requestListener.onRequest("getCurrentLocation", calDate);   // 메인 액티비티로부터 현재 위치 정보 가져오기 (단, 달력에서 넘어온 Date 사용)
-              }
-            } else {                                                                    // 위치권한을 거부
-                if(calDate == null) {
-                    requestListener.getDateOnly(null);
-                } else {
-                    requestListener.getDateOnly(calDate);
-                }
+            if(PermissionUtils.Companion.checkLocationPermission(requireContext())) {
+                // 위치권한 허용.
+              if(calDate == null) requestListener.onRequest("getCurrentLocation");  // 메인 액티비티로부터 현재위치정보 가져오기
+              else requestListener.onRequest("getCurrentLocation", calDate);    // 메인 액티비티로부터 현재위치정보 가져오기(달력에서 넘어온 Date 사용)
+            } else {
+                // 위치권한 거부.
+                if(calDate == null) requestListener.getDateOnly(null);
+                else requestListener.getDateOnly(calDate);
 
                 Toast.makeText(getContext(), "날씨 및 위치정보를 가져오려면 위치권한이 필요합니다.\n위치권한을 허용해주세요.", Toast.LENGTH_SHORT).show();
             }
         }
 
-        if(updateItem != null) {
-            setUpdateItem();
-        }
+        if(updateItem != null) setUpdateItem();
 
         return rootView;
     }
@@ -362,12 +369,7 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         // 기본 photo UI
         pictureContainer = (FrameLayout)rootView.findViewById(R.id.pictureContainer);
         addPictureImageView = (ImageView)rootView.findViewById(R.id.addPictureImageView);
-        pictureContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setDialog();
-            }
-        });
+        pictureContainer.setOnClickListener( v -> showAddPhotoDialog());
 
         // photo indicator 관련
         photoIndicator = rootView.findViewById(R.id.photo_indicator);
@@ -667,52 +669,37 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         });
     }
 
-    /** 사진추가 Dialog(촬영 or 앨범) **/
-    @Override
-    public void setDialog() {
-        dialog = new CustomDialog(requireContext());
-        dialog.show();
-        dialog.setCancelable(true);
-
-        dialog.setCameraButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showCameraActivity();
-                dialog.dismiss();
-            }
-        });
-        dialog.setAlbumButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAlbumActivity();
-                dialog.dismiss();
-            }
-        });
-    }
-
-    /** 사진 촬영 후 가져오기 **/
+    /**
+     * 사진촬영
+     * (결과는 MainActivity 로 전달.)
+     */
     public void showCameraActivity() {
         Uri uri;
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {        // 안드로이드 10(Q) 이상
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             uri = createUri();
         } else {
             File file = createFile();
-            uri = FileProvider.getUriForFile(getContext(), "org.sjhstudio.diary.fileprovider", file);
+            uri = FileProvider.getUriForFile(requireContext(), "org.sjhstudio.diary.fileprovider", file);
         }
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 
-        if(intent.resolveActivity(getContext().getPackageManager()) != null) {
-            getActivity().startActivityForResult(intent, REQUEST_CAMERA);
+        if(intent.resolveActivity(requireContext().getPackageManager()) != null) {
+            ((MainActivity)requireActivity()).cameraResult.launch(intent);
+//            getActivity().startActivityForResult(intent, REQUEST_CAMERA);
         }
     }
 
-    /** 앨범에서 가져오기 **/
+    /**
+     * 앨범 가져오기
+     * (결과는 MainActivity 로 전달.)
+     */
     public void showAlbumActivity() {
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        getActivity().startActivityForResult(intent, REQUEST_ALBUM);
+        ((MainActivity)requireActivity()).albumResult.launch(intent);
+//        getActivity().startActivityForResult(intent, REQUEST_ALBUM);
     }
 
     public void setItem(Note item) {
@@ -883,22 +870,58 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         }
     }
 
-    /** photo adapter 의 사진경로들을 합침 **/
+    /**
+     * Photo Adapter 내 사진경로 합치기
+     * (','로 구분)
+     */
     public void combineFilePath() {
         for(String filePath : photoAdapter.getItems()) {
             filePaths += filePath + ",";
         }
     }
 
-    class StarButtonClickListener implements  View.OnClickListener {
+    /**
+     * 사진추가 다이얼로그
+     * (저장공간 권한확인 필요)
+     */
+    @Override
+    public void showAddPhotoDialog() {
+        if(!PermissionUtils.Companion.checkStoragePermission(requireContext())) {
+            DialogUtils.Companion.showStoragePermissionDialog(requireContext(), () -> {
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                Uri uri = Uri.fromParts("package", requireActivity().getPackageName(), null);
+
+                intent.setData(uri);
+                ((MainActivity)requireActivity()).startActivity(intent);
+                return Unit.INSTANCE;
+            });
+        } else {
+            DialogUtils.Companion.showAddPhotoDialog(
+                    requireContext(),
+                    () -> {
+                        showCameraActivity();
+                        return Unit.INSTANCE;
+                    },
+                    () -> {
+                        showAlbumActivity();
+                        return Unit.INSTANCE;
+                    });
+        }
+    }
+
+    class StarButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             if(starIndex == 0) {
-                Glide.with(WriteFragment.this).load(getResources().getDrawable(R.drawable.star_icon_color)).into(starButton);
                 starIndex = 1;
+                Glide.with(WriteFragment.this)
+                        .load(ContextCompat.getDrawable(context, R.drawable.star_icon_color))
+                        .into(starButton);
             } else {
-                Glide.with(WriteFragment.this).load(getResources().getDrawable(R.drawable.star_icon)).into(starButton);
                 starIndex = 0;
+                Glide.with(WriteFragment.this)
+                        .load(ContextCompat.getDrawable(context, R.drawable.star_icon))
+                        .into(starButton);
             }
         }
     }
@@ -1073,21 +1096,21 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         @Override
         public void onRefresh() {
             if(requestListener != null) {
-                if(requestListener.checkLocationPermission()) {
+                if(PermissionUtils.Companion.checkLocationPermission(requireContext())) {
                     requestListener.onRequest("checkGPS");
 
-                    if(MainActivity.isGPS) {
-                        if(calDate == null) {
-                            requestListener.onRequest("getCurrentLocation");            // 메인 액티비티로부터 현재 위치 정보 가져오기
-                        } else {
-                            requestListener.onRequest("getCurrentLocation", calDate);   // 메인 액티비티로부터 현재 위치 정보 가져오기 (단, 달력에서 넘어온 Date 사용) }-
-                        }
+                    if(Utils.Companion.checkGPS(requireContext())) {
+                        if(calDate == null)requestListener.onRequest("getCurrentLocation"); // 메인 액티비티로부터 현재위치정보 가져오기
+                        else requestListener.onRequest("getCurrentLocation", calDate);  // 메인 액티비티로부터 현재위치정보 가져오기(달력에서 넘어온 Date 사용)
                     } else {
                         setSwipeRefresh(false);
                     }
                 } else {
-                    Toast.makeText(getContext(), "날씨 및 작성 위치를 가져오기 위해 위치정보가 필요합니다.\n" +
-                            "설정->위치->앱 권한에서 허용해주세요.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(
+                            getContext(),
+                            "날씨 및 작성 위치를 가져오기 위해 위치정보가 필요합니다.\n" + "설정->위치->앱 권한에서 허용해주세요.",
+                            Toast.LENGTH_LONG
+                    ).show();
                     setSwipeRefresh(false);
                 }
             } else {

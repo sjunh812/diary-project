@@ -33,18 +33,16 @@ import com.google.api.services.drive.model.File;
 
 import org.jetbrains.annotations.NotNull;
 import org.sjhstudio.diary.custom.CustomBackupDialog;
-import org.sjhstudio.diary.custom.MsgDialog;
 import org.sjhstudio.diary.googledrive.DriveServiceHelper;
-import org.sjhstudio.diary.helper.DialogUtils;
+import org.sjhstudio.diary.utils.DialogUtils;
 import org.sjhstudio.diary.helper.MyTheme;
-import org.sjhstudio.diary.helper.PermissionUtils;
+import org.sjhstudio.diary.utils.PermissionUtils;
 import org.sjhstudio.diary.note.NoteDatabase;
 
 import java.util.Collections;
 import java.util.Date;
 
 import kotlin.Unit;
-import kotlin.jvm.functions.Function0;
 
 public class BackupActivity extends AppCompatActivity {
     /** 상수 **/
@@ -77,12 +75,9 @@ public class BackupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_backup);
 
         if(!PermissionUtils.Companion.checkGoogleDrivePermission(this)) {
-            DialogUtils.Companion.showGoogleDrivePermissionDialog(this, new Function0<Unit>() {
-                @Override
-                public Unit invoke() {
-                    finish();
-                    return Unit.INSTANCE;
-                }
+            DialogUtils.Companion.showGoogleDrivePermissionDialog(this, () -> {
+                finish();
+                return Unit.INSTANCE;
             });
 
             return;
@@ -92,31 +87,18 @@ public class BackupActivity extends AppCompatActivity {
         initUI();
         requestSignIn();
 
-        accountLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if((signedAccount != null) && !(signedAccount.equals(""))) {
-                    requestSignOut();
-                } else {
-                    startProgressDialog("로그인 중입니다.");
-                    requestSignIn();
-                }
+        accountLayout.setOnClickListener(v -> {
+            if((signedAccount != null) && !(signedAccount.equals(""))) {
+                requestSignOut();
+            } else {
+                startProgressDialog("로그인 중입니다.");
+                requestSignIn();
             }
         });
 
-        backupLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startBackupDialog();
-            }
-        });
+        backupLayout.setOnClickListener(v -> startBackupDialog());
 
-        restoreLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startRestoreDialog();
-            }
-        });
+        restoreLayout.setOnClickListener(v -> startRestoreDialog());
 
         handler = new Handler() {                       // 서브 스레드 -> 메인 스레드(UI)
             @Override

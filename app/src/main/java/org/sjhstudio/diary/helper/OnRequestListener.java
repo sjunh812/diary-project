@@ -9,7 +9,6 @@ public interface OnRequestListener {
     public void onRequest(String command, Date date);
     public void onRequestDetailActivity(Note item);
     public void onRequestWriteFragmentFromCal(Date date);
-    public boolean checkLocationPermission();
     public void getDateOnly(Date date);
     public void stopLocationService();
 }

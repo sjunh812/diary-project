@@ -46,15 +46,17 @@ import org.sjhstudio.diary.fragment.GraphFragment;
 import org.sjhstudio.diary.fragment.ListFragment;
 import org.sjhstudio.diary.fragment.OptionFragment;
 import org.sjhstudio.diary.fragment.WriteFragment;
+import org.sjhstudio.diary.utils.DialogUtils;
 import org.sjhstudio.diary.helper.KMAGrid;
 import org.sjhstudio.diary.helper.MyApplication;
 import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.helper.OnRequestListener;
 import org.sjhstudio.diary.helper.OnTabItemSelectedListener;
-import org.sjhstudio.diary.helper.Pref;
 import org.sjhstudio.diary.note.Note;
 import org.sjhstudio.diary.note.NoteDatabaseCallback;
 import org.sjhstudio.diary.note.NoteDatabase;
+import org.sjhstudio.diary.utils.PermissionUtils;
+import org.sjhstudio.diary.utils.Utils;
 import org.sjhstudio.diary.weather.WeatherItem;
 import org.sjhstudio.diary.weather.WeatherResult;
 import org.xmlpull.v1.XmlPullParser;
@@ -69,14 +71,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import kotlin.Unit;
+
 public class MainActivity extends AppCompatActivity implements OnTabItemSelectedListener,
         AutoPermissionsListener, OnRequestListener, MyApplication.OnResponseListener, NoteDatabaseCallback {
 
     private static final String LOG = "MainActivity";
 
     private BottomNavigationView bottomNavigationView;  // 하단 탭
-    private CustomStopWriteDialog stopWriteDialog;      // 일기 작성 프래그먼트에서 back 키를 누르면 띄워지는 Dialog
-
     private ListFragment listFragment;                  // 일기 목록
     private CalendarFragment calendarFragment;          // 기분 달력
     private WriteFragment writeFragment;                // 일기 작성
@@ -106,9 +108,7 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
     private int selectedTabIndex = 0;                   // 현재 선택되어있는 탭 번호 (onSaveInstanceState() 호출시 Bundle 객체로 저장)
     private Date calDate = null;
     private long backPressTime = 0;
-    public static boolean isGPS = false;
     private boolean isSelected2 = false;                // 일기작성 취소시, 다른메뉴를 선택했을 때 setSelectedTabItem() 호출을 위한 flag
-    private boolean isAskGPSAgain = false;              // 위치설정 알림 여부
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +116,8 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         MyTheme.applyTheme(this);
         setContentView(R.layout.activity_main);
 
-        AutoPermissions.Companion.loadAllPermissions(this, Val.REQUEST_ALL_PERMISSIONS);    // 위험권한 체크
+        // 위험권한 체크
+        AutoPermissions.Companion.loadAllPermissions(this, Val.REQUEST_ALL_PERMISSIONS);
 
         // DB
         db = new NoteDatabase(this);         // DB 객체 생성
@@ -141,39 +142,19 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
 
             if(!isSelected2 && selectedTabIndex == 2 &&
                     writeFragment != null && !(writeFragment.isEmptyContent())) {
-                stopWriteDialog = new CustomStopWriteDialog(MainActivity.this);
-                stopWriteDialog.show();
+                DialogUtils.Companion.showStopWriteDialog(this, () -> {
+                    int position;
 
-                stopWriteDialog.setCancelButtonOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        stopWriteDialog.dismiss();
-                    }
-                });
+                    if(item.getItemId() == R.id.tab1) position = 0;
+                    else if(item.getItemId() == R.id.tab2) position = 1;
+                    else if(item.getItemId() == R.id.tab3) position = 2;
+                    else if(item.getItemId() == R.id.tab4) position = 3;
+                    else position = 4;
 
-                stopWriteDialog.setBackButtonOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        stopWriteDialog.dismiss();
-
-                        int position;
-                        if(item.getItemId() == R.id.tab1) position = 0;
-                        else if(item.getItemId() == R.id.tab2) position = 1;
-                        else if(item.getItemId() == R.id.tab3) position = 2;
-                        else if(item.getItemId() == R.id.tab4) position = 3;
-                        else position = 4;
-
-                        isSelected2 = true;
-                        onTabSelected(position);
-                        Log.d(LOG, "position : " + position);
-                    }
-                });
-
-                stopWriteDialog.setContinueButtonOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        stopWriteDialog.dismiss();
-                    }
+                    isSelected2 = true;
+                    onTabSelected(position);
+                    Log.d(LOG, "position : " + position);
+                    return Unit.INSTANCE;
                 });
             } else {
                 isSelected2 = false;
@@ -183,42 +164,36 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
             return false;
         });
 
-        // savedInstanceState (테마설정, 폰트설정 시 이용됨)
-        if(savedInstanceState == null) {
-            onTabSelected(0);        // default : list fragment
-        } else {
-            // 폰트설정 or 다크모드 설정 후 recreate() 호출, 기존 프래그먼트로 돌아와야하는 상황
-            // onSaveInstanceState() 호출됨
-            onTabSelected(savedInstanceState.getInt(Val.SELECTED_TAB_INDEX));
-        }
+        // savedInstanceState(테마설정, 폰트설정시 이용)
+        if(savedInstanceState == null) onTabSelected(0);
+        else onTabSelected(savedInstanceState.getInt(Val.SELECTED_TAB_INDEX));
 
-        // broadcast receiver (앱 제거시, 비밀번호 데이터 삭제)
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            registerRemovedReceiver();
-        }
+        registerRemovedReceiver();
     }
 
-    /** broadcast receiver 등록 **/
     private void registerRemovedReceiver() {
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
-        intentFilter.addDataScheme(getPackageName());
+        // 리시버등록(앱제거시, 비밀번호 삭제)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+            intentFilter.addDataScheme(getPackageName());
 
-        BroadcastReceiver receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Log.d("MyReceiver", "onReceive: " + intent);
+            BroadcastReceiver receiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    Log.d("MyReceiver", "onReceive: " + intent);
 
-                SharedPreferences pref = context.getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-                if(pref != null) {
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.remove(MyTheme.PASSWORD);
-                    editor.apply();
+                    SharedPreferences pref = context.getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+                    if(pref != null) {
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.remove(MyTheme.PASSWORD);
+                        editor.apply();
+                    }
                 }
-            }
-        };
+            };
 
-        registerReceiver(receiver, intentFilter);
+            registerReceiver(receiver, intentFilter);
+        }
     }
 
     @Override
@@ -226,8 +201,10 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         isSelected2 = flag;
     }
 
-    /** 위치 탐색 함수
-     * 날짜 + 위치 + 날씨 정보 갱신 **/
+    /**
+     * 위치 가져오기
+     * @param date
+     */
     public void getCurrentLocation(Date date) {
         if(date == null) curDate = new Date();                  // 현재 날짜정보
         else curDate = date;                                    // 사용자가 선택한 날짜정보
@@ -241,17 +218,12 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
             writeFragment.setDateTextView(_date);
             try {
                 writeFragment.setCurDate(Integer.parseInt(curYear), Integer.parseInt(curMonth), Integer.parseInt(curDay));
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
+            } catch(Exception e) { e.printStackTrace(); }
         }
 
-        // 위치 정보를 가져오기 위해 필요한 LocationManager 시스템 서비스 객체 정의
-        // LocationManager 에서 위치 정보를 얻기 위해 LocationListener 이용
-        // GPSListener 라는 이름으로 LocationListener 를 재정의
         try {
-            if(checkLocationPermission()) {
-                //curLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);   // 제일 최근 위치 정보를
+            if(PermissionUtils.Companion.checkLocationPermission(this)) {
+//                curLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);   // 최근 위치정보
                 long minTime = 1000;                                          // 업데이트 주기 10초
                 float minDistance = 0;                                         // 업데이트 거리간격 0
 
@@ -265,11 +237,12 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
                     locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDistance, lowVersionGPSListener);    // 위치 업데이트
                 }
             }
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        } catch(Exception e) { e.printStackTrace(); }
     }
 
+    /**
+     * 주소 가져오기
+     */
     public void getCurrentAddress() {
         Geocoder geoCoder = new Geocoder(this);
 
@@ -306,11 +279,12 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
                     writeFragment.setLocationTextView(stringBuilder.toString());
                 }
             }
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        } catch(Exception e) { e.printStackTrace(); }
     }
 
+    /**
+     * 날씨 가져오기
+     */
     public void getCurrentWeather() {
         /* 현재 위치의 위도, 경도들 이용하여 기상청이 만든 격자포멧으로 변환 */
         Map<String, Double> map = KMAGrid.getKMAGrid(curLocation.getLatitude(), curLocation.getLongitude());
@@ -330,24 +304,18 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
     @Override
     public void stopLocationService() {
         try {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                locationManager.removeUpdates(gpsListener);
-            } else {
-                locationManager.removeUpdates(lowVersionGPSListener);
-            }
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) locationManager.removeUpdates(gpsListener);
+            else locationManager.removeUpdates(lowVersionGPSListener);
+
             Log.d(LOG, "위치 업데이트 종료!!");
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        } catch(Exception e) { e.printStackTrace(); }
     }
 
     @Override
     public void getDateOnly(Date date) {
-        if(date == null) {
-            curDate = new Date();                               // 현재 날짜정보
-        } else {
-            curDate = date;
-        }
+        if(date == null) curDate = new Date();                  // 현재 날짜정보
+        else curDate = date;
+
         String curYear = yearFormat.format(curDate);            // yyyy
         String curMonth = monthFormat.format(curDate);          // MM
         String curDay = dayFormat.format(curDate);              // dd
@@ -357,86 +325,8 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
             writeFragment.setDateTextView(_date);
             try {
                 writeFragment.setCurDate(Integer.parseInt(curYear), Integer.parseInt(curMonth), Integer.parseInt(curDay));
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
+            } catch(Exception e) { e.printStackTrace(); }
         }
-    }
-
-    @Override
-    public boolean checkLocationPermission() {      // 위치 위험권한 허용 여부 판단
-        int locationPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
-        int locationPermission2 = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-
-        if((locationPermission == PackageManager.PERMISSION_GRANTED) &&
-                (locationPermission2 == PackageManager.PERMISSION_GRANTED)) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean checkGPS() {     // 사용자가 위치 기능을 켰는지 여부 판단
-        LocationManager locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
-
-        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            isGPS = false;
-            return false;
-        }
-
-        isGPS = true;
-        return true;
-    }
-
-    /** checkGPS() 를 통해 위치기능을 켰는지 여부 ->
-     * GPS 를 키지않은경우 Dialog 를 띄워줌 **/
-    public void showGPSDialog() {
-        isAskGPSAgain = Pref.getPAskLocation(this);
-        if(!isAskGPSAgain) return;
-
-        CustomGPSDialog dialog = new CustomGPSDialog(this);
-        dialog.show();
-        dialog.setIsChecked(!isAskGPSAgain);        // 다시묻지않기 checkbox 설정
-
-        dialog.setYesButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(intent);
-
-                isAskGPSAgain = !dialog.getIsChecked();
-                Pref.setPAskLocation(getApplicationContext(), isAskGPSAgain);
-            }
-        });
-    }
-
-    public void showStopWriteDialog() {
-        stopWriteDialog = new CustomStopWriteDialog(this);
-        stopWriteDialog.show();
-
-        stopWriteDialog.setCancelButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopWriteDialog.dismiss();
-            }
-        });
-
-        stopWriteDialog.setBackButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopWriteDialog.dismiss();
-                selectedTabIndex = 0;
-                bottomNavigationView.setSelectedItemId(R.id.tab1);
-            }
-        });
-
-        stopWriteDialog.setContinueButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopWriteDialog.dismiss();
-            }
-        });
     }
 
     public static String getDayOfWeek(Date date) {
@@ -475,24 +365,19 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
 
     @Override
     public void insertDB(Object[] objs) {
-        if(db != null) {
-            db.insert(NoteDatabase.NOTE_TABLE, objs);
-        }
+        if(db != null) db.insert(NoteDatabase.NOTE_TABLE, objs);
     }
 
     @Override
     public void insertDB2(Object[] objs) {
-        if(db != null) {
-            db.insert2(NoteDatabase.NOTE_TABLE, objs);
-        }
+        if(db != null) db.insert2(NoteDatabase.NOTE_TABLE, objs);
     }
 
     @Override
     public ArrayList<Note> selectAllDB() {
         ArrayList<Note> items = new ArrayList<>();
-        if(db != null) {
-            items = db.selectAll(NoteDatabase.NOTE_TABLE);
-        }
+
+        if(db != null) items = db.selectAll(NoteDatabase.NOTE_TABLE);
 
         return items;
     }
@@ -500,9 +385,9 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
     @Override
     public ArrayList<Note> selectPart(int year, int month) {
         ArrayList<Note> items = new ArrayList<>();
-        if(db != null) {
-            items = db.selectPart(NoteDatabase.NOTE_TABLE, year, month);
-        }
+
+        if(db != null) items = db.selectPart(NoteDatabase.NOTE_TABLE, year, month);
+
 
         return items;
     }
@@ -510,9 +395,8 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
     @Override
     public HashMap<Integer, Integer> selectMoodCount(boolean isAll, boolean isYear, boolean isMonth) {
         HashMap<Integer, Integer> hashMap = new HashMap<>();
-        if(db != null) {
-            hashMap = db.selectMoodCount(isAll, isYear, isMonth);
-        }
+
+        if(db != null) hashMap = db.selectMoodCount(isAll, isYear, isMonth);
 
         return hashMap;
     }
@@ -520,62 +404,48 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
     @Override
     public HashMap<Integer, Integer> selectMoodCountWeek(int weekOfDay) {
         HashMap<Integer, Integer> hashMap = new HashMap<>();
-        if(db != null) {
-            hashMap = db.selectMoodCountWeek(weekOfDay);
-        }
+
+        if(db != null) hashMap = db.selectMoodCountWeek(weekOfDay);
 
         return hashMap;
     }
 
     @Override
     public int selectLastYear() {
-        if(db != null) {
-            return db.selectLastYear();
-        }
+        if(db != null) return db.selectLastYear();
 
         return 0;
     }
 
     @Override
     public int selectAllCount() {
-        if(db != null) {
-            return db.selectAllCount();
-        }
+        if(db != null) return db.selectAllCount();
 
         return 0;
     }
 
     @Override
     public int selectStarCount() {
-        if(db != null) {
-            return db.selectStarCount();
-        }
+        if(db != null) return db.selectStarCount();
 
         return 0;
     }
 
     @Override
     public void deleteDB(int id) {
-        if(db != null) {
-            db.delete(NoteDatabase.NOTE_TABLE, id);
-        }
+        if(db != null) db.delete(NoteDatabase.NOTE_TABLE, id);
     }
 
     @Override
     public void updateDB(Note item) {
-        if(db != null) {
-            db.update(NoteDatabase.NOTE_TABLE, item);
-        }
+        if(db != null) db.update(NoteDatabase.NOTE_TABLE, item);
     }
 
     @Override
     public void updateDB2(Note item) {
-        if(db != null) {
-            db.update2(NoteDatabase.NOTE_TABLE, item);
-        }
+        if(db != null) db.update2(NoteDatabase.NOTE_TABLE, item);
     }
 
-    /* OnTabItemSelectedListener 구현(하단 탭 선택간 이벤트 구현) */
     @Override
     public void onTabSelected(int position) {
         switch(position) {
@@ -595,14 +465,13 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
                 bottomNavigationView.setSelectedItemId(R.id.tab5);
                 break;
             default:
-                Log.e(LOG, "ERROR : 하단 탭 선택 에러 발생..");
+                Log.e(LOG, "onTabSelected() error..");
                 break;
         }
     }
 
     private Boolean setSelectedTabItem(int id, FragmentTransaction transaction) {
-        // 일기작성 프래그먼트가 아니라면,
-        // 위치 탐색을 종료함 -> stopLocationService() 호출
+        // WriteFragment 가 아닌경우 위치탐색종료(stopLocationService())
         if(id != R.id.tab3) {
             if(locationManager != null) stopLocationService();
         }
@@ -655,56 +524,71 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         return false;
     }
 
-    /** OnRequestListener 구현 **/
+    /**
+     * OnRequestListener
+     * (1) onRequest(String command)
+     * (2) onRequest(String command, Date date)
+     * (3) onRequestDetailActivity(Note item)
+     * (4) onRequestWriteFragmentFromCal(Date date) : CalendarFragment -> WriteFragment
+     */
     @Override
     public void onRequest(String command) {
-        if(command.equals("getCurrentLocation")) {
-            getCurrentLocation(null);
-        } else if(command.equals("checkGPS")) {
-
-            if(!checkGPS()) {
-                showGPSDialog();
-            }
-        } else if(command.equals("showStopWriteDialog")) {
-            showStopWriteDialog();
+        switch(command) {
+            case "getCurrentLocation":
+                getCurrentLocation(null);
+                break;
+            case "checkGPS":
+                if(!Utils.Companion.checkGPS(this)) {
+                    DialogUtils.Companion.showGPSDialog(this, () -> {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(intent);
+                        return Unit.INSTANCE;
+                    });
+                }
+                break;
+            case "showStopWriteDialog":
+                DialogUtils.Companion.showStopWriteDialog(this, () -> {
+                    selectedTabIndex = 0;
+                    bottomNavigationView.setSelectedItemId(R.id.tab1);
+                    return Unit.INSTANCE;
+                });
+                break;
+            default:
+                Log.d(LOG, "onRequest() 예외발생..");
+                break;
         }
     }
 
-    /** OnRequestListener (1)
-     *  기분달력으로부터 일기작성으로 넘어간 경우에 호출 **/
     @Override
     public void onRequest(String command, Date date) {
-        if(command.equals("getCurrentLocation")) {
-            getCurrentLocation(date);
-        }
+        if(command.equals("getCurrentLocation")) getCurrentLocation(date);
     }
 
-    /** OnRequestListener (2)
-     *  일기목록에서 일기클릭시 상세보기 액티비티로 전환 **/
     @Override
     public void onRequestDetailActivity(Note item) {
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra("item", item);
-
-//        startActivityForResult(intent, Val.REQUEST_DETAIL_ACTIVITY);
         detailActivityResult.launch(intent);
     }
 
-    /** OnRequestListener (3)
-     *  기분달력에서 일기가 없는 특정 날짜 데이터를 가지고 일기작성 액티비티로 전환 **/
     @Override
     public void onRequestWriteFragmentFromCal(Date date) {
         calDate = date;
         onTabSelected(2);
     }
 
-    /** OnResponseListener
-     *  Volley 응답시 호출 **/
+    /**
+     * OnResponseListener
+     * using Volley
+     * @param requestCode
+     * @param responseCode
+     * @param response
+     */
     @Override
     public void onResponse(int requestCode, int responseCode, String response) {
         if(responseCode == Val.VOLLEY_RESPONSE_OK) {
-            if(requestCode == Val.REQUEST_WEATHER_BY_GRID) {                // 기상청으로 날씨 요청
-                XmlParserCreator creator = new XmlParserCreator() {     // Xml -> Gson
+            if(requestCode == Val.REQUEST_WEATHER_BY_GRID) {    // 기상청으로 날씨요청
+                XmlParserCreator creator = new XmlParserCreator() { // Xml -> Gson
                     @Override
                     public XmlPullParser createParser() {
                         try {
@@ -726,9 +610,7 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
                     curWeatherStr = item.getWfKor();
 
                     if(writeFragment != null) writeFragment.setWeatherImageView(curWeatherStr);
-                } catch(Exception e) {
-                    e.printStackTrace();
-                }
+                } catch(Exception e) { e.printStackTrace(); }
 
                 if(writeFragment != null) writeFragment.setSwipeRefresh(false);
             }
@@ -737,7 +619,6 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         }
     }
 
-    // 일기수정시
     @Override
     public void showWriteFragment(Note item) {
         updateItem = item;
@@ -753,11 +634,13 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
                 return;
             }
 
-            if(System.currentTimeMillis() <= backPressTime + 2000) {
-                super.onBackPressed();
-            }
+            if(System.currentTimeMillis() <= backPressTime + 2000) super.onBackPressed();
         } else if(bottomNavigationView.getSelectedItemId() == R.id.tab3) {
-            showStopWriteDialog();
+            DialogUtils.Companion.showStopWriteDialog(this, () -> {
+                selectedTabIndex = 0;
+                bottomNavigationView.setSelectedItemId(R.id.tab1);
+                return Unit.INSTANCE;
+            });
         } else {
             bottomNavigationView.setSelectedItemId(R.id.tab1);
         }
@@ -765,10 +648,9 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
 
     /**
      * ActivityResultLauncher
-     * startActivityForResult()가 deprecated 됨에 따라
-     * Activity Result 에 콜백등록 및 Launch
+     * (startActivityForResult() is deprecated)
      */
-    private final ActivityResultLauncher<Intent> cameraResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    public final ActivityResultLauncher<Intent> cameraResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         // 카메라 콜백
         int resultCode = result.getResultCode();
 
@@ -790,7 +672,7 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         }
     });
 
-    private final ActivityResultLauncher<Intent> albumResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    public final ActivityResultLauncher<Intent> albumResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         // 앨범 콜백
         int resultCode = result.getResultCode();
         Intent data = result.getData();
@@ -808,7 +690,7 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         }
     });
 
-    private final ActivityResultLauncher<Intent> cropImageActivityResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    final ActivityResultLauncher<Intent> cropImageActivityResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         // crop image activity 콜백
         int resultCode = result.getResultCode();
         Intent data = result.getData();
@@ -828,7 +710,7 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         }
     });
 
-    private final ActivityResultLauncher<Intent> fontChangeResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    final ActivityResultLauncher<Intent> fontChangeResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         int resultCode = result.getResultCode();
 
         switch(resultCode) {
@@ -841,7 +723,7 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         }
     });
 
-    private final ActivityResultLauncher<Intent> detailActivityResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    final ActivityResultLauncher<Intent> detailActivityResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         int resultCode = result.getResultCode();
         Intent data = result.getData();
 
@@ -879,33 +761,6 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
         super.onActivityResult(requestCode, resultCode, data);
 
         switch(requestCode) {
-            case WriteFragment.REQUEST_CAMERA:      // 카메라 앱으로 부터
-                if (resultCode == RESULT_OK) {
-                    if (writeFragment != null) {
-                        Log.d(LOG, "onActivityResult : REQUEST_CAMERA (RESULT_OK) " + writeFragment.getFileUri());
-                        CropImage.activity(writeFragment.getFileUri()).setGuidelines(CropImageView.Guidelines.ON).start(this);
-                    }
-                } else {
-                    Log.d(LOG, "onActivityResult : REQUEST_CAMERA (NOT RESULT_OK)");
-
-                    if (writeFragment != null) {
-                        Objects.requireNonNull(getContentResolver()).delete(writeFragment.getFileUri(), null, null);
-//                        getContentResolver().delete(writeFragment.getFileUri(), null, null);
-                    }
-                }
-                break;
-
-            case WriteFragment.REQUEST_ALBUM:      // 앨범으로 부터
-                if (resultCode == RESULT_OK) {
-                    Log.d(LOG, "onActivityResult : REQUEST_ALBUM (RESULT_OK)");
-
-                    Uri uri = Objects.requireNonNull(data).getData();
-                    CropImage.activity(uri).setGuidelines(CropImageView.Guidelines.ON).start(this);
-                } else {
-                    Log.d(LOG, "onActivityResult : REQUEST_ALBUM (NOT RESULT_OK)");
-                }
-                break;
-
             case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     Log.d(LOG, "onActivityResult : CROP_IMAGE_ACTIVITY_REQUEST_CODE (RESULT_OK)");
@@ -941,15 +796,24 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
 
     @Override
     public void onDenied(int i, String[] strings) {
+        int deny = 0;
+
         for(String permission : strings) {
-            if(permission.equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
-                Toast.makeText(getApplicationContext(),
-                        "날씨 및 작성 위치를 가져오기 위해 위치정보가 필요합니다.\n" + "설정->위치->앱 권한에서 허용해주세요.",
-                        Toast.LENGTH_LONG)
-                        .show();
-            }
+            if(permission.equals(Manifest.permission.ACCESS_FINE_LOCATION)
+                || permission.equals(Manifest.permission.ACCESS_COARSE_LOCATION)) deny++;
+        }
+
+        Log.d(LOG, "onDenied(): deny(location)=" + deny);
+
+        if(deny > 1) {
+            Toast.makeText(
+                    getApplicationContext(),
+                    "날씨 및 작성 위치를 가져오기 위해 위치정보가 필요합니다.\n" + "설정->위치->앱 권한에서 허용해주세요.",
+                    Toast.LENGTH_LONG
+            ).show();
         }
     }
+
     @Override
     public void onGranted(int i, String[] strings) {}
 
