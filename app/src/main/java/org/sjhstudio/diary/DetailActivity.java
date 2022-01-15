@@ -26,7 +26,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends BaseActivity {
 
     private static final String LOG = "DetailActivity";
 
@@ -50,7 +50,6 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MyTheme.applyTheme(this);
         setContentView(R.layout.activity_detail);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);

@@ -14,7 +14,7 @@ import android.widget.RadioGroup;
 import org.sjhstudio.diary.helper.MyTheme;
 
 
-public class DarkModeActivity extends AppCompatActivity {
+public class DarkModeActivity extends BaseActivity {
     // UI
     private RadioButton systemModeButton;
     private RadioButton lightModeButton;
@@ -27,7 +27,6 @@ public class DarkModeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MyTheme.applyTheme(this);
         setContentView(R.layout.activity_darkmode);
 
         // 현재 app 에 설정된 테마모드 인덱스를 SharedPreferences 를 이용해 가져옴

@@ -10,14 +10,13 @@ import android.os.Handler;
 
 import org.sjhstudio.diary.helper.MyTheme;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
     private Handler handler = new Handler();    // 0.5초 딜레이를 위한 핸들러
     private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MyTheme.applyTheme(this);
         setContentView(R.layout.activity_splash);
 
         SharedPreferences pref = getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);

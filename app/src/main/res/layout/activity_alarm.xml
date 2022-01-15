@@ -66,9 +66,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:textSize="18sp"
+                android:text="알림"
                 android:textColor="@color/font"
-                android:text="알림" />
+                android:textSize="18sp" />
 
             <Switch
                 android:id="@+id/alarmSwitch"
@@ -100,11 +100,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textColor="@color/pastel_700" />
 
         </RelativeLayout>
-
 
         <TextView
             android:layout_width="wrap_content"
@@ -147,5 +146,7 @@
                 android:layout_alignParentRight="true" />
 
         </RelativeLayout>
+
     </LinearLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

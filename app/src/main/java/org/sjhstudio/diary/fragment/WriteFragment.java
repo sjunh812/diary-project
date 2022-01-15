@@ -56,7 +56,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Objects;
 
 import kotlin.Unit;
 
@@ -417,7 +416,7 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         } else if(weatherStr.equals("비")) {
             weatherImageView.setImageResource(R.drawable.weather_icon_5);
             weatherIndex = 4;
-        } else if(weatherStr.equals("눈/비")) {
+        } else if(weatherStr.equals("비/눈")) {
             weatherImageView.setImageResource(R.drawable.weather_icon_6);
             weatherIndex = 5;
         } else if(weatherStr.equals("눈")){

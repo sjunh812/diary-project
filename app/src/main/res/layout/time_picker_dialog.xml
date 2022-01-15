@@ -18,7 +18,7 @@
             android:layout_gravity="center"
             android:text="시간 선택"
             android:textColor="@color/white"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <ImageButton
@@ -51,6 +51,7 @@
         android:layout_margin="10dp"
         android:background="@drawable/button"
         android:text="확인"
+        android:textSize="15sp"
         android:textStyle="bold"
         android:textColor="@color/white"
         app:backgroundTint="@color/cardview_shadow_end_color"

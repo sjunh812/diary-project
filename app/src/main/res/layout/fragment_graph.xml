@@ -59,7 +59,7 @@
                     android:text="전체"
                     android:textStyle="bold"
                     android:textColor="@drawable/radio_button_text"
-                    android:textSize="11dp" />
+                    android:textSize="11sp" />
 
                 <org.sjhstudio.diary.custom.MyRadioButton
                     android:id="@+id/yearButton"
@@ -71,7 +71,7 @@
                     android:text="올해"
                     android:textStyle="bold"
                     android:textColor="@drawable/radio_button_text"
-                    android:textSize="11dp" />
+                    android:textSize="11sp" />
 
                 <org.sjhstudio.diary.custom.MyRadioButton
                     android:id="@+id/monthButton"
@@ -82,7 +82,7 @@
                     android:text="이번달"
                     android:textStyle="bold"
                     android:textColor="@drawable/radio_button_text"
-                    android:textSize="11dp" />
+                    android:textSize="11sp" />
 
             </RadioGroup>
 
@@ -217,7 +217,7 @@
                                 android:layout_marginTop="5dp"
                                 android:text="1"
                                 android:textColor="@color/red"
-                                android:textSize="16dp"
+                                android:textSize="16sp"
                                 android:textStyle="bold" />
 
                         </LinearLayout>
@@ -250,7 +250,7 @@
                                 android:layout_marginTop="5dp"
                                 android:text="2"
                                 android:textColor="@color/blue"
-                                android:textSize="16dp"
+                                android:textSize="16sp"
                                 android:textStyle="bold" />
 
                         </LinearLayout>
@@ -323,7 +323,7 @@
                                 android:layout_marginTop="5dp"
                                 android:text="4"
                                 android:textColor="@color/lightgreen"
-                                android:textSize="16dp"
+                                android:textSize="16sp"
                                 android:textStyle="bold" />
 
                         </LinearLayout>
@@ -356,7 +356,7 @@
                                 android:layout_marginTop="5dp"
                                 android:text="5"
                                 android:textColor="@color/yellow"
-                                android:textSize="16dp"
+                                android:textSize="16sp"
                                 android:textStyle="bold" />
 
                         </LinearLayout>
@@ -388,7 +388,7 @@
                                 android:layout_marginTop="5dp"
                                 android:text="6"
                                 android:textColor="@color/gray"
-                                android:textSize="16dp"
+                                android:textSize="16sp"
                                 android:textStyle="bold" />
 
                         </LinearLayout>
@@ -430,7 +430,7 @@
                                 android:layout_marginTop="5dp"
                                 android:text="7"
                                 android:textColor="@color/black"
-                                android:textSize="16dp"
+                                android:textSize="16sp"
                                 android:textStyle="bold" />
 
                         </LinearLayout>
@@ -463,7 +463,7 @@
                                 android:layout_marginTop="5dp"
                                 android:text="8"
                                 android:textColor="@color/orange"
-                                android:textSize="16dp"
+                                android:textSize="16sp"
                                 android:textStyle="bold" />
 
                         </LinearLayout>
@@ -495,7 +495,7 @@
                                 android:layout_marginTop="5dp"
                                 android:text="9"
                                 android:textColor="@color/pink"
-                                android:textSize="16dp"
+                                android:textSize="16sp"
                                 android:textStyle="bold" />
 
                         </LinearLayout>

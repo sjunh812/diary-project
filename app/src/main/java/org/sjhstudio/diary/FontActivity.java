@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,207 +20,180 @@ import android.widget.TextView;
 
 import org.sjhstudio.diary.helper.MyTheme;
 
-public class FontActivity extends AppCompatActivity {
-    /** 상수 **/
-    private static final String LOG = "FontActivity";
+import java.util.Objects;
 
-    /** UI **/
-    private TextView exampleTextView;
-    private RadioButton systemFontButton;
-    private RadioButton basicFontButton;
-    private RadioButton fontButton;
-    private RadioButton fontButton2;
-    private RadioButton fontButton3;
-    private RadioButton fontButton4;
-    private RadioButton fontButton5;
-    private RadioButton fontButton6;
-    private RadioButton fontButton7;
-    private RadioButton fontButton8;
-    private RadioButton fontButton9;
-    private RadioButton fontButton10;
-    private RadioButton fontButton11;
+public class FontActivity extends BaseActivity {
 
-    /** data **/
+    private static final String TAG = "FontActivity";
+
     private int curFontIndex = 0;
+    private int curFontSizeIndex = 1;
     private int selectedFontIndex = -1;
-    private Intent intent;
+    private int selectedFontSizeIndex = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MyTheme.applyTheme(this);
         setContentView(R.layout.activity_font);
 
-        // 현재 app 에 설정된 폰트 인덱스를 SharedPreferences 를 이용해 가져옴
         SharedPreferences pref = getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        if(pref != null) {
-            curFontIndex = pref.getInt(MyTheme.FONT_KEY, 0);
-        }
+        if(pref != null) curFontIndex = pref.getInt(MyTheme.FONT_KEY, 0);
+        curFontSizeIndex = Pref.getPFontSize(this);
 
-        initUI();
-        initRadioButtonListener();
-        initButtonListener();
-
-        setExampleTextViewFont();       // SharedPreferences 를 통해 가져온 폰트 인덱스를 통해 라디어 버튼 세팅
+        init();
+        setPrefs();
     }
 
-    private void initUI() {
+    private void init() {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("폰트설정");
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);          // 툴바의 왼쪽 돌아가기버튼 사용을 위한 코드
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        exampleTextView = (TextView)findViewById(R.id.exampleTextView); // 폰트 적용 예시를 보여주는 텍스트 (폰트 적용에 따라 폰트가 바뀌어야함)
-        systemFontButton = (RadioButton)findViewById(R.id.systemFontButton);
-        basicFontButton = (RadioButton)findViewById(R.id.basicFontButton);
-        fontButton = (RadioButton)findViewById(R.id.fontButton);
-        fontButton2 = (RadioButton)findViewById(R.id.fontButton2);
-        fontButton3 = (RadioButton)findViewById(R.id.fontButton3);
-        fontButton4 = (RadioButton)findViewById(R.id.fontButton4);
-        fontButton5 = (RadioButton)findViewById(R.id.fontButton5);
-        fontButton6 = (RadioButton)findViewById(R.id.fontButton6);
-        fontButton7 = (RadioButton)findViewById(R.id.fontButton7);
-        fontButton8 = (RadioButton)findViewById(R.id.fontButton8);
-        fontButton9 = (RadioButton)findViewById(R.id.fontButton9);
-        fontButton10 = (RadioButton)findViewById(R.id.fontButton10);
-        fontButton11 = (RadioButton)findViewById(R.id.fontButton11);
+        initFontRadioBtn();
+        initFontSizeRadioBtn();
+        initBottom();
     }
 
-    private void initRadioButtonListener() {
-
-        RadioGroup fontGroup = (RadioGroup)findViewById(R.id.fontGroup);
-        fontGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                Typeface font = null;
-
-                switch(checkedId) {
-                    case R.id.systemFontButton:
-                        font = Typeface.SANS_SERIF;
-                        selectedFontIndex = 100;
-                        break;
-                    case R.id.basicFontButton:
-                        font = Typeface.createFromAsset(getAssets(), "font.ttf");
-                        selectedFontIndex = -1;
-                        break;
-                    case R.id.fontButton:
-                        font = Typeface.createFromAsset(getAssets(), "font1.ttf");
-                        selectedFontIndex = 0;
-                        break;
-                    case R.id.fontButton2:
-                        font = Typeface.createFromAsset(getAssets(), "font2.ttf");
-                        selectedFontIndex = 1;
-                        break;
-                    case R.id.fontButton3:
-                        font = Typeface.createFromAsset(getAssets(), "font3.ttf");
-                        selectedFontIndex = 2;
-                        break;
-                    case R.id.fontButton4:
-                        font = Typeface.createFromAsset(getAssets(), "font4.ttf");
-                        selectedFontIndex = 3;
-                        break;
-                    case R.id.fontButton5:
-                        font = Typeface.createFromAsset(getAssets(), "font5.ttf");
-                        selectedFontIndex = 4;
-                        break;
-                    case R.id.fontButton6:
-                        font = Typeface.createFromAsset(getAssets(), "font6.otf");
-                        selectedFontIndex = 5;
-                        break;
-                    case R.id.fontButton7:
-                        font = Typeface.createFromAsset(getAssets(), "font7.ttf");
-                        selectedFontIndex = 6;
-                        break;
-                    case R.id.fontButton8:
-                        font = Typeface.createFromAsset(getAssets(), "font8.ttf");
-                        selectedFontIndex = 7;
-                        break;
-                    case R.id.fontButton9:
-                        font = Typeface.createFromAsset(getAssets(), "font9.ttf");
-                        selectedFontIndex = 8;
-                        break;
-                    case R.id.fontButton10:
-                        font = Typeface.createFromAsset(getAssets(), "font10.ttf");
-                        selectedFontIndex = 9;
-                        break;
-                    case R.id.fontButton11:
-                        font = Typeface.createFromAsset(getAssets(), "font11.ttf");
-                        selectedFontIndex = 10;
-                        break;
-                }
-
-                if(font != null) {
-                    exampleTextView.setTypeface(font);
-                }
+    private void initFontRadioBtn() {
+        ((RadioGroup)findViewById(R.id.font_radio_group)).setOnCheckedChangeListener((group, checkedId) -> {
+            switch(checkedId) {
+                case R.id.systemFontButton:
+                    selectedFontIndex = 100;
+                    break;
+                case R.id.basicFontButton:
+                    selectedFontIndex = -1;
+                    break;
+                case R.id.fontButton:
+                    selectedFontIndex = 0;
+                    break;
+                case R.id.fontButton2:
+                    selectedFontIndex = 1;
+                    break;
+                case R.id.fontButton3:
+                    selectedFontIndex = 2;
+                    break;
+                case R.id.fontButton4:
+                    selectedFontIndex = 3;
+                    break;
+                case R.id.fontButton5:
+                    selectedFontIndex = 4;
+                    break;
+                case R.id.fontButton6:
+                    selectedFontIndex = 5;
+                    break;
+                case R.id.fontButton7:
+                    selectedFontIndex = 6;
+                    break;
+                case R.id.fontButton8:
+                    selectedFontIndex = 7;
+                    break;
+                case R.id.fontButton9:
+                    selectedFontIndex = 8;
+                    break;
+                case R.id.fontButton10:
+                    selectedFontIndex = 9;
+                    break;
+                case R.id.fontButton11:
+                    selectedFontIndex = 10;
+                    break;
             }
         });
     }
 
-    private void initButtonListener() {
-        Button okButton = (Button)findViewById(R.id.okButton);
-        okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MyTheme.applyTheme(getApplicationContext(), selectedFontIndex);
-                intent = getIntent();
-                setResult(RESULT_OK, intent);
-
-                finish();
-            }
-        });
-
-        Button cancelButton = (Button)findViewById(R.id.cancelButton);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
+    private void initFontSizeRadioBtn() {
+        ((RadioGroup)findViewById(R.id.font_size_radio_group)).setOnCheckedChangeListener((group, checkedId) -> {
+            switch (checkedId) {
+                case R.id.ss_size_radio_btn:
+                    selectedFontSizeIndex = 0;
+                    break;
+                case R.id.s_size_radio_btn:
+                    selectedFontSizeIndex = 1;
+                    break;
+                case R.id.m_size_radio_btn:
+                    selectedFontSizeIndex = 2;
+                    break;
+                case R.id.l_size_radio_btn:
+                    selectedFontSizeIndex = 3;
+                    break;
+                case R.id.ll_size_radio_btn:
+                    selectedFontSizeIndex = 4;
+                    break;
             }
         });
     }
 
-    private void setExampleTextViewFont() {
+    private void initBottom() {
+        ((Button)findViewById(R.id.okButton)).setOnClickListener( v -> {
+            MyTheme.applyTheme(getApplicationContext(), selectedFontIndex, selectedFontSizeIndex);
+            setResult(RESULT_OK, getIntent());
+            finish();
+        });
+
+        ((Button)findViewById(R.id.cancelButton)).setOnClickListener( v -> {
+            finish();
+        });
+    }
+
+    private void setPrefs() {
         switch(curFontIndex) {
             case 100:
-                systemFontButton.setChecked(true);
+                ((RadioButton)findViewById(R.id.systemFontButton)).setChecked(true);
                 break;
             case -1:
-                basicFontButton.setChecked(true);
+                ((RadioButton)findViewById(R.id.basicFontButton)).setChecked(true);
                 break;
             case 0:
-                fontButton.setChecked(true);
+                ((RadioButton)findViewById(R.id.fontButton)).setChecked(true);
                 break;
             case 1:
-                fontButton2.setChecked(true);
+                ((RadioButton)findViewById(R.id.fontButton2)).setChecked(true);
                 break;
             case 2:
-                fontButton3.setChecked(true);
+                ((RadioButton)findViewById(R.id.fontButton3)).setChecked(true);
                 break;
             case 3:
-                fontButton4.setChecked(true);
+                ((RadioButton)findViewById(R.id.fontButton4)).setChecked(true);
                 break;
             case 4:
-                fontButton5.setChecked(true);
+                ((RadioButton)findViewById(R.id.fontButton5)).setChecked(true);
                 break;
             case 5:
-                fontButton6.setChecked(true);
+                ((RadioButton)findViewById(R.id.fontButton6)).setChecked(true);
                 break;
             case 6:
-                fontButton7.setChecked(true);
+                ((RadioButton)findViewById(R.id.fontButton7)).setChecked(true);
                 break;
             case 7:
-                fontButton8.setChecked(true);
+                ((RadioButton)findViewById(R.id.fontButton8)).setChecked(true);
                 break;
             case 8:
-                fontButton9.setChecked(true);
+                ((RadioButton)findViewById(R.id.fontButton9)).setChecked(true);
                 break;
             case 9:
-                fontButton10.setChecked(true);
+                ((RadioButton)findViewById(R.id.fontButton10)).setChecked(true);
                 break;
             case 10:
-                fontButton11.setChecked(true);
+                ((RadioButton)findViewById(R.id.fontButton11)).setChecked(true);
                 break;
-            default:
-                Log.e(LOG, "SharedPreferences 로부터 잘못된 폰트 인덱스 가져옴");
+        }
+
+        switch(curFontSizeIndex) {
+            case 0:
+                ((RadioButton)findViewById(R.id.ss_size_radio_btn)).setChecked(true);
+                break;
+            case 1:
+                ((RadioButton)findViewById(R.id.s_size_radio_btn)).setChecked(true);
+                break;
+            case 2:
+                ((RadioButton)findViewById(R.id.m_size_radio_btn)).setChecked(true);
+                break;
+            case 3:
+                ((RadioButton)findViewById(R.id.l_size_radio_btn)).setChecked(true);
+                break;
+            case 4:
+                ((RadioButton)findViewById(R.id.ll_size_radio_btn)).setChecked(true);
+                break;
         }
     }
 

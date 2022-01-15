@@ -5,8 +5,6 @@ import androidx.multidex.MultiDexApplication;
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -20,10 +18,10 @@ import java.util.Map;
 
 public class MyApplication extends MultiDexApplication {
 
-    public static RequestQueue requestQueue;        // 웹으로부터 데이터를 요청하기위해 사용되는 RequestQueue
+    public static RequestQueue requestQueue;    // 웹으로부터 데이터를 요청하기위해 사용되는 RequestQueue
 
-    public static interface OnResponseListener {    // Volley 응답 시 사용될 응답 리스너
-        public void onResponse(int requestCode, int responseCode, String response);
+    public interface OnResponseListener {   // Volley 응답 시 사용될 응답 리스너
+        void onResponse(int requestCode, int responseCode, String response);
     }
 
     @Override
@@ -47,22 +45,13 @@ public class MyApplication extends MultiDexApplication {
         super.onTerminate();
     }
 
-    public static void request(final int requestCode, final int method, final String url, final Map<String, String> params, final OnResponseListener listener) {
+    public static void request(final int requestCode, final int method, final String url,
+                               final Map<String, String> params, final OnResponseListener listener) {
         StringRequest request = new StringRequest(
                 method,
                 url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        listener.onResponse(requestCode, Val.VOLLEY_RESPONSE_OK, response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        listener.onResponse(requestCode, Val.VOLLEY_RESPONSE_ERROR, error.getMessage());
-                    }
-                }
+                response -> listener.onResponse(requestCode, Val.VOLLEY_RESPONSE_OK, response),
+                error -> listener.onResponse(requestCode, Val.VOLLEY_RESPONSE_ERROR, error.getMessage())
         ) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -70,7 +59,7 @@ public class MyApplication extends MultiDexApplication {
             }
         };
 
-        request.setShouldCache(false);  // 캐시가 남아있어도 사용x
+        request.setShouldCache(false);  // 캐시x
         request.setRetryPolicy(new DefaultRetryPolicy(10 * 1000, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         MyApplication.requestQueue.add(request);    // requestQueue 에 해당 request 추가
     }

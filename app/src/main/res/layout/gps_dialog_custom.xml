@@ -19,7 +19,7 @@
             android:layout_gravity="center"
             android:text="위치 설정"
             android:textColor="@color/white"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <ImageButton
@@ -46,7 +46,7 @@
         android:layout_marginTop="25dp"
         android:layout_marginBottom="10dp"
         android:text="위치설정을 허용하시겠습니까?"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:textColor="@color/font" />
 
     <CheckBox
@@ -58,7 +58,7 @@
         android:scaleY="0.7"
         android:text="다시 묻지않기 (옵션에서 수정가능)"
         android:textColor="@color/font_sub"
-        android:textSize="15dp"/>
+        android:textSize="15sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -78,7 +78,7 @@
             android:text="아니오"
             android:textStyle="bold"
             android:textColor="@color/white"
-            android:textSize="15dp"
+            android:textSize="15sp"
             app:backgroundTint="@color/cardview_shadow_end_color"
             app:backgroundTintMode="add" />
 
@@ -91,7 +91,7 @@
             android:text="예"
             android:textStyle="bold"
             android:textColor="@color/white"
-            android:textSize="15dp"
+            android:textSize="15sp"
             app:backgroundTint="@color/cardview_shadow_end_color"
             app:backgroundTintMode="add" />
 

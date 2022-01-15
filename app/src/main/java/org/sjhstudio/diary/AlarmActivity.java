@@ -24,7 +24,7 @@ import org.sjhstudio.diary.helper.MyTheme;
 import java.util.Calendar;
 import java.util.Date;
 
-public class AlarmActivity extends AppCompatActivity {
+public class AlarmActivity extends BaseActivity {
     // 상수
     private static final String LOG = "AlarmActivity";
     public static final String SHARED_PREFERENCES_NAME2 = "pref2";  // 알림기능 관련 SharedPreference 이름
@@ -53,7 +53,6 @@ public class AlarmActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MyTheme.applyTheme(this);
         setContentView(R.layout.activity_alarm);
 
         alarmHelper = new AlarmHelper(this);

@@ -8,6 +8,7 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import org.sjhstudio.diary.Pref;
 import org.sjhstudio.diary.R;
 
 public class MyTheme {
@@ -20,17 +21,20 @@ public class MyTheme {
     public static final String ASK_LOCATION = "ask_location";
 
     public static void applyTheme(@NonNull Context context) {
-        int fontIndex = -1;     // default (THE얌전해진언니체)
-        int modeIndex = 0;      // default
+
+        int font = -1;  // THE얌전해진언니체
+        int fontSize = 2;   // 보통
+        int mode = 0;
 
         SharedPreferences pref = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
         if(pref != null) {
-            fontIndex = pref.getInt(FONT_KEY, -1);
-            modeIndex = pref.getInt(MODE_KEY, 0);
+            font = pref.getInt(FONT_KEY, -1);
+            mode = pref.getInt(MODE_KEY, 0);
         }
+        fontSize = Pref.getPFontSize(context);
 
-        applyDarkmode(context, modeIndex);
-        applyTheme(context, fontIndex);
+        applyDarkmode(context, mode);
+        applyTheme(context, font, fontSize);
     }
 
     public static void applyDarkmode(Context context, int modeIndex) {
@@ -52,75 +56,67 @@ public class MyTheme {
         }
     }
 
-    public static void applyTheme(@NonNull Context context, int fontIndex) {
+    public static void applyTheme(@NonNull Context context, int font, int fontSize) {
         SharedPreferences pref = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putInt(FONT_KEY, fontIndex);
+        editor.putInt(FONT_KEY, font);
         editor.commit();
 
-        if(fontIndex == 100) {
-            context.setTheme(R.style.Theme_BasicDiaryProject);
-            return;
+        Pref.setPFontSize(context, fontSize);
+
+        switch(fontSize) {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
         }
 
-        if (fontIndex == -1) {
-            context.setTheme(R.style.Theme_DiaryProject);
-            return;
-        }
-
-        if (fontIndex == 0) {
-            context.setTheme(R.style.Theme_DiaryProject1);
-            return;
-        }
-
-        if (fontIndex == 1) {
-            context.setTheme(R.style.Theme_DiaryProject2);
-            return;
-        }
-
-        if (fontIndex == 2) {
-            context.setTheme(R.style.Theme_DiaryProject3);
-            return;
-        }
-
-        if (fontIndex == 3) {
-            context.setTheme(R.style.Theme_DiaryProject4);
-            return;
-        }
-
-        if (fontIndex == 4) {
-            context.setTheme(R.style.Theme_DiaryProject5);
-            return;
-        }
-
-        if (fontIndex == 5) {
-            context.setTheme(R.style.Theme_DiaryProject6);
-            return;
-        }
-
-        if (fontIndex == 6) {
-            context.setTheme(R.style.Theme_DiaryProject7);
-            return;
-        }
-
-        if (fontIndex == 7) {
-            context.setTheme(R.style.Theme_DiaryProject8);
-            return;
-        }
-
-        if (fontIndex == 8) {
-            context.setTheme(R.style.Theme_DiaryProject9);
-            return;
-        }
-
-        if(fontIndex == 9) {
-            context.setTheme(R.style.Theme_DiaryProject10);
-            return;
-        }
-
-        if(fontIndex == 10) {
-            context.setTheme(R.style.Theme_DiaryProject11);
-            return;
+        switch(font) {
+            case 100:
+                context.setTheme(R.style.Theme_BasicDiaryProject);
+                break;
+            case -1:
+                context.setTheme(R.style.Theme_DiaryProject);
+                break;
+            case 0:
+                context.setTheme(R.style.Theme_DiaryProject1);
+                break;
+            case 1:
+                context.setTheme(R.style.Theme_DiaryProject2);
+                break;
+            case 2:
+                context.setTheme(R.style.Theme_DiaryProject3);
+                break;
+            case 3:
+                context.setTheme(R.style.Theme_DiaryProject4);
+                break;
+            case 4:
+                context.setTheme(R.style.Theme_DiaryProject5);
+                break;
+            case 5:
+                context.setTheme(R.style.Theme_DiaryProject6);
+                break;
+            case 6:
+                context.setTheme(R.style.Theme_DiaryProject7);
+                break;
+            case 7:
+                context.setTheme(R.style.Theme_DiaryProject8);
+                break;
+            case 8:
+                context.setTheme(R.style.Theme_DiaryProject9);
+                break;
+            case 9:
+                context.setTheme(R.style.Theme_DiaryProject10);
+                break;
+            case 10:
+                context.setTheme(R.style.Theme_DiaryProject11);
+                break;
         }
     }
 }

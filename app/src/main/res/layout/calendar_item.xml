@@ -38,7 +38,7 @@
             android:layout_marginRight="10dp"
             android:text="12:00"
             android:textColor="@color/gray"
-            android:textSize="13dp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/locationTextView"
@@ -52,7 +52,7 @@
             android:ellipsize="marquee"
             android:text="고양시 일산서구"
             android:textColor="@color/pastel_700"
-            android:textSize="12dp" />
+            android:textSize="12sp" />
 
     </RelativeLayout>
 
@@ -65,7 +65,7 @@
         android:maxLines="3"
         android:ellipsize="end"
         android:text="내용입니다\n띄어쓰기"
-        android:textSize="13dp"
+        android:textSize="13sp"
         android:textColor="@color/font_contents" />
 
     <ImageView

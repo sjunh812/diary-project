@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.VibrationEffect;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,24 +17,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.sjhstudio.diary.helper.MyTheme;
+import org.sjhstudio.diary.utils.Utils;
 
-public class MainPasswordActivity extends AppCompatActivity {
+public class MainPasswordActivity extends BaseActivity {
+
     private TextView subTitleTextView;
 
-    /** passwrod image **/
-    private ImageView passwordImage1;
-    private ImageView passwordImage2;
-    private ImageView passwordImage3;
-    private ImageView passwordImage4;
+    private ImageView pwImg1;
+    private ImageView pwImg2;
+    private ImageView pwImg3;
+    private ImageView pwImg4;
 
-    /** data **/
     private String password = "";
     private String input = "";
+    private Boolean canInput = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MyTheme.applyTheme(this);
         setContentView(R.layout.activity_main_password);
 
         SharedPreferences pref = getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
@@ -42,10 +44,10 @@ public class MainPasswordActivity extends AppCompatActivity {
 
     private void init() {
         subTitleTextView = findViewById(R.id.sub_title);
-        passwordImage1 = findViewById(R.id.password_image_1);
-        passwordImage2 = findViewById(R.id.password_image_2);
-        passwordImage3 = findViewById(R.id.password_image_3);
-        passwordImage4 = findViewById(R.id.password_image_4);
+        pwImg1 = findViewById(R.id.password_image_1);
+        pwImg2 = findViewById(R.id.password_image_2);
+        pwImg3 = findViewById(R.id.password_image_3);
+        pwImg4 = findViewById(R.id.password_image_4);
 
         Button keypad0 = findViewById(R.id.keypad_0);
         Button keypad1 = findViewById(R.id.keypad_1);
@@ -81,35 +83,41 @@ public class MainPasswordActivity extends AppCompatActivity {
     }
 
     private void comparePassword() {
-        if (input.equals(password)) {
+        if (input.equals(password)) {   // 인증성공
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
-        } else {
+        } else {    // 인증실패
             subTitleTextView.setText("비밀번호가 일치하지 않습니다");
-            new Handler().postDelayed(new Runnable() {              // 0.1초 delay
-                @Override
-                public void run() {
-                    initPasswordImages();
-                }
-            }, 100);
-            input = "";
+            Utils.Companion.startVibrator(this, 500, 50, true);
+            canInput = false;
+
+            // 0.5초 delay
+            new Handler().postDelayed(() -> {
+                subTitleTextView.setText("비밀번호를 다시 입력해주세요");
+                pwImg1.setImageResource(R.drawable.circle_light_purple);
+                pwImg2.setImageResource(R.drawable.circle_light_purple);
+                pwImg3.setImageResource(R.drawable.circle_light_purple);
+                pwImg4.setImageResource(R.drawable.circle_light_purple);
+                canInput = true;
+                input = "";
+            }, 500);
         }
     }
 
     private void setPasswordImages(String curInput) {
         switch (curInput.length()) {
             case 1:
-                passwordImage1.setImageResource(R.drawable.circle_purple);
+                pwImg1.setImageResource(R.drawable.circle_purple);
                 break;
             case 2:
-                passwordImage2.setImageResource(R.drawable.circle_purple);
+                pwImg2.setImageResource(R.drawable.circle_purple);
                 break;
             case 3:
-                passwordImage3.setImageResource(R.drawable.circle_purple);
+                pwImg3.setImageResource(R.drawable.circle_purple);
                 break;
             case 4:
-                passwordImage4.setImageResource(R.drawable.circle_purple);
+                pwImg4.setImageResource(R.drawable.circle_purple);
                 break;
         }
     }
@@ -117,25 +125,18 @@ public class MainPasswordActivity extends AppCompatActivity {
     private void erasePasswordImage(int position) {
         switch (position) {
             case 0:
-                passwordImage1.setImageResource(R.drawable.circle_light_purple);
+                pwImg1.setImageResource(R.drawable.circle_light_purple);
                 break;
             case 1:
-                passwordImage2.setImageResource(R.drawable.circle_light_purple);
+                pwImg2.setImageResource(R.drawable.circle_light_purple);
                 break;
             case 2:
-                passwordImage3.setImageResource(R.drawable.circle_light_purple);
+                pwImg3.setImageResource(R.drawable.circle_light_purple);
                 break;
             case 3:
-                passwordImage4.setImageResource(R.drawable.circle_light_purple);
+                pwImg4.setImageResource(R.drawable.circle_light_purple);
                 break;
         }
-    }
-
-    private void initPasswordImages() {
-        passwordImage1.setImageResource(R.drawable.circle_light_purple);
-        passwordImage2.setImageResource(R.drawable.circle_light_purple);
-        passwordImage3.setImageResource(R.drawable.circle_light_purple);
-        passwordImage4.setImageResource(R.drawable.circle_light_purple);
     }
 
     private class NumberKeypadClickListener implements View.OnClickListener {
@@ -147,7 +148,7 @@ public class MainPasswordActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            if(input.length() <= 3) {
+            if(canInput && input.length() <= 3) {
                 input += number;
                 Log.d("LOG", "input : " + number);
                 setPasswordImages(input);

@@ -91,7 +91,7 @@
                             android:layout_height="wrap_content"
                             android:text="즐겨찾기"
                             android:textColor="@color/yellow"
-                            android:textSize="6dp" />
+                            android:textSize="6sp" />
 
                     </LinearLayout>
                 </RelativeLayout>
@@ -160,9 +160,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/weatherImageView"
-                android:text="고양시 일산서구"
-                android:singleLine="true"
                 android:ellipsize="marquee"
+                android:singleLine="true"
+                android:text="고양시 일산서구"
                 android:textColor="@color/pastel_700"
                 android:textSize="11sp" />
 

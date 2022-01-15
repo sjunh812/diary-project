@@ -73,7 +73,7 @@ import java.util.Objects;
 
 import kotlin.Unit;
 
-public class MainActivity extends AppCompatActivity implements OnTabItemSelectedListener,
+public class MainActivity extends BaseActivity implements OnTabItemSelectedListener,
         AutoPermissionsListener, OnRequestListener, MyApplication.OnResponseListener, NoteDatabaseCallback {
 
     private static final String LOG = "MainActivity";
@@ -113,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MyTheme.applyTheme(this);
         setContentView(R.layout.activity_main);
 
         // 위험권한 체크
@@ -608,6 +607,7 @@ public class MainActivity extends AppCompatActivity implements OnTabItemSelected
                     WeatherResult result = gsonXml.fromXml(response, WeatherResult.class);
                     WeatherItem item = result.body.data.get(0);
                     curWeatherStr = item.getWfKor();
+                    Log.e(LOG, "getWfKor(): " + curWeatherStr);
 
                     if(writeFragment != null) writeFragment.setWeatherImageView(curWeatherStr);
                 } catch(Exception e) { e.printStackTrace(); }

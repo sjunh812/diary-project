@@ -44,7 +44,7 @@ import java.util.Date;
 
 import kotlin.Unit;
 
-public class BackupActivity extends AppCompatActivity {
+public class BackupActivity extends BaseActivity {
     /** 상수 **/
     private static final String LOG = "BackupActivity";
     private static final int REQUEST_CODE_SIGN_IN = 1;
@@ -71,7 +71,6 @@ public class BackupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MyTheme.applyTheme(this);
         setContentView(R.layout.activity_backup);
 
         if(!PermissionUtils.Companion.checkGoogleDrivePermission(this)) {

@@ -19,7 +19,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,233 +27,336 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:id="@+id/example_layout"
+            android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="4dp"
-            android:background="@color/background_sub"
-            android:orientation="vertical"
-            android:padding="30dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="10dp"
-                android:text="적용 예시"
-                android:textColor="@color/font"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/exampleTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:lineSpacingExtra="11dp"
-                android:text="가나다라마바사아자차카타파하\n폰트적용 예시입니다~ \n오늘도 좋은 하루 되세요:)"
-                android:textColor="@color/font"
-                android:textSize="17sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="10dp"
-                android:text="(단, 폰트마다 크기가 다를 수 있습니다.)"
-                android:textColor="@color/pastel_700"
-                android:textSize="13sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/font_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_above="@id/bottom_layout"
-            android:layout_below="@id/example_layout"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="4dp"
-            android:background="@color/background_sub"
-            android:orientation="vertical"
-            android:paddingLeft="20dp"
-            android:paddingTop="20dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="20dp">
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:orientation="horizontal">
+<!--            <LinearLayout
+                android:id="@+id/example_layout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:background="@color/background_sub"
+                android:orientation="vertical"
+                android:padding="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="8dp"
-                    android:text="폰트"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="15dp"
+                    android:text="적용 예시"
                     android:textColor="@color/font"
-                    android:textSize="20dp"
+                    android:textSize="18dp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/exampleTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginRight="10dp"
-                    android:text="(총 13개)"
-                    android:textColor="@color/pastel_700"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:lineSpacingExtra="3dp"
+                    android:text="가나다라마바사아자차카타파하\n폰트적용 예시입니다:)"
+                    android:textColor="@color/font"
                     android:textSize="15dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="(단, 폰트마다 크기가 다를 수 있습니다.)"
+                    android:textColor="@color/pastel_700"
+                    android:textSize="10dp" />
+
+            </LinearLayout>-->
+
+            <LinearLayout
+                android:id="@+id/font_layout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:layout_marginBottom="4dp"
+                android:background="@color/background_sub"
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:paddingTop="20dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginBottom="5dp"
+                        android:text="폰트"
+                        android:textColor="@color/font"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginRight="10dp"
+                        android:text="(총 13개)"
+                        android:textColor="@color/pastel_700"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RadioGroup
+                        android:id="@+id/font_radio_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:id="@+id/systemFontButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7dp"
+                            android:fontFamily="sans-serif"
+                            android:text="시스템서체"
+                            android:textColor="@color/font"
+                            android:textSize="13sp" />
+
+                        <RadioButton
+                            android:id="@+id/basicFontButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7dp"
+                            android:fontFamily="@font/font"
+                            android:text="THE얌전해진언니체"
+                            android:textColor="@color/font"
+                            android:textSize="13sp" />
+
+                        <RadioButton
+                            android:id="@+id/fontButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7dp"
+                            android:fontFamily="@font/font1"
+                            android:text="교보손글씨체"
+                            android:textColor="@color/font"
+                            android:textSize="13sp" />
+
+                        <RadioButton
+                            android:id="@+id/fontButton2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7dp"
+                            android:fontFamily="@font/font2"
+                            android:text="점꼴체"
+                            android:textColor="@color/font"
+                            android:textSize="13sp" />
+
+                        <RadioButton
+                            android:id="@+id/fontButton3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7dp"
+                            android:fontFamily="@font/font3"
+                            android:text="넥슨배찌체"
+                            android:textColor="@color/font"
+                            android:textSize="13sp" />
+
+                        <RadioButton
+                            android:id="@+id/fontButton4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7dp"
+                            android:fontFamily="@font/font4"
+                            android:text="미니콩다방체"
+                            android:textColor="@color/font"
+                            android:textSize="13sp" />
+
+                        <RadioButton
+                            android:id="@+id/fontButton5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7dp"
+                            android:fontFamily="@font/font5"
+                            android:text="꼬마나비체"
+                            android:textColor="@color/font"
+                            android:textSize="13sp" />
+
+                        <RadioButton
+                            android:id="@+id/fontButton6"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7dp"
+                            android:fontFamily="@font/font6"
+                            android:text="J개구쟁이체"
+                            android:textColor="@color/font"
+                            android:textSize="13sp" />
+
+                        <RadioButton
+                            android:id="@+id/fontButton7"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7dp"
+                            android:fontFamily="@font/font7"
+                            android:text="타닥타닥체"
+                            android:textColor="@color/font"
+                            android:textSize="13sp" />
+
+                        <RadioButton
+                            android:id="@+id/fontButton8"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7dp"
+                            android:fontFamily="@font/font8"
+                            android:text="쿠키런체"
+                            android:textColor="@color/font"
+                            android:textSize="13sp" />
+
+                        <RadioButton
+                            android:id="@+id/fontButton9"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7dp"
+                            android:fontFamily="@font/font9"
+                            android:text="온글잎 만두몽키체"
+                            android:textColor="@color/font"
+                            android:textSize="13sp" />
+
+                        <RadioButton
+                            android:id="@+id/fontButton10"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7dp"
+                            android:fontFamily="@font/font10"
+                            android:text="온글잎 윤우체"
+                            android:textColor="@color/font"
+                            android:textSize="13sp" />
+
+                        <RadioButton
+                            android:id="@+id/fontButton11"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7dp"
+                            android:fontFamily="@font/font11"
+                            android:text="코트라 희망체"
+                            android:textColor="@color/font"
+                            android:textSize="13sp" />
+
+                    </RadioGroup>
+
+                </ScrollView>
 
             </LinearLayout>
 
-            <androidx.core.widget.NestedScrollView
+            <LinearLayout
+                android:id="@+id/font_size_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
+                android:background="@color/background_sub"
+                android:orientation="vertical"
+                android:paddingLeft="20dp"
+                android:paddingTop="20dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="20dp">
 
-                <RadioGroup
-                    android:id="@+id/fontGroup"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
                     android:orientation="vertical">
 
-                    <RadioButton
-                        android:id="@+id/systemFontButton"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:text="폰트 크기"
+                        android:textColor="@color/font"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="(단, 폰트 종류나 시스탬 폰트 크기에 따라 다를 수 있습니다.)"
+                        android:textColor="@color/pastel_700"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RadioGroup
+                        android:id="@+id/font_size_radio_group"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="7dp"
-                        android:fontFamily="sans-serif"
-                        android:text="시스템서체"
-                        android:textColor="@color/font"
-                        android:textSize="13dp" />
+                        android:orientation="vertical">
 
-                    <RadioButton
-                        android:id="@+id/basicFontButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="7dp"
-                        android:fontFamily="@font/font"
-                        android:text="THE얌전해진언니체"
-                        android:textColor="@color/font"
-                        android:textSize="13dp" />
+                        <RadioButton
+                            android:id="@+id/ss_size_radio_btn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7dp"
+                            android:text="매우작게"
+                            android:textColor="@color/font"
+                            android:textSize="13sp" />
 
-                    <RadioButton
-                        android:id="@+id/fontButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="7dp"
-                        android:fontFamily="@font/font1"
-                        android:text="교보손글씨체"
-                        android:textColor="@color/font"
-                        android:textSize="13dp" />
+                        <RadioButton
+                            android:id="@+id/s_size_radio_btn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7dp"
+                            android:text="작게"
+                            android:textColor="@color/font"
+                            android:textSize="13sp" />
 
-                    <RadioButton
-                        android:id="@+id/fontButton2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="7dp"
-                        android:fontFamily="@font/font2"
-                        android:text="점꼴체"
-                        android:textColor="@color/font"
-                        android:textSize="13dp" />
+                        <RadioButton
+                            android:id="@+id/m_size_radio_btn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7dp"
+                            android:text="보통"
+                            android:textColor="@color/font"
+                            android:textSize="13sp" />
 
-                    <RadioButton
-                        android:id="@+id/fontButton3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="7dp"
-                        android:fontFamily="@font/font3"
-                        android:text="넥슨배찌체"
-                        android:textColor="@color/font"
-                        android:textSize="13dp" />
+                        <RadioButton
+                            android:id="@+id/l_size_radio_btn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="7dp"
+                            android:text="크게"
+                            android:textColor="@color/font"
+                            android:textSize="13sp" />
 
-                    <RadioButton
-                        android:id="@+id/fontButton4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="7dp"
-                        android:fontFamily="@font/font4"
-                        android:text="미니콩다방체"
-                        android:textColor="@color/font"
-                        android:textSize="13dp" />
+                        <RadioButton
+                            android:id="@+id/ll_size_radio_btn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="매우크게"
+                            android:textColor="@color/font"
+                            android:textSize="13sp" />
 
-                    <RadioButton
-                        android:id="@+id/fontButton5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="7dp"
-                        android:fontFamily="@font/font5"
-                        android:text="꼬마나비체"
-                        android:textColor="@color/font"
-                        android:textSize="13dp" />
+                    </RadioGroup>
 
-                    <RadioButton
-                        android:id="@+id/fontButton6"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="7dp"
-                        android:fontFamily="@font/font6"
-                        android:text="J개구쟁이체"
-                        android:textColor="@color/font"
-                        android:textSize="13dp" />
+                </ScrollView>
 
-                    <RadioButton
-                        android:id="@+id/fontButton7"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="7dp"
-                        android:fontFamily="@font/font7"
-                        android:text="타닥타닥체"
-                        android:textColor="@color/font"
-                        android:textSize="13dp" />
+            </LinearLayout>
 
-                    <RadioButton
-                        android:id="@+id/fontButton8"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="7dp"
-                        android:fontFamily="@font/font8"
-                        android:text="쿠키런체"
-                        android:textColor="@color/font"
-                        android:textSize="13dp" />
-
-                    <RadioButton
-                        android:id="@+id/fontButton9"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="7dp"
-                        android:fontFamily="@font/font9"
-                        android:text="온글잎 만두몽키체"
-                        android:textColor="@color/font"
-                        android:textSize="13dp" />
-
-                    <RadioButton
-                        android:id="@+id/fontButton10"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="7dp"
-                        android:fontFamily="@font/font10"
-                        android:text="온글잎 윤우체"
-                        android:textColor="@color/font"
-                        android:textSize="13dp" />
-
-                    <RadioButton
-                        android:id="@+id/fontButton11"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="7dp"
-                        android:fontFamily="@font/font11"
-                        android:text="코트라 희망체"
-                        android:textColor="@color/font"
-                        android:textSize="13dp" />
-
-                </RadioGroup>
-            </androidx.core.widget.NestedScrollView>
         </LinearLayout>
 
         <RelativeLayout
@@ -273,8 +375,8 @@
                 android:background="@drawable/button"
                 android:text="저장"
                 android:textColor="@color/white"
+                android:textSize="15sp"
                 android:textStyle="bold"
-                android:textSize="15dp"
                 app:backgroundTint="@color/cardview_shadow_end_color"
                 app:backgroundTintMode="add" />
 
@@ -287,10 +389,12 @@
                 android:text="취소"
                 android:textStyle="bold"
                 android:textColor="@color/white"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 app:backgroundTint="@color/cardview_shadow_end_color"
                 app:backgroundTintMode="add" />
 
         </RelativeLayout>
+
     </RelativeLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -18,7 +18,7 @@
             android:layout_gravity="center"
             android:text="사진 가져오기"
             android:textColor="@color/white"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <ImageButton
@@ -66,7 +66,7 @@
                 android:layout_gravity="center"
                 android:text="사진 촬영"
                 android:textColor="@color/font"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -94,7 +94,7 @@
                 android:layout_gravity="center"
                 android:text="사진 앨범에서 선택"
                 android:textColor="@color/font"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
     </LinearLayout>

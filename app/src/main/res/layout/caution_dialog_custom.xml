@@ -19,7 +19,7 @@
             android:layout_gravity="center"
             android:text="백업 하기"
             android:textColor="@color/white"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <ImageButton
@@ -53,7 +53,7 @@
         android:gravity="center"
         android:layout_marginBottom="5dp"
         android:text="백업하시겠습니까?"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textColor="@color/font" />
 
     <TextView
@@ -63,7 +63,7 @@
         android:layout_marginBottom="2dp"
         android:gravity="center"
         android:text="작성한 일기를 구글 드라이브에 저장합니다."
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:textColor="@color/font_contents" />
 
     <TextView
@@ -73,7 +73,7 @@
         android:layout_marginBottom="10dp"
         android:gravity="center"
         android:text="(단, 사진은 백업이 불가능합니다.)"
-        android:textSize="13dp"
+        android:textSize="13sp"
         android:textColor="@color/pastel_700" />
 
     <LinearLayout
@@ -94,7 +94,7 @@
             android:text="취소"
             android:textStyle="bold"
             android:textColor="@color/white"
-            android:textSize="15dp"
+            android:textSize="15sp"
             app:backgroundTint="@color/cardview_shadow_end_color"
             app:backgroundTintMode="add" />
 
@@ -107,8 +107,7 @@
             android:text="백업하기"
             android:textStyle="bold"
             android:textColor="@color/white"
-
-            android:textSize="15dp"
+            android:textSize="15sp"
             app:backgroundTint="@color/cardview_shadow_end_color"
             app:backgroundTintMode="add" />
 

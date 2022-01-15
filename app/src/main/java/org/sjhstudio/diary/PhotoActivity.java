@@ -15,7 +15,7 @@ import org.sjhstudio.diary.helper.MyTheme;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class PhotoActivity extends AppCompatActivity {
+public class PhotoActivity extends BaseActivity {
     private ArrayList<String> picturePaths = new ArrayList<>();
     private int position;
 
@@ -26,7 +26,6 @@ public class PhotoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MyTheme.applyTheme(this);
         setContentView(R.layout.activity_photo);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);

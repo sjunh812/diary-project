@@ -169,7 +169,9 @@
                         android:textSize="16sp" />
 
                 </LinearLayout>
+
             </ScrollView>
+
         </LinearLayout>
 
         <RelativeLayout
@@ -198,5 +200,7 @@
                 android:layout_toLeftOf="@+id/locationTextView" />
 
         </RelativeLayout>
+
     </RelativeLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

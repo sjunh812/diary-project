@@ -18,7 +18,7 @@
             android:layout_gravity="center"
             android:text="날짜 선택"
             android:textColor="@color/white"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <ImageButton
@@ -55,6 +55,7 @@
         app:backgroundTintMode="add"
         android:textColor="@color/white"
         android:textStyle="bold"
+        android:textSize="15sp"
         android:text="확인" />
 
 </LinearLayout>
