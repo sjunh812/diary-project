@@ -1,22 +1,15 @@
 package org.sjhstudio.diary;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import org.sjhstudio.diary.helper.MyTheme;
 
@@ -41,11 +34,11 @@ public class FontActivity extends BaseActivity {
         curFontSizeIndex = Pref.getPFontSize(this);
 
         init();
-        setPrefs();
+        setPrefs(); // 폰트종류 및 크기에 대한 prefs
     }
 
     private void init() {
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("폰트설정");
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);

@@ -39,9 +39,9 @@
     </RelativeLayout>
 
     <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp"
         android:layout_gravity="center"
         android:src="@drawable/caution" />
@@ -53,14 +53,15 @@
         android:gravity="center"
         android:layout_marginBottom="5dp"
         android:text="백업하시겠습니까?"
-        android:textSize="20sp"
+        android:textSize="18sp"
+        android:textStyle="bold"
         android:textColor="@color/font" />
 
     <TextView
         android:id="@+id/subTextView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
+        android:layout_marginBottom="3dp"
         android:gravity="center"
         android:text="작성한 일기를 구글 드라이브에 저장합니다."
         android:textSize="15sp"
@@ -73,7 +74,7 @@
         android:layout_marginBottom="10dp"
         android:gravity="center"
         android:text="(단, 사진은 백업이 불가능합니다.)"
-        android:textSize="13sp"
+        android:textSize="12sp"
         android:textColor="@color/pastel_700" />
 
     <LinearLayout
@@ -112,4 +113,5 @@
             app:backgroundTintMode="add" />
 
     </LinearLayout>
+
 </LinearLayout>

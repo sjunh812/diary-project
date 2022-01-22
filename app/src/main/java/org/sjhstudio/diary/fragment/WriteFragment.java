@@ -228,7 +228,7 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
                 if(calDate == null) requestListener.getDateOnly(null);
                 else requestListener.getDateOnly(calDate);
 
-                Toast.makeText(getContext(), "날씨 및 위치정보를 가져오려면 위치권한이 필요합니다.\n위치권한을 허용해주세요.", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "날씨 및 위치정보를 가져오려면 위치권한이 필요합니다.\n위치권한을 허용해주세요.", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -885,13 +885,14 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
      */
     @Override
     public void showAddPhotoDialog() {
-        if(!PermissionUtils.Companion.checkStoragePermission(requireContext())) {
+        if(!PermissionUtils.Companion.checkStoragePermission(requireContext()) ||
+            !PermissionUtils.Companion.checkCameraPermission(requireContext())) {
             DialogUtils.Companion.showStoragePermissionDialog(requireContext(), () -> {
                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                 Uri uri = Uri.fromParts("package", requireActivity().getPackageName(), null);
 
                 intent.setData(uri);
-                ((MainActivity)requireActivity()).startActivity(intent);
+                requireActivity().startActivity(intent);
                 return Unit.INSTANCE;
             });
         } else {
@@ -1107,8 +1108,8 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
                 } else {
                     Toast.makeText(
                             getContext(),
-                            "날씨 및 작성 위치를 가져오기 위해 위치정보가 필요합니다.\n" + "설정->위치->앱 권한에서 허용해주세요.",
-                            Toast.LENGTH_LONG
+                            "날씨 및 위치정보를 가져오기 위해 위치권한이 필요합니다.\n" + "설정>위치>앱 권한에서 허용해주세요.",
+                            Toast.LENGTH_SHORT
                     ).show();
                     setSwipeRefresh(false);
                 }

@@ -115,8 +115,18 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // 위험권한 체크
-        AutoPermissions.Companion.loadAllPermissions(this, Val.REQUEST_ALL_PERMISSIONS);
+        if(!Pref.getPPermissionGuide(this)) {
+            Log.e(LOG, "권한안내 필요함.");
+            DialogUtils.Companion.showPermissionGuideDialog(this, () -> {
+                AutoPermissions.Companion.loadAllPermissions(this, Val.REQUEST_ALL_PERMISSIONS);
+                Pref.setPPermissionGuide(this, true);
+
+                return Unit.INSTANCE;
+            });
+        } else {
+            Log.e(LOG, "권한안내 완료됨.");
+            AutoPermissions.Companion.loadAllPermissions(this, Val.REQUEST_ALL_PERMISSIONS);
+        }
 
         // DB
         db = new NoteDatabase(this);         // DB 객체 생성
@@ -796,22 +806,56 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
 
     @Override
     public void onDenied(int i, String[] strings) {
-        int deny = 0;
+//        String loc = "";    // 위치
+//        String cam = "";    // 카메라
+//        String storage = "";    // 저장공간
+//        String addr = "";   // 주소록
+//
+//        for(String permission: strings) {
+//            switch(permission) {
+//                case Manifest.permission.ACCESS_FINE_LOCATION:
+//                case Manifest.permission.ACCESS_COARSE_LOCATION:
+//                    loc = "위치 권한(날씨 및 위치 정보)\n";
+//                    break;
+//                case Manifest.permission.CAMERA:
+//                    cam = "카메라 권한(사진추가)\n";
+//                    break;
+//                case Manifest.permission.READ_EXTERNAL_STORAGE:
+//                case Manifest.permission.WRITE_EXTERNAL_STORAGE:
+//                    storage = "저장공간 권한(사진추가)\n";
+//                    break;
+//                case Manifest.permission.GET_ACCOUNTS:
+//                    addr = "주소록 권한(백업)\n";
+//                    break;
+//                default:
+//                    Log.e(LOG, "Permission denied exception: " + permission);
+//            }
+//        }
+//
+//        if(!(loc.isEmpty() && cam.isEmpty() && storage.isEmpty() && addr.isEmpty())) {
+//            Toast.makeText(
+//                    getApplicationContext(),
+//                    loc + cam + storage + addr + "이 거부되었습니다.\n위 기능 사용을 위해 해당 권한들이 필요합니다.",
+//                    Toast.LENGTH_LONG
+//            ).show();
+//        }
 
-        for(String permission : strings) {
-            if(permission.equals(Manifest.permission.ACCESS_FINE_LOCATION)
-                || permission.equals(Manifest.permission.ACCESS_COARSE_LOCATION)) deny++;
-        }
-
-        Log.d(LOG, "onDenied(): deny(location)=" + deny);
-
-        if(deny > 1) {
-            Toast.makeText(
-                    getApplicationContext(),
-                    "날씨 및 작성 위치를 가져오기 위해 위치정보가 필요합니다.\n" + "설정->위치->앱 권한에서 허용해주세요.",
-                    Toast.LENGTH_LONG
-            ).show();
-        }
+//        int deny = 0;
+//
+//        for(String permission : strings) {
+//            if(permission.equals(Manifest.permission.ACCESS_FINE_LOCATION)
+//                    || permission.equals(Manifest.permission.ACCESS_COARSE_LOCATION)) deny++;
+//        }
+//
+//        Log.d(LOG, "onDenied(): deny(location)=" + deny);
+//
+//        if(deny > 1) {
+//            Toast.makeText(
+//                    getApplicationContext(),
+//                    "날씨 및 작성 위치를 가져오기 위해 위치정보가 필요합니다.\n" + "설정->위치->앱 권한에서 허용해주세요.",
+//                    Toast.LENGTH_LONG
+//            ).show();
+//        }
     }
 
     @Override

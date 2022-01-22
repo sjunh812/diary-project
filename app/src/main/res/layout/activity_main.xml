@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
     <FrameLayout
         android:id="@+id/container"
@@ -21,7 +22,7 @@
         android:background="@color/background"
         style="@style/BottomNavigationView"
         app:itemIconSize="20dp"
-        app:elevation="10dp"
+        app:elevation="5dp"
         app:itemIconTint="@drawable/item_color"
         app:itemTextColor="@drawable/item_color"
         app:labelVisibilityMode="unlabeled"

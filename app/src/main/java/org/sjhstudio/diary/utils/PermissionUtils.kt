@@ -25,6 +25,14 @@ class PermissionUtils {
         }
 
         /**
+         * 카메라 권한확인
+         */
+        fun checkCameraPermission(context: Context): Boolean {
+            return (ContextCompat.checkSelfPermission(context, android.Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED)
+        }
+
+        /**
          * 저장공간 권한확인
          */
         fun checkStoragePermission(context: Context): Boolean {

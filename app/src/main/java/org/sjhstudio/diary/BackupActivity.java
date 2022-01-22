@@ -8,9 +8,11 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -78,8 +80,6 @@ public class BackupActivity extends BaseActivity {
                 finish();
                 return Unit.INSTANCE;
             });
-
-            return;
         }
 
         startProgressDialog("잠시만 기다려주세요.");

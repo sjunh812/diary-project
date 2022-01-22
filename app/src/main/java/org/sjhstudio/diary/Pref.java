@@ -5,9 +5,11 @@ import android.content.SharedPreferences;
 
 public class Pref {
 
-    public static final String PREF_NAME = "pref";              // SharedPreferences 이름
-    public static final String ASK_LOCATION = "ask_location";   // 위치설정 알림 여부
-    public static final String FONT_SIZE = "font_size";
+    public static final String PREF_NAME = "pref";
+
+    public static final String ASK_LOCATION = "ask_location";   // GPS 알림
+    public static final String FONT_SIZE = "font_size"; // 폰트크기
+    public static final String PERMISSION_GUIDE = "permission_guide";   // 권한안내(최초 1회만)
 
     public static Boolean getPAskLocation(Context context) {
         SharedPreferences pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -31,5 +33,17 @@ public class Pref {
     public static void setPFontSize(Context context, int size) {
         SharedPreferences pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         if(pref != null) pref.edit().putInt(FONT_SIZE, size).apply();
+    }
+
+    public static Boolean getPPermissionGuide(Context context) {
+        SharedPreferences pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        if(pref != null) return pref.getBoolean(PERMISSION_GUIDE, false);
+
+        return false;
+    }
+
+    public static void setPPermissionGuide(Context context, Boolean flag) {
+        SharedPreferences pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        if(pref != null) pref.edit().putBoolean(PERMISSION_GUIDE, flag).apply();
     }
 }

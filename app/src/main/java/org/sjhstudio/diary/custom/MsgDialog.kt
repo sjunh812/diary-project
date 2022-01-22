@@ -12,7 +12,7 @@ class MsgDialog(context: Context, val title: String, val contents: String): Dial
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.msg_dialog)
+        setContentView(R.layout.dialog_msg)
 
         findViewById<TextView>(R.id.title_text).text = title
         findViewById<TextView>(R.id.contents_text).text = contents
