@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.view.MenuItem
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import org.sjhstudio.diary.helper.MyTheme
@@ -43,5 +44,16 @@ open class BaseActivity: AppCompatActivity() {
             baseContext.resources.displayMetrics.setTo(metrics)
 
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 }

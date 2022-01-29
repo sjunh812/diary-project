@@ -46,17 +46,18 @@ public class AlarmHelper {
 
                 alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
                 Intent rIntent = new Intent(context, AlarmReceiver.class);
-                pendingIntent = PendingIntent.getBroadcast(context, 0, rIntent, 0);
+//                pendingIntent = PendingIntent.getBroadcast(context, 0, rIntent, 0);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    pendingIntent = PendingIntent.getBroadcast(context, 0, rIntent, PendingIntent.FLAG_IMMUTABLE);
+                } else {
+                    pendingIntent = PendingIntent.getBroadcast(context, 0, rIntent, 0);
+                }
 
                 //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
                 //alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
                 //alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(cal.getTimeInMillis(), pendingIntent), pendingIntent);
-                } else {
-                    alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
-                }
-
+                alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(cal.getTimeInMillis(), pendingIntent), pendingIntent);
             }
         }
     }
@@ -64,7 +65,14 @@ public class AlarmHelper {
     public void stopAlarm() {
         alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent rIntent = new Intent(context, AlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(context, 0, rIntent, 0);
+//        pendingIntent = PendingIntent.getBroadcast(context, 0, rIntent, 0);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            pendingIntent = PendingIntent.getBroadcast(context, 0, rIntent, PendingIntent.FLAG_IMMUTABLE);
+        } else {
+            pendingIntent = PendingIntent.getBroadcast(context, 0, rIntent, 0);
+        }
+
         alarmManager.cancel(pendingIntent);
 
 /*        if(alarmManager != null && pendingIntent != null) {

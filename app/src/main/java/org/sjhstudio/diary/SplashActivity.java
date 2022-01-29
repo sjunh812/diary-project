@@ -27,8 +27,8 @@ public class SplashActivity extends BaseActivity {
         handler.postDelayed(()->{
             Intent intent;
 
-            if(password == null || password.equals("")) intent = new Intent(this, MainActivity.class);
-            else intent = new Intent(this, MainPasswordActivity.class);
+            if(Pref.getPUsePw(this)) intent = new Intent(this, MainPasswordActivity.class);
+            else intent = new Intent(this, MainActivity.class);
 
             startActivity(intent);
             finish();

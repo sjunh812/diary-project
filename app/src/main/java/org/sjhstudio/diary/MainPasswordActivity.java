@@ -1,14 +1,10 @@
 package org.sjhstudio.diary;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.VibrationEffect;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,10 +12,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
+
 import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.utils.Utils;
 
 public class MainPasswordActivity extends BaseActivity {
+
+    private static final String TAG = "MainPasswordActivity";
 
     private TextView subTitleTextView;
 
@@ -40,6 +42,39 @@ public class MainPasswordActivity extends BaseActivity {
         SharedPreferences pref = getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
         password = pref.getString(MyTheme.PASSWORD, "1111");
         init();
+        setBiometric();
+    }
+
+    private void setBiometric() {
+        BiometricPrompt biometricPrompt = new BiometricPrompt(this, ContextCompat.getMainExecutor(this), new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                Log.e(TAG, "지문인증 에러");
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                Log.e(TAG, "지문인증 성공");
+                Intent intent = new Intent(MainPasswordActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                Log.e(TAG, "지문인증 실패");
+            }
+        });
+
+        BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("잠금 해제")
+                .setNegativeButtonText("비밀번호 사용하기")
+                .build();
+
+        if(Pref.getPFingerPrint(this)) biometricPrompt.authenticate(promptInfo);
     }
 
     private void init() {

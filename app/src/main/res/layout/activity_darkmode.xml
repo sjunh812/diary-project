@@ -41,15 +41,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:textSize="18sp"
+                android:textSize="23sp"
                 android:textStyle="bold"
-                android:text="다크모드는 UI를 어두운 배경으로 변경하는 기능입니다.\n다크 모드를 사용하시면 눈이 편해집니다!"
+                android:text="눈이 편해지는\n다크 모드를 사용해보세요!"
                 android:textColor="@color/font" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:text="시스템 설정을 선택하시면,\n휴대폰 내 설정에 따라 라이트, 다크 모드가 적용됩니다."
                 android:textColor="@color/pastel_700" />
 
@@ -92,7 +92,6 @@
                     android:id="@+id/darkModeButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"
                     android:textColor="@color/font"
                     android:textSize="18sp"
                     android:text="  다크 모드" />

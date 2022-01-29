@@ -42,7 +42,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             initPassword(context);
         } else {                                                                    // 일반적인 경우 : Notification 등록 및 알람 반복을 위해 알람매니저 재등록
             startNotification(context);
-            Log.d("LOG", "AlarmRecevier 실행됨");
+            Log.d("LOG", "AlarmReceiver 실행됨");
         }
     }
 
@@ -79,7 +79,19 @@ public class AlarmReceiver extends BroadcastReceiver {
         Intent clickIntent = new Intent(context, SplashActivity.class);
         //clickIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         clickIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, clickIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        PendingIntent pendingIntent;
+//        PendingIntent pendingIntent = PendingIntent.getActivity(
+//                context,
+//                1,
+//                clickIntent,
+//                PendingIntent.FLAG_MUTABLE|PendingIntent.FLAG_CANCEL_CURRENT
+//        );
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            pendingIntent = PendingIntent.getActivity(context, 1, clickIntent, PendingIntent.FLAG_IMMUTABLE|PendingIntent.FLAG_CANCEL_CURRENT);
+        } else {
+            pendingIntent = PendingIntent.getActivity(context, 1, clickIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        }
 
         builder.setContentTitle("1일 1일기");
         builder.setContentText("오늘 하루 어떠셨나요? 1일 1일기 실천하러 가보세요!");
@@ -115,14 +127,16 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                 AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
                 Intent rIntent = new Intent(context, AlarmReceiver.class);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, rIntent, 0);
 
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(cal.getTimeInMillis(), pendingIntent), pendingIntent);
+                PendingIntent pendingIntent;
+//                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, rIntent, 0);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    pendingIntent = PendingIntent.getBroadcast(context, 0, rIntent, PendingIntent.FLAG_IMMUTABLE);
                 } else {
-                    alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+                    pendingIntent = PendingIntent.getBroadcast(context, 0, rIntent, 0);
                 }
 
+                alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(cal.getTimeInMillis(), pendingIntent), pendingIntent);
             }
         }
     }

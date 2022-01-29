@@ -25,6 +25,7 @@ import org.sjhstudio.diary.BackupActivity;
 import org.sjhstudio.diary.DarkModeActivity;
 import org.sjhstudio.diary.FontActivity;
 import org.sjhstudio.diary.PasswordActivity;
+import org.sjhstudio.diary.PasswordSettingsActivity;
 import org.sjhstudio.diary.R;
 import org.sjhstudio.diary.helper.AppHelper;
 import org.sjhstudio.diary.helper.MyTheme;
@@ -111,12 +112,9 @@ public class OptionFragment extends Fragment {
 
         /* 잠금설정 */
         RelativeLayout passwordLayout = (RelativeLayout)rootView.findViewById(R.id.passwordlayout);
-        passwordLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), PasswordActivity.class);
-                getActivity().startActivity(intent);
-            }
+        passwordLayout.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), PasswordSettingsActivity.class);
+            requireActivity().startActivity(intent);
         });
 
         /* 잠금해제 */
