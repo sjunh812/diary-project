@@ -26,6 +26,12 @@ class PasswordSettingsActivity :
             .apply { show() }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_password_settings)
+        init()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         toast?.cancel()
@@ -65,12 +71,6 @@ class PasswordSettingsActivity :
         super.onPause()
         Pref.setPUsePw(this, pwSwitch.isChecked)
         Pref.setPFingerPrint(this,  fpSwitch.isChecked)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_password_settings)
-        init()
     }
 
     private fun init() {

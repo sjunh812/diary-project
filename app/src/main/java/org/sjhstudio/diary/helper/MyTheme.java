@@ -117,6 +117,9 @@ public class MyTheme {
             case 10:
                 context.setTheme(R.style.Theme_DiaryProject11);
                 break;
+            case 11:
+                context.setTheme(R.style.Theme_DiaryProject12);
+                break;
         }
     }
 }

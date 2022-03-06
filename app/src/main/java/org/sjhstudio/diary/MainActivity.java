@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -27,6 +28,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -109,6 +111,15 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
     private Date calDate = null;
     private long backPressTime = 0;
     private boolean isSelected2 = false;                // 일기작성 취소시, 다른메뉴를 선택했을 때 setSelectedTabItem() 호출을 위한 flag
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE
+                || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            System.out.println("xxx 화면 회전");
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

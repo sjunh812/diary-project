@@ -259,6 +259,9 @@ public class OptionFragment extends Fragment {
             case 10:
                 curFontTextView.setText("코트라 희망체");
                 break;
+            case 11:
+                curFontTextView.setText("ACC 어린이 하늘맑은체");
+                break;
             default:
                 curFontTextView.setText("THE얌전해진언니체");
                 break;

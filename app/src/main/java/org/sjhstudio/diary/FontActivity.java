@@ -90,6 +90,9 @@ public class FontActivity extends BaseActivity {
                 case R.id.fontButton11:
                     selectedFontIndex = 10;
                     break;
+                case R.id.fontButton12:
+                    selectedFontIndex = 11;
+                    break;
             }
         });
     }
@@ -168,6 +171,9 @@ public class FontActivity extends BaseActivity {
                 break;
             case 10:
                 ((RadioButton)findViewById(R.id.fontButton11)).setChecked(true);
+                break;
+            case 11:
+                ((RadioButton)findViewById(R.id.fontButton12)).setChecked(true);
                 break;
         }
 
