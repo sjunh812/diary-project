@@ -11,7 +11,6 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.sjhstudio.diary.PhotoActivity
@@ -21,6 +20,7 @@ import org.sjhstudio.diary.helper.WriteFragmentListener
 class PhotoAdapter(val context: Context, val fragment: Fragment?): RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
 
     var items: ArrayList<String> = arrayListOf()
+
     private var listener: WriteFragmentListener? = null
 
     init {

@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import org.sjhstudio.diary.R;
@@ -25,15 +28,15 @@ public class PhotoDetailAdapter extends RecyclerView.Adapter<PhotoDetailAdapter.
     }
 
     class PhotoDetailViewHolder extends RecyclerView.ViewHolder {
-        private PhotoView photoView;
+        private final SubsamplingScaleImageView scaleImageView = itemView.findViewById(R.id.scale_image_view);
 
         public PhotoDetailViewHolder(@NonNull View itemView) {
             super(itemView);
-            photoView = (PhotoView)itemView.findViewById(R.id.photoView);
         }
 
         public void setData(String data) {
-            photoView.setImageURI(Uri.parse("file://" + data));
+            scaleImageView.setImage(ImageSource.uri(Uri.parse("file://" + data)));
+//            photoView.setImageURI(Uri.parse("file://" + data));
         }
     }
 
