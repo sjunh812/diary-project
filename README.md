@@ -3,6 +3,9 @@
 
 Play 스토어 : https://play.google.com/store/apps/details?id=org.sjhstudio.diary  
 
+## 스크린샷
+<img src="https://user-images.githubusercontent.com/79048895/159394393-4694e72c-0a69-4fd0-b2b6-d6a5ff66a018.jpeg" width="180" height="390" /> <img src="https://user-images.githubusercontent.com/79048895/159394546-f24af17c-96d5-431e-b506-dfbca5ef0121.jpeg" width="180" height="390" /> <img src="https://user-images.githubusercontent.com/79048895/159394553-7f532a79-2eee-48e8-a97b-7bce5d0ff51f.jpeg" width="180" height="390" /> <img src="https://user-images.githubusercontent.com/79048895/159394564-6a247d3f-cd7f-4a58-8133-6d7b073b101e.jpeg" width="180" height="390" /> <img src="https://user-images.githubusercontent.com/79048895/159394569-700a7d9e-26db-43ed-9aab-add85289cf78.jpeg" width="180" height="390" /> <img src="https://user-images.githubusercontent.com/79048895/159394576-91284790-a57d-4047-8086-631c0a4dc1a5.jpeg" width="180" height="390" />
+
 ## 설명
 1일 1일기는 안드로이드 일기장 앱입니다.  
 
