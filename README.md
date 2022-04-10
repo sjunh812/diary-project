@@ -17,8 +17,7 @@ https://play.google.com/store/apps/details?id=org.sjhstudio.diary
 
 **JAVA**를 이용해 개발하였으며, 출시 후 업데이트는 **Kotlin**으로 하고있습니다.  
 DB에는 **SQLite**, 네트워킹에는 **Volley**를 이용했으며  
-백업 및 복원에는 **Google Drive**를 사용 했습니다.    
-<br>
+백업 및 복원에는 **Google Drive**를 사용 했습니다.
 <br>
 <br>
 ## 📢 간단 기능
