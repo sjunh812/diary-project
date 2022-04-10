@@ -1,5 +1,6 @@
 # 📖 1일 1일기 - 바쁜 현대인을 위한 간편한 일기장
 ![app_icon](https://user-images.githubusercontent.com/79048895/159389254-d84a5c96-8edc-4aec-bc12-53d5e0dba38b.png)
+
 🎮 Play 스토어  
 https://play.google.com/store/apps/details?id=org.sjhstudio.diary  
 <br>
@@ -32,7 +33,7 @@ DB에는 **SQLite**, 네트워킹에는 **Volley**를 이용했으며
 - 백업 및 복원 💾
 <br>
 <br>
-<br>
+
 ## ✍ 느낀점
 원래 **MVC**패턴을 이용해 개발하고자 했지만,  
 앱의 개발양이 많아질수록 패턴을 묵시한채 개발한 것같습니다😭  
