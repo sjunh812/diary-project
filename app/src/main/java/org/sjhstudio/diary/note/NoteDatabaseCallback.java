@@ -13,6 +13,7 @@ public interface NoteDatabaseCallback {
     public void updateDB2(Note item);
 
     public ArrayList<Note> selectAllDB();
+    public ArrayList<Note> selectKeyword(String keyword);
     public int selectAllCount();
     public int selectStarCount();
     public ArrayList<Note> selectPart(int year, int month);

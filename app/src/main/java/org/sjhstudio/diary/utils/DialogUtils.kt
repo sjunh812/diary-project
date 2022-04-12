@@ -1,6 +1,9 @@
 package org.sjhstudio.diary.utils
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
+import android.widget.EditText
 import org.sjhstudio.diary.Pref
 import org.sjhstudio.diary.custom.*
 
@@ -105,6 +108,19 @@ class DialogUtils {
                     back()
                 }
             }
+        }
+
+        /**
+         * 일기검색 다이얼로그(키워드)
+         */
+        fun showSearchKeywordDialog(context: Context) {
+//            AlertDialog.Builder(context)
+//                .setTitle("일기 검색")
+//                .setMessage("검색할 내용을 입력해주세요. ex) 여행")
+//                .setView(EditText(context))
+//                .setPositiveButton("검색", positiveListener)
+//                .setNegativeButton("취소", negativeListener)
+//                .show()
         }
     }
 }

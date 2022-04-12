@@ -214,7 +214,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
                 showPhotoStateView.setVisibility(View.GONE);
             }
         } else {
-            existPictureImageView.setVisibility(View.GONE);
+            existPictureImageView.setVisibility(View.INVISIBLE);
             photoViewPager.setVisibility(View.GONE);
             photoIndicator.setVisibility(View.GONE);
             showPhotoStateView.setVisibility(View.VISIBLE);

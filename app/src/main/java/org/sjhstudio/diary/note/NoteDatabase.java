@@ -261,6 +261,63 @@ public class NoteDatabase {
         return items;
     }
 
+    public ArrayList<Note> selectKeyword(String tableName, String keyword) {
+        ArrayList<Note> items = new ArrayList<>();
+
+        if(db != null) {
+            if(tableName.equals(NOTE_TABLE)) {
+                Note item;
+
+                String sql = "SELECT " + NOTE_ID + ", " + NOTE_WEATHER + ", " + NOTE_ADDRESS + ", " + NOTE_LOCATION_X + ", " + NOTE_LOCATION_Y + ", "
+                        + NOTE_CONTENTS + ", " + NOTE_MOOD + ", " + NOTE_PICTURE + ", " + NOTE_CREATE_DATE + ", " + NOTE_YEAR + ", " + NOTE_MONTH + ", " + NOTE_STAR
+                        + " FROM " + NOTE_TABLE
+                        + " WHERE " + NOTE_CONTENTS + " LIKE " + "'%" + keyword + "%'"
+                        + " ORDER BY " + NOTE_CREATE_DATE + " DESC;";
+                Cursor cursor = db.rawQuery(sql, null);
+
+                while(cursor.moveToNext()) {
+                    int _id = cursor.getInt(0);
+                    int _weather = cursor.getInt(1);
+                    String _address = cursor.getString(2);
+                    String _locationX = cursor.getString(3);
+                    String _locationY = cursor.getString(4);
+                    String _contents = cursor.getString(5);
+                    int _mood = cursor.getInt(6);
+                    String _picture = cursor.getString(7);
+                    String _createDate = cursor.getString(8);
+                    int _year = cursor.getInt(9);
+                    int _month = cursor.getInt(10);
+                    int _starIndex = cursor.getInt(11);
+                    String createDateStr = null;
+                    String time = null;
+                    String dayOfWeek = null;
+
+                    if(_createDate != null && _createDate.length() > 10) {
+                        try {
+                            Date date = timeFormat.parse(_createDate);
+                            createDateStr = MainActivity.dateFormat.format(date);
+                            time = MainActivity.timeFormat.format(date);
+                            dayOfWeek = MainActivity.getDayOfWeek(date);
+                        } catch(Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        createDateStr = "";
+                    }
+
+                    item = new Note(_id, _weather, _address, _locationX, _locationY, _contents, _mood, _picture, createDateStr, time, dayOfWeek, _year, _month, _starIndex);
+                    items.add(item);
+                }
+
+                cursor.close();
+            }
+        } else {
+            Log.d(LOG, "db를 먼저 오픈해주세요");
+        }
+
+        return items;
+    }
+
     public ArrayList<Note> selectPart(String tableName, int year, int month) {
         ArrayList<Note> items = new ArrayList<>();
 

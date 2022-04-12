@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginRight="3dp"
-            android:layout_toLeftOf="@+id/starButton"
+            android:layout_toLeftOf="@+id/search_btn"
             android:background="@drawable/border_button_view"
             android:clickable="true"
             android:paddingLeft="9dp"
@@ -44,6 +44,14 @@
             android:textColor="@color/font"
             android:textSize="12sp"
             android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/search_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/starButton"
+            android:background="@drawable/circle_view"
+            android:src="@drawable/ic_search" />
 
         <ImageButton
             android:id="@+id/starButton"

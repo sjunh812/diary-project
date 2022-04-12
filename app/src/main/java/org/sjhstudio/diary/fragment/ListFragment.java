@@ -24,11 +24,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import org.sjhstudio.diary.MainActivity;
 import org.sjhstudio.diary.custom.CustomAlignDialog;
 import org.sjhstudio.diary.R;
 import org.sjhstudio.diary.custom.CustomDeleteDialog;
 import org.sjhstudio.diary.custom.CustomUpdateDialog;
+import org.sjhstudio.diary.custom.SearchKeywordDialog;
 import org.sjhstudio.diary.helper.OnNoteItemClickListener;
 import org.sjhstudio.diary.helper.OnNoteItemLongClickListener;
 import org.sjhstudio.diary.helper.OnRequestListener;
@@ -158,7 +161,7 @@ public class ListFragment extends Fragment {
         monthAdapter = new MyArrayAdapter(getContext(), android.R.layout.simple_spinner_item, months);
 
         initUI(rootView);
-        initListener();
+        initListener(rootView);
         initRecyclerView(rootView);     // 리사이클러 뷰에 관한 초기설정
         setShowDiaryStateView();        // 일기목록이 비어있는 확인
 
@@ -166,15 +169,29 @@ public class ListFragment extends Fragment {
     }
 
     private void initUI(View rootView) {
-        titleTextView = (TextView)rootView.findViewById(R.id.titleTextView);
+        titleTextView = rootView.findViewById(R.id.titleTextView);
         titleTextView.startAnimation(translateRightAnim);
-        showDiaryStateView = (LinearLayout)rootView.findViewById(R.id.showDiaryStateView);
-        selectedDateTextView = (TextView)rootView.findViewById(R.id.selectedDateTextView);
-        photoButton = (ImageButton)rootView.findViewById(R.id.photoButton);
-        starButton = (ImageButton)rootView.findViewById(R.id.starButton);
+        showDiaryStateView = rootView.findViewById(R.id.showDiaryStateView);
+        selectedDateTextView = rootView.findViewById(R.id.selectedDateTextView);
+        photoButton = rootView.findViewById(R.id.photoButton);
+        starButton = rootView.findViewById(R.id.starButton);
     }
 
-    private void initListener() {
+    private void initListener(View rootView) {
+        rootView.findViewById(R.id.search_btn).setOnClickListener(v -> {
+            SearchKeywordDialog dialog = new SearchKeywordDialog(requireContext());
+            dialog.show();
+            dialog.setOnSearchBtnClickListener(v2 -> {
+                dialog.dismiss();
+                Snackbar.make(selectedDateTextView,dialog.getKeyword() + " 검색결과 입니다.", 1000).show();
+                adapter.setItems(callback.selectKeyword(dialog.getKeyword()));
+                checkStar();
+                adapter.notifyDataSetChanged();
+                titleTextView.setText(dialog.getKeyword());
+                selectedDateTextView.setText("전체");
+            });
+        });
+
         selectedDateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -383,9 +400,7 @@ public class ListFragment extends Fragment {
                 isAligned = false;
                 adapter.setItems(items);
 
-                if(isStar) {
-                    adapter.setStar();
-                }
+                checkStar();
 
                 adapter.notifyDataSetChanged();
                 setShowDiaryStateView();
@@ -471,6 +486,9 @@ public class ListFragment extends Fragment {
     private void checkStar() {
         if(isStar) {
             adapter.setStar();
+            titleTextView.setText("즐겨찾기");
+        } else {
+            titleTextView.setText("일기목록");
         }
     }
 

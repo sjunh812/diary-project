@@ -403,6 +403,15 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
     }
 
     @Override
+    public ArrayList<Note> selectKeyword(String keyword) {
+        ArrayList<Note> items = new ArrayList<>();
+
+        if(db != null) items = db.selectKeyword(NoteDatabase.NOTE_TABLE, keyword);
+
+        return items;
+    }
+
+    @Override
     public ArrayList<Note> selectPart(int year, int month) {
         ArrayList<Note> items = new ArrayList<>();
 
