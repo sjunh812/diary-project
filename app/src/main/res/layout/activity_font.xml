@@ -189,7 +189,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="7dp"
                                 android:fontFamily="@font/font6"
-                                android:text=" J개구쟁이체"
+                                android:text=" 심경하체"
                                 android:textColor="@color/font"
                                 android:textSize="14sp" />
 
@@ -199,7 +199,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="7dp"
                                 android:fontFamily="@font/font7"
-                                android:text=" 타닥타닥체"
+                                android:text=" 강원교육모두체"
                                 android:textColor="@color/font"
                                 android:textSize="14sp" />
 

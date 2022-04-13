@@ -3,4 +3,17 @@
     <string name="write"><u>작성하기</u></string>
     <string name="email">sjunh812@naver.com</string>
     <string name="report">피드백</string>
+
+    <string name="diary_list">일기목록</string>
+    <string name="search_diary">일기검색</string>
+    <string name="delete_diary">일기삭제</string>
+    <string name="bookmark">즐겨찾기</string>
+    <string name="delete_diary_and_cant_restore">일기를 삭제하시겠습니까?\n삭제한 일기는 복구가 불가능합니다.</string>
+    <string name="enter_search_keyword">검색할 내용을 입력해주세요.</string>
+    <string name="within_10_characters">(10자이내로 입력해주세요.)</string>
+    <string name="cancel">취소</string>
+    <string name="search">검색</string>
+    <string name="delete">삭제</string>
+    <string name="see_all">전체</string>
+    <string name="no_diary">일기가 없습니다…</string>
 </resources>

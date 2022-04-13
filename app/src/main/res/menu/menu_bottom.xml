@@ -16,7 +16,7 @@
     <item
         android:id="@+id/tab3"
         android:title="작성"
-        android:icon="@drawable/ic_write"
+        android:icon="@drawable/ic_pencil"
         app:showAsAction="always" />
 
     <item

@@ -144,30 +144,31 @@
             android:id="@+id/weatherAndLocationLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
+            android:layout_marginTop="10dp"
             android:paddingRight="10dp"
             android:paddingLeft="10dp">
 
             <ImageView
                 android:id="@+id/weatherImageView"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_alignParentLeft="true"
-                android:layout_gravity="center"
-                android:layout_marginRight="8dp" />
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="5dp" />
 
             <TextView
                 android:id="@+id/locationTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/weatherImageView"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/weatherImageView"
                 android:ellipsize="marquee"
                 android:singleLine="true"
-                android:text="고양시 일산서구"
                 android:textColor="@color/pastel_700"
                 android:textSize="11sp" />
 
         </RelativeLayout>
+
     </LinearLayout>
 
     <LinearLayout

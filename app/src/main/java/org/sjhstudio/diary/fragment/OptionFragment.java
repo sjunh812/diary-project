@@ -242,10 +242,10 @@ public class OptionFragment extends Fragment {
                 curFontTextView.setText("꼬마나비체");
                 break;
             case 5:
-                curFontTextView.setText("J개구쟁이체");
+                curFontTextView.setText("심경하체");
                 break;
             case 6:
-                curFontTextView.setText("타닥타닥체");
+                curFontTextView.setText("강원교육모두체");
                 break;
             case 7:
                 curFontTextView.setText("쿠키런체");

@@ -18,11 +18,11 @@
             android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="일기목록"
+            android:text="@string/diary_list"
             android:textColor="@color/font"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -32,17 +32,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_marginRight="3dp"
-            android:layout_toLeftOf="@+id/search_btn"
+            android:layout_marginEnd="3dp"
+            android:layout_toStartOf="@+id/search_btn"
             android:background="@drawable/border_button_view"
-            android:clickable="true"
             android:paddingLeft="9dp"
             android:paddingTop="3dp"
             android:paddingRight="9dp"
             android:paddingBottom="3dp"
-            android:text="전체보기"
+            android:text="@string/see_all"
             android:textColor="@color/font"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:textStyle="bold" />
 
         <ImageView
@@ -53,25 +52,23 @@
             android:background="@drawable/circle_view"
             android:src="@drawable/ic_search" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/starButton"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/photoButton"
+            android:layout_toStartOf="@+id/photoButton"
             android:background="@drawable/circle_view"
-            android:scaleType="centerInside"
             android:src="@drawable/star_button" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/photoButton"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
             android:background="@drawable/circle_view"
-            android:scaleType="centerInside"
             android:src="@drawable/photo_button" />
 
     </RelativeLayout>
@@ -91,14 +88,15 @@
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="10dp"
                 android:src="@drawable/mood_crying_color" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="17sp"
-                android:text="일기가 없습니다.."
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:text="@string/no_diary"
                 android:textColor="@color/gray" />
 
         </LinearLayout>
@@ -109,8 +107,8 @@
             android:layout_height="match_parent"
             android:background="@color/background"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:visibility="visible" />
+            android:paddingRight="15dp" />
 
     </FrameLayout>
+
 </LinearLayout>
