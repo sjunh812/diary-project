@@ -249,7 +249,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="7dp"
                                 android:fontFamily="@font/font12"
-                                android:text=" ACC 어린이 하늘맑은체"
+                                android:text=" ACC 어린이 마음고운체"
                                 android:textColor="@color/font"
                                 android:textSize="14sp" />
 

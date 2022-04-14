@@ -71,6 +71,7 @@ public class ListFragment extends Fragment {
     private boolean isAligned = false;                 // 사용자가 일기 기간별 정렬했는지 여부
     private boolean isPhoto = false;                   // 사진보기 여부
     private boolean isStar = false;                    // 즐겨찾기 여부
+    private boolean isPause = false;                   // onPause() 호출여부
     private Animation translateRightAnim;              // 타이틀 애니메이션 객체
 
     @Override
@@ -84,9 +85,16 @@ public class ListFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        isPause = false;
         if(tabListener != null) tabListener = null;
         if(requestListener != null) requestListener = null;
         if(callback != null) callback = null;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isPause = true;
     }
 
     @Override
@@ -104,10 +112,12 @@ public class ListFragment extends Fragment {
         if(isStar) {
             if(adapter != null) adapter.setStar();
             starButton.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_star_color));
-            titleTextView.setText(getString(R.string.bookmark));
+            if(!isPause) titleTextView.setText(getString(R.string.bookmark));
+            else isPause = false;
         } else {
             starButton.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_star));
-            titleTextView.setText(getString(R.string.diary_list));
+            if(!isPause) titleTextView.setText(getString(R.string.diary_list));
+            else isPause = false;
         }
 
         adapter.notifyDataSetChanged();
@@ -184,6 +194,7 @@ public class ListFragment extends Fragment {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void initListener(View rootView) {
         rootView.findViewById(R.id.search_btn).setOnClickListener(v -> {
             // 일기검색
@@ -199,7 +210,7 @@ public class ListFragment extends Fragment {
                 adapter.setItems(callback.selectKeyword(dialog.getKeyword().trim()));
                 checkStar();
                 adapter.notifyDataSetChanged();
-                titleTextView.setText(dialog.getKeyword().trim());
+                titleTextView.setText("검색 : " + dialog.getKeyword().trim());
                 selectedDateTextView.setText("전체");
             });
         });
