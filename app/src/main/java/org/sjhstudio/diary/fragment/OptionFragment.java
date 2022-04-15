@@ -31,8 +31,6 @@ import org.sjhstudio.diary.helper.AppHelper;
 import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.note.NoteDatabaseCallback;
 
-import java.util.Objects;
-
 public class OptionFragment extends Fragment {
     /** 상수 **/
     public static final int REQUEST_FONT_CHANGE = 101;
@@ -41,8 +39,6 @@ public class OptionFragment extends Fragment {
 
     /** data **/
     private NoteDatabaseCallback callback;  // DB 접근을 위한 callback
-    private int allCount = 0;               // 작성한 일기 총 개수
-    private int starCount = 0;              // 즐겨찾기 총 개수
     private int curFontIndex = 0;           // 현재 선택한 폰트종류
 
     @Override
@@ -157,6 +153,11 @@ public class OptionFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
     private void setTitleTextView(View rootView) {
         /** animation **/
         // 타이틀 애니메이션
@@ -170,8 +171,10 @@ public class OptionFragment extends Fragment {
     private void setCountTextView(View rootView) {
         TextView allCountTextView = (TextView) rootView.findViewById(R.id.allCountTextView);
         TextView starCountTextView = (TextView) rootView.findViewById(R.id.starCountTextView);
-        allCount = callback.selectAllCount();
-        starCount = callback.selectStarCount();
+        // 작성한 일기 총 개수
+        int allCount = callback.selectAllCount();
+        // 즐겨찾기 총 개수
+        int starCount = callback.selectStarCount();
 
         allCountTextView.setText(allCount + "개");
         starCountTextView.setText(starCount + "개");
