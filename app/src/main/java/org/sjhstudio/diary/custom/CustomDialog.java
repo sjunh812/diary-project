@@ -22,15 +22,14 @@ public class CustomDialog extends Dialog {
         super(context, themeResId);
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_custom);
 
-        cancelButton = (ImageButton)findViewById(R.id.cancelButton);
-        cameraButton = (Button)findViewById(R.id.cameraButton);
-        albumButton = (Button)findViewById(R.id.albumButton);
+        cancelButton = findViewById(R.id.cancelButton);
+        cameraButton = findViewById(R.id.cameraButton);
+        albumButton = findViewById(R.id.albumButton);
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -63,15 +63,12 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
 
     private static final String LOG = "WriteFragment";  // log
 
-    private TextView titleTextView;
     private ImageView weatherImageView;
     private ImageView weatherAddImageView;
     private LinearLayout weatherView;
     private TextView dateTextView;
-    private ImageView dateTextImageView;
     private EditText locationEditText;
     private EditText contentsEditText;
-    private ImageButton saveButton;
     private Button button1;
     private Button button2;
     private Button button3;
@@ -140,9 +137,7 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-
         this.context = context;
-
         if(context instanceof OnTabItemSelectedListener) tabListener = (OnTabItemSelectedListener)context;
         if(context instanceof OnRequestListener) requestListener = (OnRequestListener)context;
         if(context instanceof NoteDatabaseCallback)  callback = (NoteDatabaseCallback)context;
@@ -151,7 +146,6 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     @Override
     public void onDetach() {
         super.onDetach();
-
         requestListener.stopLocationService();  // 위치탐색종료
 
         if(needDeleteCache) {
@@ -199,7 +193,6 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     @Override
     public void onResume() {
         super.onResume();
-
         // 사용자가 GPS 기능을 켰는지 확인
         if(requestListener != null) {
             Log.d(LOG, "onRequest(checkGPS) 호출됨.");
@@ -211,7 +204,6 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_write, container, false);
-
         initAnimationUI();
         initBasicUI(rootView);
         initWeatherViewUI(rootView);
@@ -239,12 +231,10 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
 
     private void initAnimationUI() {
         MyAnimationListener animationListener = new MyAnimationListener();
-
         moodAnim = AnimationUtils.loadAnimation(getContext(), R.anim.mood_icon_animation);
         translateLeftAnim = AnimationUtils.loadAnimation(getContext(), R.anim.translate_left_animation);
         translateRightAnim = AnimationUtils.loadAnimation(getContext(), R.anim.translate_right_animation);
         translateRightTitleAnim = AnimationUtils.loadAnimation(getContext(), R.anim.translate_right_animation);
-
         translateLeftAnim.setAnimationListener(animationListener);
         translateRightAnim.setAnimationListener(animationListener);
         translateRightTitleAnim.setDuration(300);
@@ -252,119 +242,75 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
 
     private void initBasicUI(View rootView) {
         // title
-        titleTextView = (TextView)rootView.findViewById(R.id.titleTextView);
+        TextView titleTextView = rootView.findViewById(R.id.titleTextView);
         titleTextView.startAnimation(translateRightTitleAnim);
         if(updateItem == null) titleTextView.setText("일기작성");
         else titleTextView.setText("일기수정");
 
         // 날짜 관련
-        dateTextView = (TextView)rootView.findViewById(R.id.dateTextView);
-        dateTextImageView = (ImageView)rootView.findViewById(R.id.dateTextImageView);
-        dateTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setDatePickerDialog();
-            }
-        });
-        dateTextImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setDatePickerDialog();
-            }
-        });
+        dateTextView = rootView.findViewById(R.id.dateTextView);
+        ImageView dateTextImageView = rootView.findViewById(R.id.dateTextImageView);
+        dateTextView.setOnClickListener(v -> setDatePickerDialog());
+        dateTextImageView.setOnClickListener(v -> setDatePickerDialog());
 
         // 날씨 관련
-        weatherImageView = (ImageView)rootView.findViewById(R.id.weatherImageView);
-        weatherAddImageView = (ImageView)rootView.findViewById(R.id.weatherAddImageView);
-        weatherView = (LinearLayout)rootView.findViewById(R.id.weatherView);                // 날씨를 직접 설정시 나타나는 뷰
+        weatherImageView = rootView.findViewById(R.id.weatherImageView);
+        weatherAddImageView = rootView.findViewById(R.id.weatherAddImageView);
+        weatherView = rootView.findViewById(R.id.weatherView);                // 날씨를 직접 설정시 나타나는 뷰
         weatherImageView.setOnClickListener(new OpenWeatherClickListener());
         weatherAddImageView.setOnClickListener(new OpenWeatherClickListener());
 
         // edit text
-        locationEditText = (EditText)rootView.findViewById(R.id.locationTextView);          // 위치를 나타내는 edit text
-        contentsEditText = (EditText)rootView.findViewById(R.id.contentsEditText);          // 일기 내용
+        locationEditText = rootView.findViewById(R.id.locationTextView);          // 위치를 나타내는 edit text
+        contentsEditText = rootView.findViewById(R.id.contentsEditText);          // 일기 내용
 
         // 새로고침
-        swipeRefreshLayout = (SwipeRefreshLayout)rootView.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.pastel_700));
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshListener());
 
         // 버튼
-        starButton = (ImageButton)rootView.findViewById(R.id.starButton);
-        saveButton = (ImageButton)rootView.findViewById(R.id.saveButton);
-        ImageButton deleteButton = (ImageButton)rootView.findViewById(R.id.deleteButton);
+        starButton = rootView.findViewById(R.id.starButton);
+        ImageButton saveButton = rootView.findViewById(R.id.saveButton);
+        ImageButton deleteButton = rootView.findViewById(R.id.deleteButton);
         starButton.setOnClickListener(new StarButtonClickListener());
         saveButton.setOnClickListener(new SaveButtonClickListener());
         deleteButton.setOnClickListener(new DeleteButtonClickListener());
     }
 
     private void initWeatherViewUI(View rootView) {
-        ImageButton weatherButton = (ImageButton)rootView.findViewById(R.id.weatherButton);
-        ImageButton weatherButton2 = (ImageButton)rootView.findViewById(R.id.weatherButton2);
-        ImageButton weatherButton3 = (ImageButton)rootView.findViewById(R.id.weatherButton3);
-        ImageButton weatherButton4 = (ImageButton)rootView.findViewById(R.id.weatherButton4);
-        ImageButton weatherButton5 = (ImageButton)rootView.findViewById(R.id.weatherButton5);
-        ImageButton weatherButton6 = (ImageButton)rootView.findViewById(R.id.weatherButton6);
-        ImageButton weatherButton7 = (ImageButton)rootView.findViewById(R.id.weatherButton7);
-
-        weatherButton.setOnClickListener(new WeatherButtonClickListener(0));
-        weatherButton2.setOnClickListener(new WeatherButtonClickListener(1));
-        weatherButton3.setOnClickListener(new WeatherButtonClickListener(2));
-        weatherButton4.setOnClickListener(new WeatherButtonClickListener(3));
-        weatherButton5.setOnClickListener(new WeatherButtonClickListener(4));
-        weatherButton6.setOnClickListener(new WeatherButtonClickListener(5));
-        weatherButton7.setOnClickListener(new WeatherButtonClickListener(6));
+        rootView.findViewById(R.id.weatherButton).setOnClickListener(new WeatherButtonClickListener(0));
+        rootView.findViewById(R.id.weatherButton2).setOnClickListener(new WeatherButtonClickListener(1));
+        rootView.findViewById(R.id.weatherButton3).setOnClickListener(new WeatherButtonClickListener(2));
+        rootView.findViewById(R.id.weatherButton4).setOnClickListener(new WeatherButtonClickListener(3));
+        rootView.findViewById(R.id.weatherButton5).setOnClickListener(new WeatherButtonClickListener(4));
+        rootView.findViewById(R.id.weatherButton6).setOnClickListener(new WeatherButtonClickListener(5));
+        rootView.findViewById(R.id.weatherButton7).setOnClickListener(new WeatherButtonClickListener(6));
     }
 
     private void initMoodUI(View rootView) {
         moodButtonListener = new MoodButtonClickListener();     // 감정 선택에 따른 버튼 스케일 변화 리스너 초기화
-
-        LinearLayout moodView1 = (LinearLayout)rootView.findViewById(R.id.angryView);
-        LinearLayout moodView2 = (LinearLayout)rootView.findViewById(R.id.coolView);
-        LinearLayout moodView3 = (LinearLayout)rootView.findViewById(R.id.cryingView);
-        LinearLayout moodView4 = (LinearLayout)rootView.findViewById(R.id.illView);
-        LinearLayout moodView5 = (LinearLayout)rootView.findViewById(R.id.laughView);
-        LinearLayout moodView6 = (LinearLayout)rootView.findViewById(R.id.mehView);
-        LinearLayout moodView7 = (LinearLayout)rootView.findViewById(R.id.sadView);
-        LinearLayout moodView8 = (LinearLayout)rootView.findViewById(R.id.smileView);
-        LinearLayout moodView9 = (LinearLayout)rootView.findViewById(R.id.yawnView);
-
-        button1 = (Button)rootView.findViewById(R.id.button1);
-        button2 = (Button)rootView.findViewById(R.id.button2);
-        button3 = (Button)rootView.findViewById(R.id.button3);
-        button4 = (Button)rootView.findViewById(R.id.button4);
-        button5 = (Button)rootView.findViewById(R.id.button5);
-        button6 = (Button)rootView.findViewById(R.id.button6);
-        button7 = (Button)rootView.findViewById(R.id.button7);
-        button8 = (Button)rootView.findViewById(R.id.button8);
-        button9 = (Button)rootView.findViewById(R.id.button9);
-
-        moodView1.setOnClickListener(moodButtonListener);
-        moodView2.setOnClickListener(moodButtonListener);
-        moodView3.setOnClickListener(moodButtonListener);
-        moodView4.setOnClickListener(moodButtonListener);
-        moodView5.setOnClickListener(moodButtonListener);
-        moodView6.setOnClickListener(moodButtonListener);
-        moodView7.setOnClickListener(moodButtonListener);
-        moodView8.setOnClickListener(moodButtonListener);
-        moodView9.setOnClickListener(moodButtonListener);
+        button1 = rootView.findViewById(R.id.button1);
+        button2 = rootView.findViewById(R.id.button2);
+        button3 = rootView.findViewById(R.id.button3);
+        button4 = rootView.findViewById(R.id.button4);
+        button5 = rootView.findViewById(R.id.button5);
+        button6 = rootView.findViewById(R.id.button6);
+        button7 = rootView.findViewById(R.id.button7);
+        button8 = rootView.findViewById(R.id.button8);
+        button9 = rootView.findViewById(R.id.button9);
+        rootView.findViewById(R.id.angryView).setOnClickListener(moodButtonListener);
+        rootView.findViewById(R.id.coolView).setOnClickListener(moodButtonListener);
+        rootView.findViewById(R.id.cryingView).setOnClickListener(moodButtonListener);
+        rootView.findViewById(R.id.illView).setOnClickListener(moodButtonListener);
+        rootView.findViewById(R.id.laughView).setOnClickListener(moodButtonListener);
+        rootView.findViewById(R.id.mehView).setOnClickListener(moodButtonListener);
+        rootView.findViewById(R.id.sadView).setOnClickListener(moodButtonListener);
+        rootView.findViewById(R.id.smileView).setOnClickListener(moodButtonListener);
+        rootView.findViewById(R.id.yawnView).setOnClickListener(moodButtonListener);
     }
 
     private void initPhoto(View rootView) {
-//        pictureImageView = (ImageView)rootView.findViewById(R.id.pictureImageView);
-//        pictureImageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                setDialog();
-//            }
-//        });
-//        pictureImageView.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View v) {
-//                setDeletePictureDialog();
-//                return true;
-//            }
-//        });
         // 기본 photo UI
         pictureContainer = (FrameLayout)rootView.findViewById(R.id.pictureContainer);
         addPictureImageView = (ImageView)rootView.findViewById(R.id.addPictureImageView);
@@ -425,8 +371,7 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         } else if(weatherStr.equals("소나기")) {
             weatherImageView.setImageResource(R.drawable.weather_icon_5);
             weatherIndex = 4;
-        }
-        else {
+        } else {
             Log.d(LOG, "Unknown weather string : " + weatherStr);
         }
     }
@@ -473,25 +418,6 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         totalBanner.setText(String.valueOf(photoAdapter.getItemCount()));
     }
 
-/*    public void setPictureImageView(Bitmap bitmap, Uri uri, int res) {
-        pictureImageView.setVisibility(View.VISIBLE);
-        addPictureImageView.setVisibility(View.GONE);
-
-        if(bitmap != null) {
-            Glide.with(this).load(bitmap).apply(RequestOptions.bitmapTransform(MainActivity.option)).into(pictureImageView);
-        }
-        if(uri != null) {
-            Glide.with(this).load(uri).apply(RequestOptions.bitmapTransform(MainActivity.option)).into(pictureImageView);
-        }
-        if(res != -1) {
-            Glide.with(this).load(res).apply(RequestOptions.bitmapTransform(MainActivity.option)).into(pictureImageView);
-        }
-    }*/
-
-//    public void setFilePath(String filePath) {
-//        this.filePath = filePath;
-//    }
-
     public void setCurDate(int curYear, int curMonth, int curDay) {
         this.curYear = curYear;
         this.curMonth = curMonth;
@@ -505,10 +431,8 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     /** curButton 객체 값으로 기분 인덱스 설정 **/
     public void setMoodIndex() {
         if(curButton == null) {
-            /**
-             * 사용자가 아무런 기분도 선택하지 않는 상황
-             * 선택할 수 있도록 토스트바를 띄워줘야함
-             */
+            // 사용자가 아무런 기분도 선택하지 않는 상황
+            // 선택할 수 있도록 토스트바를 띄워줘야함
             moodIndex = -1;
         } else if(curButton == button1) {
             moodIndex = 0;
@@ -574,7 +498,6 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         deleteNoteDialog = new CustomDeleteDialog(requireContext());
         deleteNoteDialog.show();
         deleteNoteDialog.setCancelable(true);
-
         deleteNoteDialog.setTitleTextView("일기 삭제");
         deleteNoteDialog.setDeleteTextView("일기를 삭제하시겠습니까?");
         deleteNoteDialog.setDeleteButtonOnClickListener(new View.OnClickListener() {
@@ -639,14 +562,6 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         deleteDialog.setDeleteButtonOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if(updateItem == null) {            // 새 일기 작성시
-//                    deleteFileCache();
-//                    photoAdapter.getItems().remove(position);
-//                } else {
-//                    if(filePath.equals("")) {       // 일기 수정시, 사용자가 기존에 올렸던 사진을 삭제한 경우
-//                        deleteRecentFilePath = true;
-//                    }
-//                }
                 deleteDialog.dismiss();
 
                 if(updateItem != null) {            // 일기 수정 시
@@ -687,7 +602,6 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
 
         if(intent.resolveActivity(requireContext().getPackageManager()) != null) {
             ((MainActivity)requireActivity()).cameraResult.launch(intent);
-//            getActivity().startActivityForResult(intent, REQUEST_CAMERA);
         }
     }
 
@@ -698,7 +612,6 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     public void showAlbumActivity() {
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         ((MainActivity)requireActivity()).albumResult.launch(intent);
-//        getActivity().startActivityForResult(intent, REQUEST_ALBUM);
     }
 
     public void setItem(Note item) {
@@ -886,11 +799,11 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     @Override
     public void showAddPhotoDialog() {
         if(!PermissionUtils.Companion.checkStoragePermission(requireContext()) ||
-            !PermissionUtils.Companion.checkCameraPermission(requireContext())) {
+            !PermissionUtils.Companion.checkCameraPermission(requireContext()))
+        {
             DialogUtils.Companion.showStoragePermissionDialog(requireContext(), () -> {
                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                 Uri uri = Uri.fromParts("package", requireActivity().getPackageName(), null);
-
                 intent.setData(uri);
                 requireActivity().startActivity(intent);
                 return Unit.INSTANCE;

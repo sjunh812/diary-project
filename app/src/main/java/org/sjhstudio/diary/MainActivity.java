@@ -32,14 +32,17 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.canhub.cropper.CropImageContract;
+import com.canhub.cropper.CropImageContractOptions;
+import com.canhub.cropper.CropImageOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.pedro.library.AutoPermissions;
 import com.pedro.library.AutoPermissionsListener;
 import com.stanfy.gsonxml.GsonXml;
 import com.stanfy.gsonxml.GsonXmlBuilder;
 import com.stanfy.gsonxml.XmlParserCreator;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
+//import com.theartofdev.edmodo.cropper.CropImage;
+//import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.sjhstudio.diary.custom.CustomGPSDialog;
 import org.sjhstudio.diary.custom.CustomStopWriteDialog;
@@ -680,6 +683,21 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
      * ActivityResultLauncher
      * (startActivityForResult() is deprecated)
      */
+    final ActivityResultLauncher<CropImageContractOptions> cropImageActivityResult = registerForActivityResult(new CropImageContract(), result -> {
+        // crop image activity 콜백
+        if(result.isSuccessful()) {
+            Log.d(LOG, "xxx cropImageActivityResult: Success");
+            Uri uriContent = result.getUriContent();
+            if(uriContent != null) {
+                String filePath = uriContent.getPath();
+                if (writeFragment != null) writeFragment.setPhotoAdapter(filePath);
+            }
+        } else {
+            String errorMsg = Objects.requireNonNull(result.getError()).toString();
+            Log.d(LOG, "xxx cropImageActivityResult: Fail-" + errorMsg);
+        }
+    });
+
     public final ActivityResultLauncher<Intent> cameraResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         // 카메라 콜백
         int resultCode = result.getResultCode();
@@ -689,7 +707,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
                 Log.d(LOG, "xxx cameraResult: RESULT_OK");
 
                 if (writeFragment != null) {
-                    CropImage.activity(writeFragment.getFileUri()).setGuidelines(CropImageView.Guidelines.ON).start(this);
+//                    CropImage.activity(writeFragment.getFileUri()).setGuidelines(CropImageView.Guidelines.ON).start(this);
                 }
                 break;
             default:
@@ -712,30 +730,13 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
                 Log.d(LOG, "xxx albumResult: RESULT_OK");
 
                 Uri uri = Objects.requireNonNull(data).getData();
-                CropImage.activity(uri).setGuidelines(CropImageView.Guidelines.ON).start(this);
+//                CropImage.activity(uri).setGuidelines(CropImageView.Guidelines.ON).start(this);
+                CropImageContractOptions options = new CropImageContractOptions(uri, new CropImageOptions())
+                        .setGuidelines(com.canhub.cropper.CropImageView.Guidelines.ON);
+                cropImageActivityResult.launch(options);
                 break;
             default:
                 Log.d(LOG, "xxx albumResult: RESULT_NOT_OK");
-                break;
-        }
-    });
-
-    final ActivityResultLauncher<Intent> cropImageActivityResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-        // crop image activity 콜백
-        int resultCode = result.getResultCode();
-        Intent data = result.getData();
-
-        switch(resultCode) {
-            case RESULT_OK:
-                Log.d(LOG, "xxx cropImageActivityResult: RESULT_OK");
-
-                CropImage.ActivityResult activityResult = CropImage.getActivityResult(data);
-                String filePath = Objects.requireNonNull(activityResult).getUri().getPath();
-
-                if (writeFragment != null) writeFragment.setPhotoAdapter(filePath);
-                break;
-            default:
-                Log.d(LOG, "xxx cropImageActivityResult: RESULT_NOT_OK");
                 break;
         }
     });
@@ -791,20 +792,20 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         super.onActivityResult(requestCode, resultCode, data);
 
         switch(requestCode) {
-            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
-                if (resultCode == RESULT_OK) {
-                    Log.d(LOG, "onActivityResult : CROP_IMAGE_ACTIVITY_REQUEST_CODE (RESULT_OK)");
-
-                    CropImage.ActivityResult result = CropImage.getActivityResult(data);
-                    String filePath = Objects.requireNonNull(result).getUri().getPath();
-
-                    if (writeFragment != null) {
-                        writeFragment.setPhotoAdapter(filePath);
-                    }
-                } else {
-                    Log.d(LOG, "onActivityResult : CROP_IMAGE_ACTIVITY_REQUEST_CODE (NOT RESULT_OK)");
-                }
-                break;
+//            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+//                if (resultCode == RESULT_OK) {
+//                    Log.d(LOG, "onActivityResult : CROP_IMAGE_ACTIVITY_REQUEST_CODE (RESULT_OK)");
+//
+//                    CropImage.ActivityResult result = CropImage.getActivityResult(data);
+//                    String filePath = Objects.requireNonNull(result).getUri().getPath();
+//
+//                    if (writeFragment != null) {
+//                        writeFragment.setPhotoAdapter(filePath);
+//                    }
+//                } else {
+//                    Log.d(LOG, "onActivityResult : CROP_IMAGE_ACTIVITY_REQUEST_CODE (NOT RESULT_OK)");
+//                }
+//                break;
 
             case OptionFragment.REQUEST_FONT_CHANGE:
                 if (resultCode == RESULT_OK) recreate();
@@ -825,58 +826,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
     }
 
     @Override
-    public void onDenied(int i, String[] strings) {
-//        String loc = "";    // 위치
-//        String cam = "";    // 카메라
-//        String storage = "";    // 저장공간
-//        String addr = "";   // 주소록
-//
-//        for(String permission: strings) {
-//            switch(permission) {
-//                case Manifest.permission.ACCESS_FINE_LOCATION:
-//                case Manifest.permission.ACCESS_COARSE_LOCATION:
-//                    loc = "위치 권한(날씨 및 위치 정보)\n";
-//                    break;
-//                case Manifest.permission.CAMERA:
-//                    cam = "카메라 권한(사진추가)\n";
-//                    break;
-//                case Manifest.permission.READ_EXTERNAL_STORAGE:
-//                case Manifest.permission.WRITE_EXTERNAL_STORAGE:
-//                    storage = "저장공간 권한(사진추가)\n";
-//                    break;
-//                case Manifest.permission.GET_ACCOUNTS:
-//                    addr = "주소록 권한(백업)\n";
-//                    break;
-//                default:
-//                    Log.e(LOG, "Permission denied exception: " + permission);
-//            }
-//        }
-//
-//        if(!(loc.isEmpty() && cam.isEmpty() && storage.isEmpty() && addr.isEmpty())) {
-//            Toast.makeText(
-//                    getApplicationContext(),
-//                    loc + cam + storage + addr + "이 거부되었습니다.\n위 기능 사용을 위해 해당 권한들이 필요합니다.",
-//                    Toast.LENGTH_LONG
-//            ).show();
-//        }
-
-//        int deny = 0;
-//
-//        for(String permission : strings) {
-//            if(permission.equals(Manifest.permission.ACCESS_FINE_LOCATION)
-//                    || permission.equals(Manifest.permission.ACCESS_COARSE_LOCATION)) deny++;
-//        }
-//
-//        Log.d(LOG, "onDenied(): deny(location)=" + deny);
-//
-//        if(deny > 1) {
-//            Toast.makeText(
-//                    getApplicationContext(),
-//                    "날씨 및 작성 위치를 가져오기 위해 위치정보가 필요합니다.\n" + "설정->위치->앱 권한에서 허용해주세요.",
-//                    Toast.LENGTH_LONG
-//            ).show();
-//        }
-    }
+    public void onDenied(int i, String[] strings) {}
 
     @Override
     public void onGranted(int i, String[] strings) {}

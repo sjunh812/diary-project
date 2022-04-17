@@ -614,7 +614,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
+                                android:layout_marginStart="10dp"
                                 android:layout_marginTop="10dp"
                                 android:layout_marginBottom="10dp"
                                 android:text="사진 선택"
@@ -622,14 +622,37 @@
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
+                            <RelativeLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginBottom="10dp"
-                                android:text="탭하여 사진을 추가해주세요.\n(삭제하려면 길게 눌렀다가 떼주세요.)"
-                                android:textColor="@color/pastel_700"
-                                android:textSize="16sp" />
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginBottom="10dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_centerVertical="true"
+                                    android:text="탭하여 사진을 추가해주세요.\n(삭제하려면 길게 눌렀다가 떼주세요.)"
+                                    android:textColor="@color/pastel_700"
+                                    android:textSize="16sp" />
+
+                                <Button
+                                    android:id="@+id/add_photo_btn"
+                                    style="@style/Widget.AppCompat.Button.Borderless"
+                                    android:layout_width="52dp"
+                                    android:layout_height="30dp"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true"
+                                    android:visibility="gone"
+                                    android:background="@drawable/ripple_radius_5"
+                                    android:text="사진추가"
+                                    android:textColor="@color/pastel_700"
+                                    android:textSize="10dp"
+                                    android:textStyle="bold" />
+
+                            </RelativeLayout>
 
                             <FrameLayout
                                 android:id="@+id/pictureContainer"
@@ -693,10 +716,17 @@
                                     android:visibility="visible" />
 
                             </FrameLayout>
+
                         </LinearLayout>
+
                     </androidx.cardview.widget.CardView>
+
                 </LinearLayout>
+
             </androidx.core.widget.NestedScrollView>
+
         </LinearLayout>
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 </LinearLayout>

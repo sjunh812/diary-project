@@ -124,11 +124,11 @@
             android:configChanges="orientation|screenSize" />
 
         <!-- 크롭 액티비티 -->
-        <activity
-            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:exported="false"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/Base.Theme.AppCompat" />
+<!--        <activity-->
+<!--            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"-->
+<!--            android:exported="false"-->
+<!--            android:configChanges="orientation|screenSize"-->
+<!--            android:theme="@style/Base.Theme.AppCompat" />-->
 
         <!-- 내용 제공자(카메라 앱과 파일 공유) -->
         <provider
