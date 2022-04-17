@@ -17,6 +17,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -35,6 +36,7 @@ import com.android.volley.Request;
 import com.canhub.cropper.CropImageContract;
 import com.canhub.cropper.CropImageContractOptions;
 import com.canhub.cropper.CropImageOptions;
+import com.canhub.cropper.CropImageView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.pedro.library.AutoPermissions;
 import com.pedro.library.AutoPermissionsListener;
@@ -683,18 +685,18 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
      * ActivityResultLauncher
      * (startActivityForResult() is deprecated)
      */
-    final ActivityResultLauncher<CropImageContractOptions> cropImageActivityResult = registerForActivityResult(new CropImageContract(), result -> {
-        // crop image activity 콜백
+    public final ActivityResultLauncher<CropImageContractOptions> cropImageActivityResult = registerForActivityResult(new CropImageContract(), result -> {
+        // Crop activity 콜백
         if(result.isSuccessful()) {
             Log.d(LOG, "xxx cropImageActivityResult: Success");
             Uri uriContent = result.getUriContent();
             if(uriContent != null) {
-                String filePath = uriContent.getPath();
+                String filePath = result.getUriFilePath(this, true);
                 if (writeFragment != null) writeFragment.setPhotoAdapter(filePath);
             }
         } else {
             String errorMsg = Objects.requireNonNull(result.getError()).toString();
-            Log.d(LOG, "xxx cropImageActivityResult: Fail-" + errorMsg);
+            Log.d(LOG, "xxx cropImageActivityResult: Fail->" + errorMsg);
         }
     });
 
@@ -702,21 +704,18 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         // 카메라 콜백
         int resultCode = result.getResultCode();
 
-        switch(resultCode) {
-            case RESULT_OK:
-                Log.d(LOG, "xxx cameraResult: RESULT_OK");
-
-                if (writeFragment != null) {
-//                    CropImage.activity(writeFragment.getFileUri()).setGuidelines(CropImageView.Guidelines.ON).start(this);
-                }
-                break;
-            default:
-                Log.d(LOG, "xxx cameraResult: RESULT_NOT_OK");
-
-                if (writeFragment != null) {
-                    Objects.requireNonNull(getContentResolver()).delete(writeFragment.getFileUri(), null, null);
-                }
-                break;
+        if (resultCode == RESULT_OK) {
+            Log.d(LOG, "xxx cameraResult: RESULT_OK");
+            if (writeFragment != null) {
+                CropImageContractOptions options = new CropImageContractOptions(writeFragment.getFileUri(), new CropImageOptions())
+                        .setGuidelines(CropImageView.Guidelines.ON);
+                cropImageActivityResult.launch(options);
+            }
+        } else {
+            Log.d(LOG, "xxx cameraResult: RESULT_NOT_OK");
+            if (writeFragment != null) {
+                Objects.requireNonNull(getContentResolver()).delete(writeFragment.getFileUri(), null, null);
+            }
         }
     });
 
@@ -725,33 +724,22 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         int resultCode = result.getResultCode();
         Intent data = result.getData();
 
-        switch(resultCode) {
-            case RESULT_OK:
-                Log.d(LOG, "xxx albumResult: RESULT_OK");
-
-                Uri uri = Objects.requireNonNull(data).getData();
-//                CropImage.activity(uri).setGuidelines(CropImageView.Guidelines.ON).start(this);
-                CropImageContractOptions options = new CropImageContractOptions(uri, new CropImageOptions())
-                        .setGuidelines(com.canhub.cropper.CropImageView.Guidelines.ON);
-                cropImageActivityResult.launch(options);
-                break;
-            default:
-                Log.d(LOG, "xxx albumResult: RESULT_NOT_OK");
-                break;
+        if (resultCode == RESULT_OK) {
+            Log.d(LOG, "xxx albumResult: RESULT_OK");
+            Uri uri = Objects.requireNonNull(data).getData();
+            CropImageContractOptions options = new CropImageContractOptions(uri, new CropImageOptions())
+                    .setGuidelines(CropImageView.Guidelines.ON);
+            cropImageActivityResult.launch(options);
+        } else {
+            Log.d(LOG, "xxx albumResult: RESULT_NOT_OK");
         }
     });
 
     final ActivityResultLauncher<Intent> fontChangeResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         int resultCode = result.getResultCode();
 
-        switch(resultCode) {
-            case RESULT_OK:
-                recreate();
-                break;
-            default:
-                Log.d(LOG, "xxx fontChangeResult: RESULT_NOT_OK");
-                break;
-        }
+        if (resultCode == RESULT_OK) recreate();
+        else Log.d(LOG, "xxx fontChangeResult: RESULT_NOT_OK");
     });
 
     final ActivityResultLauncher<Intent> detailActivityResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -761,24 +749,17 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         switch(resultCode) {
             case Val.DETAIL_ACTIVITY_RESULT_DELETE:
                 Log.d(LOG, "xxx detailActivityResult: 일기삭제됨");
-
                 int id = Objects.requireNonNull(data).getIntExtra("id", -1);
 
                 if (id != -1) {
                     deleteDB(id);
-
-                    if (selectedTabIndex == 0) {
-                        if(listFragment != null) listFragment.update();
-                    } else {
-                        if (calendarFragment != null) onTabSelected(1);
-                    }
+                    if (selectedTabIndex == 0) if(listFragment != null) listFragment.update();
+                    else if (calendarFragment != null) onTabSelected(1);
                 }
                 break;
             case Val.DETAIL_ACTIVITY_RESULT_UPDATE:
                 Log.d(LOG, "xxx detailActivityResult: 일기수정됨");
-
                 Note item = (Note)(Objects.requireNonNull(data).getSerializableExtra("item"));
-
                 if(item != null) showWriteFragment(item);
                 break;
             default:

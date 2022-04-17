@@ -79,11 +79,12 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     private Button button8;
     private Button button9;
     private Button curButton = null;                    // 현재 선택된 감정표현 버튼
+    private ImageButton starButton;                     // 즐겨찾기 버튼
+    private Button addPhotoBtn;                         // 사진추가 버튼(여러장 추가시)
     private CustomDialog dialog;                        // 사진 추가시 띄워지는 커스텀 다이얼로그
     private CustomDeleteDialog deleteDialog;            // 사진 삭제시 띄워지는 커스텀 다이얼로그
     private CustomDeleteDialog deleteNoteDialog;        // 일기 삭제시 띄워지는 커스텀 다이얼로그
     private CustomDatePickerDialog pickerDialog;
-    private ImageButton starButton;                     // 즐겨찾기 버튼
     private SwipeRefreshLayout swipeRefreshLayout;      // 새로고침 뷰
 
     /** 사진관련 **/
@@ -129,15 +130,15 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     private int curMonth;
     private int curDay;
     private int starIndex = 0;                          // 0 = 즐겨찾기 x, 1 = 즐겨찾기
-    private boolean deleteRecentFilePath = false;       // 일기 수정 시, 사용자가 기존 사진을 삭제한지 여부
     private boolean isWeatherViewOpen = false;
-    private boolean needDeleteCache = true;            // 캐시 삭제 필요 여부
+    public boolean needDeleteCache = true;            // 캐시 삭제 필요 여부
     private ArrayList<String> deletePath = new ArrayList<>();
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
+
         if(context instanceof OnTabItemSelectedListener) tabListener = (OnTabItemSelectedListener)context;
         if(context instanceof OnRequestListener) requestListener = (OnRequestListener)context;
         if(context instanceof NoteDatabaseCallback)  callback = (NoteDatabaseCallback)context;
@@ -147,11 +148,7 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     public void onDetach() {
         super.onDetach();
         requestListener.stopLocationService();  // 위치탐색종료
-
-        if(needDeleteCache) {
-            if(filePaths == null || filePaths.equals("")) combineFilePath();
-            deleteFilesCache(); // 남아있는 파일캐시 삭제
-        }
+        deleteFilesCache(); // 남아있는 파일캐시 삭제
 
         if(context != null) {
             context = null;
@@ -166,15 +163,33 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
      * (여러개 사진경로)
      */
     public void deleteFilesCache() {
-        if(filePaths != null && !filePaths.equals("")) {
-            String[] picturePaths = filePaths.split(",");
-
-            for (String picturePath : picturePaths) {
-                File file = new File(picturePath);
-                file.delete();
+        if(updateItem != null) {
+            for(String filePath : photoAdapter.getItems()) {
+                Log.d(LOG, "xxx picture path : " + filePath);
+                if(!recentFilePaths.contains(filePath)) {
+                    Log.d(LOG, "    delete picture path : " + filePath + "\n");
+                    new File(filePath).delete();
+                }
             }
+            for(String deletePath : deletePath) {
+                Log.d(LOG, "xxx delete dialog picture path : " + deletePath + "\n");
+                new File(deletePath).delete();
+            }
+        } else {
+            if(needDeleteCache) {
+                if(filePaths == null || filePaths.equals("")) combineFilePath();
+                if(filePaths != null && !filePaths.equals("")) {
+                    String[] picturePaths = filePaths.split(",");
 
-            filePaths = "";
+                    for (String picturePath : picturePaths) {
+                        Log.d(LOG, "xxx delete picture path : " + picturePath);
+                        File file = new File(picturePath);
+                        file.delete();
+                    }
+
+                    filePaths = "";
+                }
+            }
         }
     }
 
@@ -198,6 +213,8 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
             Log.d(LOG, "onRequest(checkGPS) 호출됨.");
             requestListener.onRequest("checkGPS");
         }
+        if(photoAdapter.getItemCount() > 0) addPhotoBtn.setVisibility(View.VISIBLE);
+        else addPhotoBtn.setVisibility(View.GONE);
     }
 
     @Nullable
@@ -312,8 +329,8 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
 
     private void initPhoto(View rootView) {
         // 기본 photo UI
-        pictureContainer = (FrameLayout)rootView.findViewById(R.id.pictureContainer);
-        addPictureImageView = (ImageView)rootView.findViewById(R.id.addPictureImageView);
+        pictureContainer = rootView.findViewById(R.id.pictureContainer);
+        addPictureImageView = rootView.findViewById(R.id.addPictureImageView);
         pictureContainer.setOnClickListener( v -> showAddPhotoDialog());
 
         // photo indicator 관련
@@ -343,6 +360,10 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
                 super.onPageScrollStateChanged(state);
             }
         });
+
+        // 사진추가(여러장)
+        addPhotoBtn = rootView.findViewById(R.id.add_photo_btn);
+        addPhotoBtn.setOnClickListener(v -> showAddPhotoDialog());
     }
 
     /** 문자열로 나타낸 날씨를 통해 날씨 이미지 설정 **/
@@ -410,8 +431,8 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     public void setPhotoAdapter(String filePath) {
         photoAdapter.addItem(filePath);
         photoAdapter.notifyDataSetChanged();
-
         photoViewPager.setCurrentItem(photoAdapter.getItemCount() - 1);
+        if(photoAdapter.getItemCount() > 0) addPhotoBtn.setVisibility(View.VISIBLE);
         addPictureImageView.setVisibility(View.GONE);
         photoViewPager.setVisibility(View.VISIBLE);
         photoIndicator.setVisibility(View.VISIBLE);
@@ -500,27 +521,24 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         deleteNoteDialog.setCancelable(true);
         deleteNoteDialog.setTitleTextView("일기 삭제");
         deleteNoteDialog.setDeleteTextView("일기를 삭제하시겠습니까?");
-        deleteNoteDialog.setDeleteButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteNoteDialog.dismiss();
+        deleteNoteDialog.setDeleteButtonOnClickListener(v -> {
+            deleteNoteDialog.dismiss();
 
-                int id = updateItem.get_id();
-                String paths = updateItem.getPicture();
+            int id = updateItem.get_id();
+            String paths = updateItem.getPicture();
 
-                if(paths != null && !paths.equals("")) {
-                    String picturePaths[] = paths.split(",");
+            if(paths != null && !paths.equals("")) {
+                String picturePaths[] = paths.split(",");
 
-                    for(int i = 0; i < picturePaths.length; i++) {
-                        File file = new File(picturePaths[i]);
-                        file.delete();
-                    }
+                for(int i = 0; i < picturePaths.length; i++) {
+                    File file = new File(picturePaths[i]);
+                    file.delete();
                 }
-
-                callback.deleteDB(id);                  // 해당 db 삭제
-                tabListener.setIsSelected(true);
-                tabListener.onTabSelected(0);
             }
+
+            callback.deleteDB(id);                  // 해당 db 삭제
+            tabListener.setIsSelected(true);
+            tabListener.onTabSelected(0);
         });
     }
 
@@ -559,27 +577,25 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         deleteDialog.show();
         deleteDialog.setCancelable(true);
 
-        deleteDialog.setDeleteButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteDialog.dismiss();
+        deleteDialog.setDeleteButtonOnClickListener(v -> {
+            deleteDialog.dismiss();
 
-                if(updateItem != null) {            // 일기 수정 시
-                    deletePath.add(photoAdapter.getItems().get(position));
-                } else {                            // 일기 처음 작성 시
-                    deleteFileCache(photoAdapter.getItems().get(position));     // 삭제한 사진경로의 파일 삭제
-                }
-
-                photoAdapter.getItems().remove(position);
-                photoAdapter.notifyDataSetChanged();
-
-                if(photoAdapter.getItemCount() < 1) {                       // 사진을 모두 삭제하여 사진이 없는 경우
-                    photoViewPager.setVisibility(View.GONE);
-                    photoIndicator.setVisibility(View.GONE);
-                    addPictureImageView.setVisibility(View.VISIBLE);
-                }
-                totalBanner.setText(String.valueOf(photoAdapter.getItemCount()));
+            if(updateItem != null) {            // 일기 수정 시
+                deletePath.add(photoAdapter.getItems().get(position));
+            } else {                            // 일기 처음 작성 시
+                deleteFileCache(photoAdapter.getItems().get(position));     // 삭제한 사진경로의 파일 삭제
             }
+
+            photoAdapter.getItems().remove(position);
+            photoAdapter.notifyDataSetChanged();
+
+            if(photoAdapter.getItemCount() < 1) {                       // 사진을 모두 삭제하여 사진이 없는 경우
+                addPhotoBtn.setVisibility(View.GONE);
+                photoViewPager.setVisibility(View.GONE);
+                photoIndicator.setVisibility(View.GONE);
+                addPictureImageView.setVisibility(View.VISIBLE);
+            }
+            totalBanner.setText(String.valueOf(photoAdapter.getItemCount()));
         });
     }
 
@@ -645,25 +661,15 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         setMoodButton(moodIndex);
         setUpdatePhoto(paths);
         needDeleteCache = false;
-
-//        if(path != null && !path.equals("")) {
-//            Glide.with(context).load(Uri.parse("file://" + path)).apply(RequestOptions.bitmapTransform(MainActivity.option)).into(pictureImageView);
-//            recentFilePath = path;                          // 수정하기 취소 시, 기존에 올렸던 파일을 복구하기위해 recentFilePath 에 미리 경로를 저장
-//            pictureImageView.setVisibility(View.VISIBLE);
-//            addPictureImageView.setVisibility(View.GONE);
-//        } else {
-//            pictureImageView.setVisibility(View.GONE);
-//            addPictureImageView.setVisibility(View.VISIBLE);
-//        }
     }
 
     public void setUpdatePhoto(String paths) {
         if(paths != null && !paths.equals("")) {
-            String picturePaths[] = paths.split(",");
+            String[] picturePaths = paths.split(",");
             if(picturePaths.length > 0) {
                 recentFilePaths = paths;      // 수정하기 취소 시, 기존에 올렸던 파일을 복구하기위해 recentFilePath 에 미리 경로를 저장
 
-                photoAdapter.setItems(new ArrayList<String>(Arrays.asList(picturePaths)));
+                photoAdapter.setItems(new ArrayList<>(Arrays.asList(picturePaths)));
                 photoAdapter.notifyDataSetChanged();
 
                 photoViewPager.setVisibility(View.VISIBLE);

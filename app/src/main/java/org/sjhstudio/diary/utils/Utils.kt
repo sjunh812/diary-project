@@ -2,11 +2,18 @@ package org.sjhstudio.diary.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.Color.WHITE
 import android.location.LocationManager
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageView
+import com.canhub.cropper.options
+import org.sjhstudio.diary.R
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -49,6 +56,7 @@ class Utils {
         fun getCurrentMonth(): Int {
             return Integer.parseInt(monthFormat.format(Date()))
         }
+
     }
 
 }
