@@ -21,7 +21,7 @@
         android:background="@color/background"
         style="@style/BottomNavigationView"
         app:itemIconSize="20dp"
-        app:elevation="5dp"
+        app:elevation="0dp"
         app:itemIconTint="@drawable/item_color"
         app:itemTextColor="@drawable/item_color"
         app:labelVisibilityMode="unlabeled"

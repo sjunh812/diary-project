@@ -147,6 +147,7 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     @Override
     public void onDetach() {
         super.onDetach();
+        Log.d(LOG, "xxx onDetach()");
         requestListener.stopLocationService();  // 위치탐색종료
         deleteFilesCache(); // 남아있는 파일캐시 삭제
 
@@ -879,25 +880,14 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
                 } else {                                            // 일기를 수정하는 경우
                     if(filePaths != null && !filePaths.equals("")) {
                         updateItem.setPicture(filePaths);
+                        recentFilePaths = filePaths;
                     } else {
                         updateItem.setPicture("");
                     }
 
-                    for(String path : deletePath) {
-                        File file = new File(path);
-                        file.delete();
-                    }
-
-//                    else {
-//                        if(deleteRecentFilePath) {      // 기존 사진을 모두 삭제한 경우
-//                            updateItem.setPicture("");
-//                            if(recentFilePaths != null && !recentFilePaths.equals("")) {
-//                                File file = new File(recentFilePaths);
-//                                file.delete();
-//                            }
-//                        } else {                        // 수정 전 사진 복구
-//                            updateItem.setPicture(recentFilePaths);
-//                        }
+//                    for(String path : deletePath) {
+//                        File file = new File(path);
+//                        file.delete();
 //                    }
 
                     updateItem.setWeather(weatherIndex);

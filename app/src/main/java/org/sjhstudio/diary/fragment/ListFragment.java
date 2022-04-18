@@ -202,14 +202,15 @@ public class ListFragment extends Fragment {
             dialog.show();
             dialog.setOnSearchBtnClickListener(v2 -> {
                 if(dialog.getKeyword().trim().isEmpty()) {
-                    Snackbar.make(dialog.findViewById(R.id.search_et), getString(R.string.enter_search_keyword), 1000).show();
+                    Snackbar.make(dialog.findViewById(R.id.search_et), getString(R.string.enter_search_keyword), 700).show();
                     return;
                 }
                 dialog.dismiss();
-                Snackbar.make(photoButton, dialog.getKeyword().trim() + " 검색결과입니다.", 1000).show();
+                Snackbar.make(photoButton, dialog.getKeyword().trim() + " 검색결과입니다.", 700).show();
                 adapter.setItems(callback.selectKeyword(dialog.getKeyword().trim()));
                 checkStar();
                 adapter.notifyDataSetChanged();
+                setShowDiaryStateView();
                 titleTextView.setText("검색 : " + dialog.getKeyword().trim());
                 selectedDateTextView.setText("전체");
             });

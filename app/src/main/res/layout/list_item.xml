@@ -323,9 +323,9 @@
 
                 <ImageView
                     android:id="@+id/moodImageView2"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignParentLeft="true"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_alignParentStart="true"
                     app:srcCompat="@drawable/mood_angry_color" />
 
                 <ImageView
@@ -334,19 +334,19 @@
                     android:layout_height="18dp"
                     android:layout_marginRight="20dp"
                     android:layout_marginLeft="20dp"
-                    android:layout_toRightOf="@id/moodImageView2" />
+                    android:layout_toEndOf="@id/moodImageView2" />
 
+                <!-- android:layout_toLeftOf="@id/timeTextView2"
+                    android:layout_toRightOf="@id/weatherImageView2" -->
                 <TextView
                     android:id="@+id/locationTextView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:layout_toLeftOf="@id/timeTextView2"
-                    android:layout_toRightOf="@id/weatherImageView2"
                     android:gravity="center"
                     android:singleLine="true"
                     android:ellipsize="marquee"
-                    android:text="고양시 일산서구"
+                    android:text="위치"
                     android:textColor="@color/pastel_700"
                     android:textSize="12sp" />
 
@@ -357,7 +357,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="20dp"
-                    android:text="AM 5:00"
+                    android:text="시간"
                     android:textColor="@color/gray"
                     android:textSize="12sp" />
 
