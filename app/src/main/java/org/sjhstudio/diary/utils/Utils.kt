@@ -24,6 +24,10 @@ class Utils {
         val yearFormat = SimpleDateFormat("yyyy")
         @SuppressLint("SimpleDateFormat")
         val monthFormat = SimpleDateFormat("MM")
+        @SuppressLint("SimpleDateFormat")
+        val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일")
+        @SuppressLint("SimpleDateFormat")
+        val dateFormat2 = SimpleDateFormat("yyyy-MM-dd")
 
         // GPS 체크
         fun checkGPS(context: Context): Boolean {

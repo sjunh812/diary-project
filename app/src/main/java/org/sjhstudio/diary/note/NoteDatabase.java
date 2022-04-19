@@ -19,7 +19,7 @@ import java.util.HashMap;
 public class NoteDatabase {
     /* 상수 */
     private static final String LOG = "NoteDatabase";
-    public static final int DB_VERSION = 2;
+    public static final int DB_VERSION = 2;                     // 2(즐겨찾기추가)
     public static final String DB_NAME = "note.db";             // db 이름
     public static final String NOTE_TABLE = "Note";             // table 이름(일기목록을 위한 테이블)
     public static final String NOTE_INDEX = "Note_Index";

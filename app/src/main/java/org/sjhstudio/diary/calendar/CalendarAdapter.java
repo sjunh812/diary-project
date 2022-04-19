@@ -15,6 +15,7 @@ import org.sjhstudio.diary.note.Note;
 import java.util.ArrayList;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> implements OnCalItemClickListener {
+
     private Context context;
     private ArrayList<Note> items = new ArrayList<>();
     private OnCalItemClickListener clickListener;

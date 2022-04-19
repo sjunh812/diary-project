@@ -1,7 +1,7 @@
 package org.sjhstudio.diary.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,130 +32,111 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 
-import org.sjhstudio.diary.MainActivity;
 import org.sjhstudio.diary.R;
 import org.sjhstudio.diary.calendar.CalendarAdapter;
-import org.sjhstudio.diary.calendar.CalendarViewHolder;
-import org.sjhstudio.diary.helper.OnCalItemClickListener;
 import org.sjhstudio.diary.helper.OnRequestListener;
 import org.sjhstudio.diary.note.Note;
 import org.sjhstudio.diary.note.NoteDatabaseCallback;
+import org.sjhstudio.diary.utils.Utils;
 import org.threeten.bp.DayOfWeek;
 import org.threeten.bp.LocalDate;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 public class CalendarFragment extends Fragment implements OnDateSelectedListener{
-    /* UI */
-    private TextView titleTextView;
-    private MaterialCalendarView calendarView;
+
     private TextView dateTextView;
     private RecyclerView recyclerView;
     private LinearLayout showDiaryStateView;
-    private Button writeButton;
     private TextView moodTextView;
 
-    /* Helper */
     private OnRequestListener requestListener;
     private NoteDatabaseCallback callback;
 
-    /* Data */
     private ArrayList<Note> items;
     private CalendarAdapter adapter;
     private String dateStr = null;
-    private Animation translateRightAnim;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-
-        if(context instanceof NoteDatabaseCallback) {
-            callback = (NoteDatabaseCallback)context;
-        }
-        if(context instanceof OnRequestListener) {
-            requestListener = (OnRequestListener)context;
-        }
+        if(context instanceof NoteDatabaseCallback) callback = (NoteDatabaseCallback)context;
+        if(context instanceof OnRequestListener) requestListener = (OnRequestListener)context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-
-        if(callback != null) {
-            callback = null;
-        }
-        if(requestListener != null) {
-            requestListener = null;
-        }
+        if(callback != null) callback = null;
+        if(requestListener != null) requestListener = null;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_calendar, container, false);
-
         items = callback.selectAllDB();
-        translateRightAnim = AnimationUtils.loadAnimation(getContext(), R.anim.translate_right_animation);
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initUi(view);
+    }
+
+    private void initUi(View rootView) {
+        Animation translateRightAnim = AnimationUtils.loadAnimation(getContext(), R.anim.translate_right_animation);
         translateRightAnim.setDuration(350);
 
-        titleTextView = (TextView)rootView.findViewById(R.id.titleTextView);
+        TextView titleTextView = (TextView) rootView.findViewById(R.id.titleTextView);
         titleTextView.startAnimation(translateRightAnim);
         dateTextView = (TextView)rootView.findViewById(R.id.dateTextView);
         moodTextView = (TextView)rootView.findViewById(R.id.moodTextView);
         showDiaryStateView = (LinearLayout)rootView.findViewById(R.id.showDiaryStateView);
-        writeButton = (Button)rootView.findViewById(R.id.writeButton);
-        writeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(dateStr != null) {
-                    try {
-                        Date date = MainActivity.dateFormat.parse(dateStr);
-                        requestListener.onRequestWriteFragmentFromCal(date);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+        Button writeButton = (Button) rootView.findViewById(R.id.writeButton);
+
+        writeButton.setOnClickListener(v -> {
+            if(dateStr != null) {
+                try {
+                    Date date = Utils.Companion.getDateFormat().parse(dateStr);
+                    requestListener.onRequestWriteFragmentFromCal(date);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
 
         initRecyclerView(rootView);
         initCalendarView(rootView);
-
-        return rootView;
     }
 
     private void initRecyclerView(View rootView) {
+        adapter = new CalendarAdapter(requireContext());
+        adapter.setOnCalItemClickListener((holder, view, position) -> {
+            Note item = adapter.getItem(position);
+            requestListener.onRequestDetailActivity(item);
+        });
         recyclerView = (RecyclerView)rootView.findViewById(R.id.recyclerView);
-        LinearLayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-
-        recyclerView.setLayoutManager(manager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
-
-                if(parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
+                if(parent.getChildAdapterPosition(view) !=
+                        Objects.requireNonNull(parent.getAdapter()).getItemCount()-1) {
                     outRect.bottom = 30;
                 }
             }
         });
-
-        adapter = new CalendarAdapter(getContext());
-        adapter.setOnCalItemClickListener(new OnCalItemClickListener() {
-            @Override
-            public void onItemClick(CalendarViewHolder holder, View view, int position) {
-                Note item = adapter.getItem(position);
-
-                requestListener.onRequestDetailActivity(item);
-            }
-        });
-
         recyclerView.setAdapter(adapter);
     }
 
     private void initCalendarView(View rootView) {
-        calendarView = (MaterialCalendarView)rootView.findViewById(R.id.calendar);
+        MaterialCalendarView calendarView = (MaterialCalendarView) rootView.findViewById(R.id.calendar);
         calendarView.getLeftArrow().setColorFilter(getResources().getColor(R.color.font), PorterDuff.Mode.SRC_IN);
         calendarView.getRightArrow().setColorFilter(getResources().getColor(R.color.font), PorterDuff.Mode.SRC_IN);
 /*        calendarView.state().edit()
@@ -163,15 +145,14 @@ public class CalendarFragment extends Fragment implements OnDateSelectedListener
                 .commit();*/
         calendarView.setOnDateChangedListener(this);
         calendarView.setSelectedDate(CalendarDay.today());
-        onDateSelected(calendarView, CalendarDay.today(), true);
         calendarView.addDecorators(new SaturdayDecorator(), new SundayDecorator(), new TodayDecorator());
+        onDateSelected(calendarView, CalendarDay.today(), true);
 
         for(Note note : items) {
             try {
                 LocalDate localDate = LocalDate.parse(note.getCreateDateStr2());
                 int moodIndex = note.getMood();
-
-                calendarView.addDecorator(new MyDayDecorator(getContext(), CalendarDay.from(localDate), moodIndex));
+                calendarView.addDecorator(new MyDayDecorator(requireContext(), CalendarDay.from(localDate), moodIndex));
             } catch(Exception e) {
                 e.printStackTrace();
             }
@@ -219,6 +200,7 @@ public class CalendarFragment extends Fragment implements OnDateSelectedListener
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
         /* 선택한 날짜에 맞게 dateTextView 설정 */
@@ -233,10 +215,19 @@ public class CalendarFragment extends Fragment implements OnDateSelectedListener
         adapter.clearItems();
         for(Note item : items) {
             try {
-                Date _date = MainActivity.dateFormat2.parse(item.getCreateDateStr2());
-                if((_date.getYear() + 1900) == year && (_date.getMonth() + 1) == month && _date.getDate() == day) {
-                    adapter.addItem(item);
-                    setMoodTextView(item.getMood());
+                Date _date = Utils.Companion.getDateFormat2().parse(item.getCreateDateStr2());
+
+                if(_date != null) {
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(_date);
+
+                    if((cal.get(Calendar.YEAR)) == year &&
+                            (cal.get(Calendar.MONTH) + 1) == month &&
+                            cal.get(Calendar.DAY_OF_MONTH) == day)
+                    {
+                        adapter.addItem(item);
+                        setMoodTextView(item.getMood());
+                    }
                 }
             } catch(Exception e) {
                 e.printStackTrace();
@@ -251,7 +242,6 @@ public class CalendarFragment extends Fragment implements OnDateSelectedListener
             showDiaryStateView.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
             moodTextView.setVisibility(View.VISIBLE);
-
             adapter.notifyDataSetChanged();
         }
     }
@@ -326,7 +316,7 @@ public class CalendarFragment extends Fragment implements OnDateSelectedListener
 
         @Override
         public void decorate(DayViewFacade view) {
-            view.addSpan(new ForegroundColorSpan(getContext().getResources().getColor(R.color.skyblue)));
+            view.addSpan(new ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.skyblue)));
         }
     }
 
@@ -340,11 +330,11 @@ public class CalendarFragment extends Fragment implements OnDateSelectedListener
 
         @Override
         public void decorate(DayViewFacade view) {
-            view.addSpan(new ForegroundColorSpan(Color.RED));
+            view.addSpan(new ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.red)));
         }
     }
 
-    class TodayDecorator implements DayViewDecorator {
+    static class TodayDecorator implements DayViewDecorator {
 
         @Override
         public boolean shouldDecorate(CalendarDay day) {
