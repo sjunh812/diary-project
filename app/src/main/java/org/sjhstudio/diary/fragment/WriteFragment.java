@@ -3,7 +3,6 @@ package org.sjhstudio.diary.fragment;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -52,7 +51,6 @@ import org.sjhstudio.diary.utils.PermissionUtils;
 import org.sjhstudio.diary.utils.Utils;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -81,40 +79,28 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     private Button curButton = null;                    // 현재 선택된 감정표현 버튼
     private ImageButton starButton;                     // 즐겨찾기 버튼
     private Button addPhotoBtn;                         // 사진추가 버튼(여러장 추가시)
-    private CustomDialog dialog;                        // 사진 추가시 띄워지는 커스텀 다이얼로그
     private CustomDeleteDialog deleteDialog;            // 사진 삭제시 띄워지는 커스텀 다이얼로그
     private CustomDeleteDialog deleteNoteDialog;        // 일기 삭제시 띄워지는 커스텀 다이얼로그
     private CustomDatePickerDialog pickerDialog;
     private SwipeRefreshLayout swipeRefreshLayout;      // 새로고침 뷰
 
-    /** 사진관련 **/
+    // Photo
     private ImageView addPictureImageView;
-    private FrameLayout pictureContainer;               // 아무 사진도 넣지않은 경우, 사진 추가시 클릭 이벤트가 발생하는 container
     private ViewPager2 photoViewPager;
     private PhotoAdapter photoAdapter;
     private LinearLayout photoIndicator;
     private TextView currentBanner;                     // 현재 view pager item 위치
     private TextView totalBanner;                       // view pager 총 개수
 
-    /** 리스너 **/
+    // Listener
     private OnTabItemSelectedListener tabListener;      // 메인 액티비티에서 관리하는 하단 탭 선택 리스터
     private OnRequestListener requestListener;          // 메인 액티비티에서 현재 위치 정보를 가져오게 해주는 리스너
     private MoodButtonClickListener moodButtonListener; // 감정표현 버튼 눌림에 따른 버튼 스케일 효과를 위한 리스터
 
-    /** DB **/
+    // DB
     private NoteDatabaseCallback callback;              // db 쿼리문 실행을 위한 콜백 인터페이스
 
-    /** 포멧 **/
-    private SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");     // 카메라 앱을 이용해 촬영시 저장되는 파일이름에 사용될 날짜포멧 ex)20210418
-
-    /** 애니메이션 **/
-    private Animation moodAnim;
-    private Animation translateLeftAnim;
-    private Animation translateRightAnim;
-    private Animation translateRightTitleAnim;
-
-    /** 데이터 **/
-    private Context context;
+    // Data
     private Note updateItem = null;
     private Date calDate = null;
     private String address = "";                        // 위치 정보
@@ -129,15 +115,18 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     private int curYear;
     private int curMonth;
     private int curDay;
-    private int starIndex = 0;                          // 0 = 즐겨찾기 x, 1 = 즐겨찾기
+    private int starIndex = 0;                          // 0: 즐겨찾기無,  1: 즐겨찾기有
     private boolean isWeatherViewOpen = false;
     public boolean needDeleteCache = true;            // 캐시 삭제 필요 여부
     private ArrayList<String> deletePath = new ArrayList<>();
+    private Animation moodAnim;
+    private Animation translateLeftAnim;
+    private Animation translateRightAnim;
+    private Animation translateRightTitleAnim;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.context = context;
 
         if(context instanceof OnTabItemSelectedListener) tabListener = (OnTabItemSelectedListener)context;
         if(context instanceof OnRequestListener) requestListener = (OnRequestListener)context;
@@ -147,24 +136,21 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.d(LOG, "xxx onDetach()");
         requestListener.stopLocationService();  // 위치탐색종료
         deleteFilesCache(); // 남아있는 파일캐시 삭제
 
-        if(context != null) {
-            context = null;
-            tabListener = null;
-            requestListener = null;
-            callback = null;
-        }
+        if(tabListener != null) tabListener = null;
+        if(requestListener != null) requestListener = null;
+        if(callback != null) callback = null;
     }
 
     /**
-     * 파일캐쉬 삭제
-     * (여러개 사진경로)
+     * Delete files cache
+     * (다중 경로)
      */
     public void deleteFilesCache() {
         if(updateItem != null) {
+            // 일기수정
             for(String filePath : photoAdapter.getItems()) {
                 Log.d(LOG, "xxx picture path : " + filePath);
                 if(!recentFilePaths.contains(filePath)) {
@@ -172,13 +158,16 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
                     new File(filePath).delete();
                 }
             }
+
             for(String deletePath : deletePath) {
                 Log.d(LOG, "xxx delete dialog picture path : " + deletePath + "\n");
                 new File(deletePath).delete();
             }
         } else {
+            // 일기작성
             if(needDeleteCache) {
                 if(filePaths == null || filePaths.equals("")) combineFilePath();
+
                 if(filePaths != null && !filePaths.equals("")) {
                     String[] picturePaths = filePaths.split(",");
 
@@ -195,9 +184,8 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     }
 
     /**
-     * 파일캐쉬 삭제
+     * Delete file cache
      * (단일 경로)
-     * @param filePath // 경로명
      */
     public void deleteFileCache(String filePath) {
         if(filePath != null && !filePath.equals("")) {
@@ -211,7 +199,6 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         super.onResume();
         // 사용자가 GPS 기능을 켰는지 확인
         if(requestListener != null) {
-            Log.d(LOG, "onRequest(checkGPS) 호출됨.");
             requestListener.onRequest("checkGPS");
         }
         if(photoAdapter.getItemCount() > 0) addPhotoBtn.setVisibility(View.VISIBLE);
@@ -222,11 +209,6 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_write, container, false);
-        initAnimationUI();
-        initBasicUI(rootView);
-        initWeatherViewUI(rootView);
-        initMoodUI(rootView);
-        initPhoto(rootView);;
 
         if(requestListener != null && updateItem == null) {
             if(PermissionUtils.Companion.checkLocationPermission(requireContext())) {
@@ -237,18 +219,26 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
                 // 위치권한 거부.
                 if(calDate == null) requestListener.getDateOnly(null);
                 else requestListener.getDateOnly(calDate);
-
-//                Toast.makeText(getContext(), "날씨 및 위치정보를 가져오려면 위치권한이 필요합니다.\n위치권한을 허용해주세요.", Toast.LENGTH_SHORT).show();
             }
         }
-
-        if(updateItem != null) setUpdateItem();
 
         return rootView;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initAnimationUI();
+        initBasicUI(view);
+        initWeatherViewUI(view);
+        initMoodUI(view);
+        initPhoto(view);
+        if(updateItem != null) setUpdateItem();
+    }
+
     private void initAnimationUI() {
         MyAnimationListener animationListener = new MyAnimationListener();
+
         moodAnim = AnimationUtils.loadAnimation(getContext(), R.anim.mood_icon_animation);
         translateLeftAnim = AnimationUtils.loadAnimation(getContext(), R.anim.translate_left_animation);
         translateRightAnim = AnimationUtils.loadAnimation(getContext(), R.anim.translate_right_animation);
@@ -330,9 +320,8 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
 
     private void initPhoto(View rootView) {
         // 기본 photo UI
-        pictureContainer = rootView.findViewById(R.id.pictureContainer);
         addPictureImageView = rootView.findViewById(R.id.addPictureImageView);
-        pictureContainer.setOnClickListener( v -> showAddPhotoDialog());
+        rootView.findViewById(R.id.pictureContainer).setOnClickListener( v -> showAddPhotoDialog());
 
         // photo indicator 관련
         photoIndicator = rootView.findViewById(R.id.photo_indicator);
@@ -342,7 +331,7 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         // photo view pager 관련
         photoViewPager = rootView.findViewById(R.id.photo_view_pager);
         photoViewPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
-        photoAdapter = new PhotoAdapter(context, this);
+        photoAdapter = new PhotoAdapter(requireContext(), this);
         photoViewPager.setAdapter(photoAdapter);
         photoViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -711,61 +700,34 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         return null;
     }
 
-    /** 사용자가 기분을 골랐는지 판단 **/
-    public boolean isEmpty() {
-        if(curButton == null) {
-            return true;
-        }
-        return false;
-    }
-
     private void checkStarButton(int index) {
         if(index == 0) {
             starIndex = 0;
-            Glide.with(WriteFragment.this).load(getResources().getDrawable(R.drawable.star_icon)).into(starButton);
+            Glide.with(WriteFragment.this)
+                    .load(ContextCompat.getDrawable(requireContext(), R.drawable.star_icon))
+                    .into(starButton);
         } else {
             starIndex = 1;
-            Glide.with(WriteFragment.this).load(getResources().getDrawable(R.drawable.star_icon_color)).into(starButton);
+            Glide.with(WriteFragment.this)
+                    .load(ContextCompat.getDrawable(requireContext(), R.drawable.star_icon_color))
+                    .into(starButton);
         }
     }
 
-    /** 안드로이드 10 이전 **/
     private File createFile() {
-        // 파일 이름 생성
-        Date date = new Date();
-        String fileName = format.format(date) + "_" + System.currentTimeMillis();
+        // 파일이름 생성(yyyyMMdd_)
+        String fileName = Utils.Companion.getDateFormat3().format(new Date()) + "_" + System.currentTimeMillis();
 
-        // 파일 경로 생성
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            ContentValues values = new ContentValues();
+        // 파일 생성
+        File storageFile = Environment.getExternalStorageDirectory();
 
-            values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
-            values.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
-            values.put(MediaStore.MediaColumns.RELATIVE_PATH, "DCIM/Diary");
-
-            fileUri = getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-            String[] filePathColums = { MediaStore.MediaColumns.DATA };     /** 안드로이드 Q(10)이상 부터 쓸 수 없는 코드 **/
-
-            Cursor cursor = getContext().getContentResolver().query(fileUri, filePathColums, null, null);
-            cursor.moveToFirst();
-
-            int index = cursor.getColumnIndex(filePathColums[0]);
-            String filePath = cursor.getString(index);
-
-            cursor.close();
-            return new File(filePath);
-        } else {
-            File storageFile = Environment.getExternalStorageDirectory();
-            return new File(storageFile, fileName);
-        }
+        return new File(storageFile, fileName);
     }
 
-    /** 안드로이드 10 이후 **/
     @RequiresApi(api = Build.VERSION_CODES.Q)
     private Uri createUri() {
-        // 파일 이름 생성
-        Date date = new Date();
-        String fileName = format.format(date) + "_" + System.currentTimeMillis();
+        // 파일이름 생성(yyyyMMdd_)
+        String fileName = Utils.Companion.getDateFormat3().format(new Date()) + "_" + System.currentTimeMillis();
 
         // ContentValues 생성
         ContentValues values = new ContentValues();
@@ -773,20 +735,21 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         values.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
         values.put(MediaStore.MediaColumns.RELATIVE_PATH, "DCIM/Diary");
 
-        fileUri = getContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        fileUri = requireContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
         return fileUri;
     }
 
-    /** 일기내용이 비어있는지 체크 ->
-     * 비어있는 경우 작성취소 팝업없이 일기작성 종료가능 **/
+    // 사용자가 기분을 골랐는지..
+    public boolean isEmpty() {
+        return curButton == null;
+    }
+
+    // 일기내용이 비어있는지..
+    // 비어있는경우 팝업없이 종료가능!!
     public Boolean isEmptyContent() {
         Log.d(LOG, "moodIndex : " + moodIndex + ", contentEditText : " + contentsEditText.getText());
-        if(curButton == null && (contentsEditText.getText().toString().equals("") || contentsEditText.getText() == null)) {
-            return true;
-        } else {
-            return false;
-        }
+        return curButton == null && (contentsEditText.getText().toString().equals("") || contentsEditText.getText() == null);
     }
 
     /**
@@ -835,12 +798,12 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
             if(starIndex == 0) {
                 starIndex = 1;
                 Glide.with(WriteFragment.this)
-                        .load(ContextCompat.getDrawable(context, R.drawable.star_icon_color))
+                        .load(ContextCompat.getDrawable(requireContext(), R.drawable.star_icon_color))
                         .into(starButton);
             } else {
                 starIndex = 0;
                 Glide.with(WriteFragment.this)
-                        .load(ContextCompat.getDrawable(context, R.drawable.star_icon))
+                        .load(ContextCompat.getDrawable(requireContext(), R.drawable.star_icon))
                         .into(starButton);
             }
         }

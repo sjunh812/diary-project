@@ -52,6 +52,7 @@ public class CalendarFragment extends Fragment implements OnDateSelectedListener
     private RecyclerView recyclerView;
     private LinearLayout showDiaryStateView;
     private TextView moodTextView;
+    private MaterialCalendarView calendarView;
 
     private OnRequestListener requestListener;
     private NoteDatabaseCallback callback;
@@ -59,6 +60,7 @@ public class CalendarFragment extends Fragment implements OnDateSelectedListener
     private ArrayList<Note> items;
     private CalendarAdapter adapter;
     private String dateStr = null;
+    private CalendarDay curCalDay = null;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -74,11 +76,18 @@ public class CalendarFragment extends Fragment implements OnDateSelectedListener
         if(requestListener != null) requestListener = null;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        items = callback.selectAllDB();
+        setCalendarViewData();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_calendar, container, false);
-        items = callback.selectAllDB();
+//        items = callback.selectAllDB();
         return rootView;
     }
 
@@ -136,7 +145,7 @@ public class CalendarFragment extends Fragment implements OnDateSelectedListener
     }
 
     private void initCalendarView(View rootView) {
-        MaterialCalendarView calendarView = (MaterialCalendarView) rootView.findViewById(R.id.calendar);
+        calendarView = (MaterialCalendarView) rootView.findViewById(R.id.calendar);
         calendarView.getLeftArrow().setColorFilter(getResources().getColor(R.color.font), PorterDuff.Mode.SRC_IN);
         calendarView.getRightArrow().setColorFilter(getResources().getColor(R.color.font), PorterDuff.Mode.SRC_IN);
 /*        calendarView.state().edit()
@@ -144,9 +153,20 @@ public class CalendarFragment extends Fragment implements OnDateSelectedListener
                 .setMaximumDate(CalendarDay.from(2021, 12, 31))
                 .commit();*/
         calendarView.setOnDateChangedListener(this);
-        calendarView.setSelectedDate(CalendarDay.today());
         calendarView.addDecorators(new SaturdayDecorator(), new SundayDecorator(), new TodayDecorator());
-        onDateSelected(calendarView, CalendarDay.today(), true);
+        curCalDay = CalendarDay.today();
+    }
+
+    private void setCalendarViewData() {
+        calendarView.removeDecorators();    // 달력내 Decorators 초기화
+
+        if(curCalDay == null) {
+            calendarView.setSelectedDate(CalendarDay.today());
+            onDateSelected(calendarView, CalendarDay.today(), true);
+        } else {
+            calendarView.setSelectedDate(curCalDay);
+            onDateSelected(calendarView, curCalDay, true);
+        }
 
         for(Note note : items) {
             try {
@@ -203,11 +223,11 @@ public class CalendarFragment extends Fragment implements OnDateSelectedListener
     @SuppressLint("SetTextI18n")
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-        /* 선택한 날짜에 맞게 dateTextView 설정 */
         int year = date.getYear();
         int month = date.getMonth();
         int day = date.getDay();
 
+        curCalDay = date;   // 선택한 CalendarDay 저장
         dateStr = year + "년 " + month + "월 " + day + "일";
         dateTextView.setText(dateStr + "은, ");
 
@@ -246,10 +266,11 @@ public class CalendarFragment extends Fragment implements OnDateSelectedListener
         }
     }
 
-    class MyDayDecorator implements DayViewDecorator {
-        private Context context;
-        private CalendarDay day;
-        private int moodIndex;
+    static class MyDayDecorator implements DayViewDecorator {
+
+        private final Context context;
+        private final CalendarDay day;
+        private final int moodIndex;
 
         public MyDayDecorator(Context context, CalendarDay day, int moodIndex) {
             this.context = context;
@@ -264,49 +285,41 @@ public class CalendarFragment extends Fragment implements OnDateSelectedListener
 
         @Override
         public void decorate(DayViewFacade view) {
-            //view.addSpan(new RelativeSizeSpan(0.7f));
             switch(moodIndex) {
                 case 0:
                     view.addSpan(new DotSpan(10f, context.getResources().getColor(R.color.pastel_red)));
-                    //view.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.mood_angry_color));
                     break;
                 case 1:
                     view.addSpan(new DotSpan(10f, context.getResources().getColor(R.color.pastel_blue)));
-                    //view.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.mood_cool_color));
                     break;
                 case 2:
                     view.addSpan(new DotSpan(10f, context.getResources().getColor(R.color.pastel_skyblue)));
-                    //view.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.mood_crying_color));
                     break;
                 case 3:
                     view.addSpan(new DotSpan(10f, context.getResources().getColor(R.color.pastel_green)));
-                    //view.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.mood_ill_color));
                     break;
                 case 4:
                     view.addSpan(new DotSpan(10f, context.getResources().getColor(R.color.pastel_yellow)));
-                    //view.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.mood_laugh_color));
                     break;
                 case 5:
                     view.addSpan(new DotSpan(10f, context.getResources().getColor(R.color.pastel_gray)));
-                    //view.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.mood_meh_color));
                     break;
                 case 6:
                     view.addSpan(new DotSpan(10f, context.getResources().getColor(R.color.pastel_black)));
-                    //view.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.mood_sad));
                     break;
                 case 7:
                     view.addSpan(new DotSpan(10f, context.getResources().getColor(R.color.pastel_orange)));
-                    //view.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.mood_smile_color));
                     break;
                 case 8:
                     view.addSpan(new DotSpan(10f, context.getResources().getColor(R.color.pastel_pink)));
-                    //view.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.mood_yawn_color));
                     break;
             }
         }
+
     }
 
     class SaturdayDecorator implements DayViewDecorator {
+
         @Override
         public boolean shouldDecorate(CalendarDay day) {
             LocalDate date = day.getDate();
@@ -318,9 +331,11 @@ public class CalendarFragment extends Fragment implements OnDateSelectedListener
         public void decorate(DayViewFacade view) {
             view.addSpan(new ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.skyblue)));
         }
+
     }
 
     class SundayDecorator implements DayViewDecorator {
+
         @Override
         public boolean shouldDecorate(CalendarDay day) {
             LocalDate date = day.getDate();
@@ -332,6 +347,7 @@ public class CalendarFragment extends Fragment implements OnDateSelectedListener
         public void decorate(DayViewFacade view) {
             view.addSpan(new ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.red)));
         }
+
     }
 
     static class TodayDecorator implements DayViewDecorator {
@@ -346,5 +362,6 @@ public class CalendarFragment extends Fragment implements OnDateSelectedListener
             view.addSpan(new StyleSpan(Typeface.BOLD));
             view.addSpan(new RelativeSizeSpan(1.4f));
         }
+
     }
 }

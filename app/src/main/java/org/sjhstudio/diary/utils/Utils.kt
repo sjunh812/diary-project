@@ -28,6 +28,8 @@ class Utils {
         val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일")
         @SuppressLint("SimpleDateFormat")
         val dateFormat2 = SimpleDateFormat("yyyy-MM-dd")
+        @SuppressLint("SimpleDateFormat")
+        val dateFormat3 = SimpleDateFormat("yyyyMMdd")
 
         // GPS 체크
         fun checkGPS(context: Context): Boolean {
