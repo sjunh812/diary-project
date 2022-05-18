@@ -2,7 +2,7 @@
 ![app_icon](https://user-images.githubusercontent.com/79048895/159389254-d84a5c96-8edc-4aec-bc12-53d5e0dba38b.png)
 
 🎮 Play 스토어  
-https://play.google.com/store/apps/details?id=org.sjhstudio.diary  
+https://play.google.com/store/apps/details?id=org.sjhstudio.diary
 <br>
 <br>
 ## 📷 스크린샷
@@ -21,17 +21,17 @@ DB에는 **SQLite**, 네트워킹에는 **Volley**를 이용했으며
 <br>
 <br>
 ## 📢 간단 기능
-- 위치 및 날씨연동⛅
-- 사진 추가📷
-- 즐겨찾기⭐
-- 다크모드🌃
-- 알림🔔
-- 기분통계📊
-- 백업 및 복원💾
+- ⛅ 위치 및 날씨연동
+- 📷 사진 추가
+- ⭐ 즐겨찾기
+- 🌃 다크모드
+- 🔔 알림
+- 📊 기분통계
+- 💾 백업 및 복원
 <br>
 
 ## ✍ 느낀점
-원래 **MVC**패턴을 이용해 개발하고자 했지만,  
+원래 **MVC** 패턴을 이용해 개발하고자 했지만,  
 앱의 개발양이 많아질수록 패턴을 묵시한채 개발한 것같습니다😭  
 그러다보니 유지보수나 기능 업데이트때 불편함을 크게 느꼈고,  
 추후 다른 프로젝트에 있어서는 개발패턴을 꼭 명심하면서 개발해야겠다고  
