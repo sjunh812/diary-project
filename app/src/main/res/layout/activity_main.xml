@@ -14,14 +14,14 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
+        style="@style/BottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         android:background="@color/background"
-        style="@style/BottomNavigationView"
-        app:itemIconSize="20dp"
         app:elevation="0dp"
+        app:itemIconSize="18dp"
         app:itemIconTint="@drawable/item_color"
         app:itemTextColor="@drawable/item_color"
         app:labelVisibilityMode="unlabeled"

@@ -1,7 +1,6 @@
 package org.sjhstudio.diary;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.Activity;
@@ -19,7 +18,7 @@ import android.widget.TextView;
 
 import org.sjhstudio.diary.custom.CustomTimePickerDialog;
 import org.sjhstudio.diary.helper.AlarmHelper;
-import org.sjhstudio.diary.helper.MyTheme;
+import org.sjhstudio.diary.utils.Pref;
 
 import java.util.Calendar;
 import java.util.Date;

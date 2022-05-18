@@ -125,6 +125,7 @@
 
         </RelativeLayout>
 
+        <!-- android:maxLines="3" -->
         <TextView
             android:id="@+id/contentsTextView"
             android:layout_width="wrap_content"
@@ -135,7 +136,6 @@
             android:layout_marginRight="10dp"
             android:lineSpacingExtra="1.5dp"
             android:text="내용"
-            android:maxLines="3"
             android:ellipsize="end"
             android:textColor="@color/font_contents"
             android:textSize="14sp" />
@@ -232,16 +232,16 @@
                 android:gravity="center"
                 android:visibility="visible">
 
-                <ImageView
-                    android:layout_width="45dp"
-                    android:layout_height="56dp"
-                    android:layout_marginBottom="15dp"
-                    android:src="@drawable/mood_crying_color" />
+<!--                <ImageView-->
+<!--                    android:layout_width="45dp"-->
+<!--                    android:layout_height="56dp"-->
+<!--                    android:layout_marginBottom="15dp"-->
+<!--                    android:src="@drawable/mood_crying_color" />-->
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
                     android:text="사진이 없습니다.."
                     android:textColor="@color/gray" />
 

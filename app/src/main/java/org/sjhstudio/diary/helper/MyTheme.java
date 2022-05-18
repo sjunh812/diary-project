@@ -8,7 +8,7 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 
-import org.sjhstudio.diary.Pref;
+import org.sjhstudio.diary.utils.Pref;
 import org.sjhstudio.diary.R;
 
 public class MyTheme {

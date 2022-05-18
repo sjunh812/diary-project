@@ -57,6 +57,16 @@
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/time_picker_dialog.xml" value="0.26640625" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/layout/update_dialog_custom.xml" value="0.26640625" />
         <entry key="..\:/Users/sjunh/Desktop/DiaryProject/app/src/main/res/menu/menu_bottom.xml" value="0.26953125" />
+        <entry key="..\:/Users/sjunh/Desktop/android-project/diary-app/DiaryProject/app/src/main/res/drawable/item_color.xml" value="0.237" />
+        <entry key="..\:/Users/sjunh/Desktop/android-project/diary-app/DiaryProject/app/src/main/res/drawable/ripple_radius_5.xml" value="0.237" />
+        <entry key="..\:/Users/sjunh/Desktop/android-project/diary-app/DiaryProject/app/src/main/res/drawable/ripple_radius_5_pastel_500.xml" value="0.237" />
+        <entry key="..\:/Users/sjunh/Desktop/android-project/diary-app/DiaryProject/app/src/main/res/layout/activity_alarm.xml" value="0.271484375" />
+        <entry key="..\:/Users/sjunh/Desktop/android-project/diary-app/DiaryProject/app/src/main/res/layout/activity_main.xml" value="0.271484375" />
+        <entry key="..\:/Users/sjunh/Desktop/android-project/diary-app/DiaryProject/app/src/main/res/layout/activity_settings.xml" value="0.260546875" />
+        <entry key="..\:/Users/sjunh/Desktop/android-project/diary-app/DiaryProject/app/src/main/res/layout/fragment_list.xml" value="0.271484375" />
+        <entry key="..\:/Users/sjunh/Desktop/android-project/diary-app/DiaryProject/app/src/main/res/layout/fragment_option.xml" value="0.271484375" />
+        <entry key="..\:/Users/sjunh/Desktop/android-project/diary-app/DiaryProject/app/src/main/res/layout/fragment_write.xml" value="0.271484375" />
+        <entry key="..\:/Users/sjunh/Desktop/android-project/diary-app/DiaryProject/app/src/main/res/layout/list_item.xml" value="0.271484375" />
       </map>
     </option>
   </component>

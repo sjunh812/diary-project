@@ -84,7 +84,7 @@ public class PasswordActivity extends BaseActivity {
             startPasswordCautionDialog();
         } else {
             subTitleTextView.setText("비밀번호가 일치하지 않습니다\n처음부터 다시 시도해주세요");
-            Utils.Companion.startVibrator(this, 500, 50, true);
+            Utils.INSTANCE.startVibrator(this, 500, 50, true);
             canInput = false;
 
             initPasswordImages(500);

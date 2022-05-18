@@ -1,7 +1,5 @@
 package org.sjhstudio.diary;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import org.sjhstudio.diary.helper.MyTheme;
+import org.sjhstudio.diary.utils.Pref;
 
 public class SplashActivity extends BaseActivity {
     private Handler handler = new Handler();    // 0.5초 딜레이를 위한 핸들러

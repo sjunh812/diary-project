@@ -130,7 +130,7 @@ public class ListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_list, container, false);
         translateRightAnim = AnimationUtils.loadAnimation(getContext(), R.anim.translate_right_animation);
         translateRightAnim.setDuration(350);
-        curYear = Utils.Companion.getCurrentYear();     // 현재년도 가져오기
+        curYear = Utils.INSTANCE.getCurrentYear();     // 현재년도 가져오기
         calculateYearArray();           // 현재년도와 DB 내 마지막 년도를 이용하여 years 배열 설정 (년도 스피너의 어뎁터에 사용될)
         initSpinnerPosition();          // 초기 스피너 포지션 값을 지정하기위해 selectedYearPos 와 selectedMonthPos 초기화 (금년, 금월로 지정)
         yearAdapter = new MyArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, years);
@@ -155,6 +155,9 @@ public class ListFragment extends Fragment {
         starButton = rootView.findViewById(R.id.starButton);
 
         initRecyclerView(rootView);
+        rootView.findViewById(R.id.write_btn).setOnClickListener(v -> {
+            tabListener.showWriteFragment(null);
+        });
     }
 
     @SuppressLint("SetTextI18n")
@@ -267,7 +270,7 @@ public class ListFragment extends Fragment {
 
     private void initSpinnerPosition() {
         selectedYearPos = years.length - 1; // last index -> 현재 년도
-        selectedMonthPos = Utils.Companion.getCurrentMonth() - 1;   // ex) 4월 -> position=3
+        selectedMonthPos = Utils.INSTANCE.getCurrentMonth() - 1;   // ex) 4월 -> position=3
     }
 
     public void calculateYearArray() {

@@ -9,7 +9,7 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.sjhstudio.diary.Val;
+import org.sjhstudio.diary.utils.Val;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

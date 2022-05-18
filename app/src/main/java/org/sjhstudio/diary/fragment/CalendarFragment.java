@@ -101,7 +101,7 @@ public class CalendarFragment extends Fragment implements OnDateSelectedListener
         Animation translateRightAnim = AnimationUtils.loadAnimation(getContext(), R.anim.translate_right_animation);
         translateRightAnim.setDuration(350);
 
-        TextView titleTextView = (TextView) rootView.findViewById(R.id.titleTextView);
+        TextView titleTextView = rootView.findViewById(R.id.titleTextView);
         titleTextView.startAnimation(translateRightAnim);
         dateTextView = (TextView)rootView.findViewById(R.id.dateTextView);
         moodTextView = (TextView)rootView.findViewById(R.id.moodTextView);
@@ -111,7 +111,7 @@ public class CalendarFragment extends Fragment implements OnDateSelectedListener
         writeButton.setOnClickListener(v -> {
             if(dateStr != null) {
                 try {
-                    Date date = Utils.Companion.getDateFormat().parse(dateStr);
+                    Date date = Utils.INSTANCE.getDateFormat().parse(dateStr);
                     requestListener.onRequestWriteFragmentFromCal(date);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -235,7 +235,7 @@ public class CalendarFragment extends Fragment implements OnDateSelectedListener
         adapter.clearItems();
         for(Note item : items) {
             try {
-                Date _date = Utils.Companion.getDateFormat2().parse(item.getCreateDateStr2());
+                Date _date = Utils.INSTANCE.getDateFormat2().parse(item.getCreateDateStr2());
 
                 if(_date != null) {
                     Calendar cal = Calendar.getInstance();

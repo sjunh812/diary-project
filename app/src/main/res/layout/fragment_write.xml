@@ -91,7 +91,7 @@
                     android:layout_height="23dp"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@id/weatherImageView"
-                    android:paddingLeft="7dp"
+                    android:paddingLeft="10dp"
                     android:paddingTop="5dp"
                     android:paddingRight="5dp"
                     android:paddingBottom="5dp"
@@ -112,12 +112,12 @@
                     android:layout_width="23dp"
                     android:layout_height="23dp"
                     android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
                     android:layout_toRightOf="@id/dateTextView"
-                    android:paddingLeft="7dp"
+                    android:paddingLeft="10dp"
                     android:paddingTop="5dp"
                     android:paddingRight="5dp"
                     android:paddingBottom="5dp"
-                    android:layout_marginRight="5dp"
                     android:src="@drawable/navigate_down" />
 
                 <EditText
@@ -264,10 +264,10 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp"
+                                android:layout_marginBottom="5dp"
                                 android:text="기분 선택"
                                 android:textColor="@color/font"
-                                android:textSize="20sp"
+                                android:textSize="18sp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -277,7 +277,7 @@
                                 android:layout_marginBottom="30dp"
                                 android:text="오늘의 기분을 선택해주세요."
                                 android:textColor="@color/pastel_700"
-                                android:textSize="16sp" />
+                                android:textSize="14sp" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -314,7 +314,7 @@
                                             android:layout_marginTop="5dp"
                                             android:text="화남"
                                             android:textColor="@color/font"
-                                            android:textSize="16sp" />
+                                            android:textSize="14sp" />
 
                                     </LinearLayout>
 
@@ -341,7 +341,7 @@
                                             android:layout_marginTop="5dp"
                                             android:text="쿨"
                                             android:textColor="@color/font"
-                                            android:textSize="16sp" />
+                                            android:textSize="14sp" />
 
                                     </LinearLayout>
 
@@ -367,7 +367,7 @@
                                             android:layout_marginTop="5dp"
                                             android:text="슬픔"
                                             android:textColor="@color/font"
-                                            android:textSize="16sp" />
+                                            android:textSize="14sp" />
 
                                     </LinearLayout>
                                 </LinearLayout>
@@ -401,7 +401,7 @@
                                             android:layout_marginTop="5dp"
                                             android:text="아픔"
                                             android:textColor="@color/font"
-                                            android:textSize="16sp" />
+                                            android:textSize="14sp" />
 
                                     </LinearLayout>
 
@@ -428,7 +428,7 @@
                                             android:layout_marginTop="5dp"
                                             android:text="웃음"
                                             android:textColor="@color/font"
-                                            android:textSize="16sp" />
+                                            android:textSize="14sp" />
 
                                     </LinearLayout>
 
@@ -454,7 +454,7 @@
                                             android:layout_marginTop="5dp"
                                             android:text="보통"
                                             android:textColor="@color/font"
-                                            android:textSize="16sp" />
+                                            android:textSize="14sp" />
 
                                     </LinearLayout>
                                 </LinearLayout>
@@ -489,7 +489,7 @@
                                             android:layout_marginTop="5dp"
                                             android:text="나쁨"
                                             android:textColor="@color/font"
-                                            android:textSize="16sp" />
+                                            android:textSize="14sp" />
 
                                     </LinearLayout>
 
@@ -516,7 +516,7 @@
                                             android:layout_marginTop="5dp"
                                             android:text="좋음"
                                             android:textColor="@color/font"
-                                            android:textSize="16sp" />
+                                            android:textSize="14sp" />
 
                                     </LinearLayout>
 
@@ -542,7 +542,7 @@
                                             android:layout_marginTop="5dp"
                                             android:text="피곤"
                                             android:textColor="@color/font"
-                                            android:textSize="16sp" />
+                                            android:textSize="14sp" />
 
                                     </LinearLayout>
                                 </LinearLayout>
@@ -569,7 +569,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginTop="10dp"
-                                android:layout_marginBottom="5dp"
                                 android:text="일기 입력"
                                 android:textColor="@color/font"
                                 android:textSize="20sp"
@@ -591,7 +590,7 @@
                                     android:padding="10dp"
                                     android:textColor="@color/font"
                                     android:textColorHint="@color/pastel_700"
-                                    android:textSize="16sp" />
+                                    android:textSize="14sp" />
 
                             </androidx.core.widget.NestedScrollView>
                         </LinearLayout>
@@ -616,10 +615,10 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp"
+                                android:layout_marginBottom="5dp"
                                 android:text="사진 선택"
                                 android:textColor="@color/font"
-                                android:textSize="20sp"
+                                android:textSize="18sp"
                                 android:textStyle="bold" />
 
                             <RelativeLayout
@@ -636,7 +635,7 @@
                                     android:layout_centerVertical="true"
                                     android:text="탭하여 사진을 추가해주세요.\n(삭제하려면 길게 눌렀다가 떼주세요.)"
                                     android:textColor="@color/pastel_700"
-                                    android:textSize="16sp" />
+                                    android:textSize="14sp" />
 
                                 <Button
                                     android:id="@+id/add_photo_btn"

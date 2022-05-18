@@ -5,6 +5,6 @@
         android:state_selected="true"
         android:color="@color/pastel_700" />
     <item
-        android:color="@color/pastel_gray" />
+        android:color="@color/unselected_navi_icon" />
 
 </selector>

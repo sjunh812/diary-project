@@ -27,6 +27,7 @@ import org.sjhstudio.diary.DarkModeActivity;
 import org.sjhstudio.diary.FontActivity;
 import org.sjhstudio.diary.PasswordSettingsActivity;
 import org.sjhstudio.diary.R;
+import org.sjhstudio.diary.SettingsActivity;
 import org.sjhstudio.diary.helper.AppHelper;
 import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.note.NoteDatabaseCallback;
@@ -81,6 +82,13 @@ public class OptionFragment extends Fragment {
         darkmodeLayout.setOnClickListener(v -> {
             Intent intent = new Intent(getContext(), DarkModeActivity.class);
             getActivity().startActivityForResult(intent, REQUEST_DARK_MODE);
+        });
+
+        /* 기타설정 */
+        RelativeLayout settingsLayout = rootView.findViewById(R.id.settings_layout);
+        settingsLayout.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), SettingsActivity.class);
+            startActivity(intent);
         });
 
         /* 잠금설정 */

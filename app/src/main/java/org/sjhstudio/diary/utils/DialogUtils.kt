@@ -1,7 +1,6 @@
 package org.sjhstudio.diary.utils
 
 import android.content.Context
-import org.sjhstudio.diary.Pref
 import org.sjhstudio.diary.custom.*
 
 /**

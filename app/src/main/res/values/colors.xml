@@ -12,6 +12,8 @@
     <color name="background_button">#DEDEFF</color>
     <color name="backgroud_button_pressed">#CAA6FE</color>
     <color name="backgroud_graph">#F8F8FF</color>
+    <color name="unselected_navi_icon">#DEDEFF</color>
+    <color name="background_button_2">#EFEFFF</color>
 
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>

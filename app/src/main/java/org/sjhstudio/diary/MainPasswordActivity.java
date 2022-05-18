@@ -17,6 +17,7 @@ import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
 import org.sjhstudio.diary.helper.MyTheme;
+import org.sjhstudio.diary.utils.Pref;
 import org.sjhstudio.diary.utils.Utils;
 
 public class MainPasswordActivity extends BaseActivity {
@@ -124,7 +125,7 @@ public class MainPasswordActivity extends BaseActivity {
             finish();
         } else {    // 인증실패
             subTitleTextView.setText("비밀번호가 일치하지 않습니다");
-            Utils.Companion.startVibrator(this, 500, 50, true);
+            Utils.INSTANCE.startVibrator(this, 500, 50, true);
             canInput = false;
 
             // 0.5초 delay

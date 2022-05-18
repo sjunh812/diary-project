@@ -88,7 +88,7 @@
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="7dp"
                 android:src="@drawable/mood_crying_color" />
 
             <TextView
@@ -98,6 +98,18 @@
                 android:textStyle="bold"
                 android:text="@string/no_diary"
                 android:textColor="@color/gray" />
+
+            <Button
+                android:id="@+id/write_btn"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="52dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="17dp"
+                android:background="@drawable/ripple_radius_5_pastel_300"
+                android:text="작성하기"
+                android:textColor="@color/pastel_700"
+                android:textSize="10dp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 

@@ -13,7 +13,7 @@ import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 
 import org.sjhstudio.diary.R;
-import org.sjhstudio.diary.Pref;
+import org.sjhstudio.diary.utils.Pref;
 
 public class CustomGPSDialog extends Dialog {
     ImageButton cancelButton;

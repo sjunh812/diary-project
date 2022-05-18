@@ -1,4 +1,4 @@
-package org.sjhstudio.diary
+package org.sjhstudio.diary.utils
 
 class Val {
 

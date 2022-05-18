@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import org.sjhstudio.diary.helper.MyTheme
+import org.sjhstudio.diary.utils.Pref
 
 open class BaseActivity: AppCompatActivity() {
 

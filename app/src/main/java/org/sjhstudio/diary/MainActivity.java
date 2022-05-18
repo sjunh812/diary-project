@@ -4,20 +4,15 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -28,8 +23,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -46,8 +39,6 @@ import com.stanfy.gsonxml.XmlParserCreator;
 //import com.theartofdev.edmodo.cropper.CropImage;
 //import com.theartofdev.edmodo.cropper.CropImageView;
 
-import org.sjhstudio.diary.custom.CustomGPSDialog;
-import org.sjhstudio.diary.custom.CustomStopWriteDialog;
 import org.sjhstudio.diary.fragment.CalendarFragment;
 import org.sjhstudio.diary.fragment.GraphFragment;
 import org.sjhstudio.diary.fragment.ListFragment;
@@ -63,7 +54,9 @@ import org.sjhstudio.diary.note.Note;
 import org.sjhstudio.diary.note.NoteDatabaseCallback;
 import org.sjhstudio.diary.note.NoteDatabase;
 import org.sjhstudio.diary.utils.PermissionUtils;
+import org.sjhstudio.diary.utils.Pref;
 import org.sjhstudio.diary.utils.Utils;
+import org.sjhstudio.diary.utils.Val;
 import org.sjhstudio.diary.weather.WeatherItem;
 import org.sjhstudio.diary.weather.WeatherResult;
 import org.xmlpull.v1.XmlPullParser;
@@ -226,20 +219,22 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         isSelected2 = flag;
     }
 
+
     /**
-     * 위치 가져오기
-     * @param date
+     * Get current location and date
+     * @param date  // null -> current date
      */
     public void getCurrentLocation(Date date) {
         if(date == null) curDate = new Date();                  // 현재 날짜정보
         else curDate = date;                                    // 사용자가 선택한 날짜정보
 
-        String curYear = yearFormat.format(curDate);            // yyyy
-        String curMonth = monthFormat.format(curDate);          // MM
-        String curDay = dayFormat.format(curDate);              // dd
-        String _date = dateFormat.format(curDate);              // yyyy년 MM월 dd일
+        String curYear = Utils.INSTANCE.getYearFormat().format(curDate);   // yyyy
+        String curMonth = Utils.INSTANCE.getMonthFormat().format(curDate); // MM
+        String curDay = Utils.INSTANCE.getDayFormat().format(curDate); // dd
+        String _date = Utils.INSTANCE.getDateFormat().format(curDate); // yyyy년 MM월 dd일
 
         if(writeFragment != null) {
+            Log.d(LOG, _date);
             writeFragment.setDateTextView(_date);
             try {
                 writeFragment.setCurDate(Integer.parseInt(curYear), Integer.parseInt(curMonth), Integer.parseInt(curDay));
@@ -572,7 +567,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
                 getCurrentLocation(null);
                 break;
             case "checkGPS":
-                if(!Utils.Companion.checkGPS(this)) {
+                if(!Utils.INSTANCE.checkGPS(this)) {
                     DialogUtils.Companion.showGPSDialog(this, () -> {
                         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                         startActivity(intent);
@@ -761,6 +756,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
                 Log.d(LOG, "xxx detailActivityResult: 일기수정됨");
                 Note item = (Note)(Objects.requireNonNull(data).getSerializableExtra("item"));
                 if(item != null) showWriteFragment(item);
+                else onTabSelected(2);
                 break;
             default:
                 Log.d(LOG, "xxx detailActivityResult: 예외 응답");

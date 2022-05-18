@@ -1,7 +1,6 @@
 package org.sjhstudio.diary;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -19,8 +18,8 @@ import android.widget.TextView;
 
 import org.sjhstudio.diary.adapters.PhotoAdapter;
 import org.sjhstudio.diary.custom.CustomDeleteDialog;
-import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.note.Note;
+import org.sjhstudio.diary.utils.Val;
 
 import java.io.File;
 import java.util.ArrayList;

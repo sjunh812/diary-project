@@ -29,41 +29,37 @@
         android:theme="@style/Theme.DiaryProject"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
-
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
         <activity
             android:name=".PasswordSettingsActivity"
-            android:exported="false"
-            android:configChanges="orientation|screenSize" />
-
+            android:configChanges="orientation|screenSize"
+            android:exported="false" />
         <activity
             android:name=".MainPasswordActivity"
-            android:exported="false"
-            android:configChanges="orientation|screenSize" />
-
+            android:configChanges="orientation|screenSize"
+            android:exported="false" />
         <activity
             android:name=".PasswordActivity"
-            android:exported="false"
-            android:configChanges="orientation|screenSize" />
-
+            android:configChanges="orientation|screenSize"
+            android:exported="false" />
         <activity
             android:name=".BackupActivity"
-            android:exported="false"
-            android:configChanges="orientation|screenSize" />
-
+            android:configChanges="orientation|screenSize"
+            android:exported="false" />
         <activity
             android:name=".DetailActivity"
-            android:exported="false"
-            android:configChanges="orientation|screenSize" />
-
+            android:configChanges="orientation|screenSize"
+            android:exported="false" />
         <activity
             android:name=".PhotoActivity"
-            android:exported="false"
-            android:configChanges="orientation|screenSize" />
-
+            android:configChanges="orientation|screenSize"
+            android:exported="false" />
         <activity
             android:name=".DarkModeActivity"
-            android:exported="false"
-            android:configChanges="orientation|screenSize" />
+            android:configChanges="orientation|screenSize"
+            android:exported="false" />
 
         <receiver
             android:name=".helper.AlarmReceiver"
@@ -92,38 +88,32 @@
 
         <activity
             android:name=".AlarmActivity"
-            android:exported="false"
-            android:configChanges="orientation|screenSize" />
-
+            android:configChanges="orientation|screenSize"
+            android:exported="false" />
         <activity
             android:name=".SplashActivity"
-            android:exported="true"
-            android:configChanges="orientation|screenSize">
+            android:configChanges="orientation|screenSize"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".FontActivity"
-            android:exported="false"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize"
-            android:configChanges="orientation|screenSize" />
-
-        <!-- 크롭 액티비티 -->
-        <activity android:name="com.canhub.cropper.CropImageActivity"
-            android:exported="true"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Base.Theme.AppCompat"/>
-
-        <!-- 내용 제공자(카메라 앱과 파일 공유) -->
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" /> <!-- 크롭 액티비티 -->
+        <activity
+            android:name="com.canhub.cropper.CropImageActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true"
+            android:theme="@style/Base.Theme.AppCompat" /> <!-- 내용 제공자(카메라 앱과 파일 공유) -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="org.sjhstudio.diary.fileprovider"
@@ -133,7 +123,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/external" />
         </provider>
-
     </application>
 
 </manifest>

@@ -209,19 +209,6 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_write, container, false);
-
-        if(requestListener != null && updateItem == null) {
-            if(PermissionUtils.Companion.checkLocationPermission(requireContext())) {
-                // 위치권한 허용.
-              if(calDate == null) requestListener.onRequest("getCurrentLocation");  // 메인 액티비티로부터 현재위치정보 가져오기
-              else requestListener.onRequest("getCurrentLocation", calDate);    // 메인 액티비티로부터 현재위치정보 가져오기(달력에서 넘어온 Date 사용)
-            } else {
-                // 위치권한 거부.
-                if(calDate == null) requestListener.getDateOnly(null);
-                else requestListener.getDateOnly(calDate);
-            }
-        }
-
         return rootView;
     }
 
@@ -233,6 +220,19 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         initWeatherViewUI(view);
         initMoodUI(view);
         initPhoto(view);
+
+        if(requestListener != null && updateItem == null) {
+            if(PermissionUtils.Companion.checkLocationPermission(requireContext())) {
+                // 위치권한 허용.
+                if(calDate == null) requestListener.onRequest("getCurrentLocation");  // 메인 액티비티로부터 현재위치정보 가져오기
+                else requestListener.onRequest("getCurrentLocation", calDate);    // 메인 액티비티로부터 현재위치정보 가져오기(달력에서 넘어온 Date 사용)
+            } else {
+                // 위치권한 거부.
+                if(calDate == null) requestListener.getDateOnly(null);
+                else requestListener.getDateOnly(calDate);
+            }
+        }
+
         if(updateItem != null) setUpdateItem();
     }
 
@@ -716,7 +716,7 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
 
     private File createFile() {
         // 파일이름 생성(yyyyMMdd_)
-        String fileName = Utils.Companion.getDateFormat3().format(new Date()) + "_" + System.currentTimeMillis();
+        String fileName = Utils.INSTANCE.getDateFormat3().format(new Date()) + "_" + System.currentTimeMillis();
 
         // 파일 생성
         File storageFile = Environment.getExternalStorageDirectory();
@@ -727,7 +727,7 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     private Uri createUri() {
         // 파일이름 생성(yyyyMMdd_)
-        String fileName = Utils.Companion.getDateFormat3().format(new Date()) + "_" + System.currentTimeMillis();
+        String fileName = Utils.INSTANCE.getDateFormat3().format(new Date()) + "_" + System.currentTimeMillis();
 
         // ContentValues 생성
         ContentValues values = new ContentValues();
@@ -971,7 +971,7 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
                 if(PermissionUtils.Companion.checkLocationPermission(requireContext())) {
                     requestListener.onRequest("checkGPS");
 
-                    if(Utils.Companion.checkGPS(requireContext())) {
+                    if(Utils.INSTANCE.checkGPS(requireContext())) {
                         if(calDate == null)requestListener.onRequest("getCurrentLocation"); // 메인 액티비티로부터 현재위치정보 가져오기
                         else requestListener.onRequest("getCurrentLocation", calDate);  // 메인 액티비티로부터 현재위치정보 가져오기(달력에서 넘어온 Date 사용)
                     } else {
