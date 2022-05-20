@@ -31,6 +31,7 @@ import com.canhub.cropper.CropImageContractOptions;
 import com.canhub.cropper.CropImageOptions;
 import com.canhub.cropper.CropImageView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
 import com.pedro.library.AutoPermissions;
 import com.pedro.library.AutoPermissionsListener;
 import com.stanfy.gsonxml.GsonXml;
@@ -44,6 +45,9 @@ import org.sjhstudio.diary.fragment.GraphFragment;
 import org.sjhstudio.diary.fragment.ListFragment;
 import org.sjhstudio.diary.fragment.OptionFragment;
 import org.sjhstudio.diary.fragment.WriteFragment;
+import org.sjhstudio.diary.model.RGResults;
+import org.sjhstudio.diary.model.ReverseGeocoder;
+import org.sjhstudio.diary.utils.ApiKey;
 import org.sjhstudio.diary.utils.DialogUtils;
 import org.sjhstudio.diary.helper.KMAGrid;
 import org.sjhstudio.diary.helper.MyApplication;
@@ -56,7 +60,7 @@ import org.sjhstudio.diary.note.NoteDatabase;
 import org.sjhstudio.diary.utils.PermissionUtils;
 import org.sjhstudio.diary.utils.Pref;
 import org.sjhstudio.diary.utils.Utils;
-import org.sjhstudio.diary.utils.Val;
+import org.sjhstudio.diary.utils.Constants;
 import org.sjhstudio.diary.weather.WeatherItem;
 import org.sjhstudio.diary.weather.WeatherResult;
 import org.xmlpull.v1.XmlPullParser;
@@ -127,14 +131,14 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         if(!Pref.getPPermissionGuide(this)) {
             Log.e(LOG, "권한안내 필요함.");
             DialogUtils.Companion.showPermissionGuideDialog(this, () -> {
-                AutoPermissions.Companion.loadAllPermissions(this, Val.REQUEST_ALL_PERMISSIONS);
+                AutoPermissions.Companion.loadAllPermissions(this, Constants.REQUEST_ALL_PERMISSIONS);
                 Pref.setPPermissionGuide(this, true);
 
                 return Unit.INSTANCE;
             });
         } else {
             Log.e(LOG, "권한안내 완료됨.");
-            AutoPermissions.Companion.loadAllPermissions(this, Val.REQUEST_ALL_PERMISSIONS);
+            AutoPermissions.Companion.loadAllPermissions(this, Constants.REQUEST_ALL_PERMISSIONS);
         }
 
         // DB
@@ -184,7 +188,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
 
         // savedInstanceState(테마설정, 폰트설정시 이용)
         if(savedInstanceState == null) onTabSelected(0);
-        else onTabSelected(savedInstanceState.getInt(Val.SELECTED_TAB_INDEX));
+        else onTabSelected(savedInstanceState.getInt(Constants.SELECTED_TAB_INDEX));
 
         registerRemovedReceiver();
     }
@@ -302,12 +306,32 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         } catch(Exception e) { e.printStackTrace(); }
     }
 
+    public void reverseGeocoder() {
+        //https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=126.9044504,37.5270122&ouput=json
+        String url = "https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc";
+        String get = "?coords=" + curLocation.getLongitude() + "," + curLocation.getLatitude()
+                + "&" + "output=json";
+        url += get;
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("X-NCP-APIGW-API-KEY-ID", ApiKey.NAVER_MAP_CLIENT_ID);
+        headers.put("X-NCP-APIGW-API-KEY", ApiKey.NAVER_MAP_CLIENT_KEY);
+
+        MyApplication.requestWithHeader(
+                Constants.REQUEST_REVERSE_GEOCODER,
+                Request.Method.GET,
+                url,
+                headers,
+                this
+        );
+    }
+
     /**
      * 날씨 가져오기
      */
     public void getCurrentWeather() {
         /* 현재 위치의 위도, 경도들 이용하여 기상청이 만든 격자포멧으로 변환 */
-        Map<String, Double> map = KMAGrid.getKMAGrid(curLocation.getLatitude(), curLocation.getLongitude());
+        Map<String, Double> map = KMAGrid.getKMAGrid(curLocation.getLongitude(), curLocation.getLatitude());
 
         double gridX = map.get("X");
         double gridY = map.get("Y");
@@ -318,7 +342,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         url += "&gridy=" + Math.round(gridY);
 
         Map<String, String> params = new HashMap<>();
-        MyApplication.request(Val.REQUEST_WEATHER_BY_GRID, Request.Method.GET, url, params, this);
+        MyApplication.request(Constants.REQUEST_WEATHER_BY_GRID, Request.Method.GET, url, params, this);
     }
 
     @Override
@@ -615,34 +639,61 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
      */
     @Override
     public void onResponse(int requestCode, int responseCode, String response) {
-        if(responseCode == Val.VOLLEY_RESPONSE_OK) {
-            if(requestCode == Val.REQUEST_WEATHER_BY_GRID) {    // 기상청으로 날씨요청
-                XmlParserCreator creator = new XmlParserCreator() { // Xml -> Gson
-                    @Override
-                    public XmlPullParser createParser() {
-                        try {
-                            return XmlPullParserFactory.newInstance().newPullParser();
-                        } catch(Exception e) {
-                            throw new RuntimeException(e);
+        if(responseCode == Constants.VOLLEY_RESPONSE_OK) {
+            switch(requestCode) {
+                case Constants.REQUEST_WEATHER_BY_GRID:
+                    XmlParserCreator creator = new XmlParserCreator() { // Xml -> Gson
+                        @Override
+                        public XmlPullParser createParser() {
+                            try {
+                                return XmlPullParserFactory.newInstance().newPullParser();
+                            } catch(Exception e) {
+                                throw new RuntimeException(e);
+                            }
                         }
+                    };
+
+                    GsonXml gsonXml = new GsonXmlBuilder()
+                            .setXmlParserCreator(creator)
+                            .setSameNameLists(true)
+                            .create();
+                    try {
+                        WeatherResult result = gsonXml.fromXml(response, WeatherResult.class);
+                        WeatherItem item = result.body.data.get(0);
+                        curWeatherStr = item.getWfKor();
+                        Log.e(LOG, "getWfKor(): " + curWeatherStr);
+
+                        if(writeFragment != null) writeFragment.setWeatherImageView(curWeatherStr);
+                    } catch(Exception e) { e.printStackTrace(); }
+
+                    if(writeFragment != null) writeFragment.setSwipeRefresh(false);
+
+                    break;
+
+                case Constants.REQUEST_REVERSE_GEOCODER:
+                    Gson gson = new Gson();
+                    Log.d("TAG", response);
+                    ReverseGeocoder data = gson.fromJson(response, ReverseGeocoder.class);
+                    if(!data.getResults().isEmpty()) {
+                        RGResults result = data.getResults().get(0);
+                        String country = result.getRegion().getArea0().getName();  // 국가
+                        String sido = result.getRegion().getArea1().getName(); // 시도
+                        String gungu = result.getRegion().getArea2().getName();    // 시군구
+                        if(!gungu.isEmpty()) gungu += " ";
+                        String dong = result.getRegion().getArea3().getName(); // 읍면동
+                        String lee = result.getRegion().getArea4().getName();  // 리
+                        if(!dong.isEmpty()) {
+                            if(!lee.isEmpty()) {
+                                dong += " ";
+                            }
+                        }
+                        String address = gungu + dong + lee;
+                        Log.d("TAG", address);
+
+                        writeFragment.setLocationTextView(address);
                     }
-                };
 
-                GsonXml gsonXml = new GsonXmlBuilder()
-                        .setXmlParserCreator(creator)
-                        .setSameNameLists(true)
-                        .create();
-
-                try {
-                    WeatherResult result = gsonXml.fromXml(response, WeatherResult.class);
-                    WeatherItem item = result.body.data.get(0);
-                    curWeatherStr = item.getWfKor();
-                    Log.e(LOG, "getWfKor(): " + curWeatherStr);
-
-                    if(writeFragment != null) writeFragment.setWeatherImageView(curWeatherStr);
-                } catch(Exception e) { e.printStackTrace(); }
-
-                if(writeFragment != null) writeFragment.setSwipeRefresh(false);
+                    break;
             }
         } else {
             Log.e(LOG, "ERROR : Failure response code = " + responseCode);
@@ -742,7 +793,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         Intent data = result.getData();
 
         switch(resultCode) {
-            case Val.DETAIL_ACTIVITY_RESULT_DELETE:
+            case Constants.DETAIL_ACTIVITY_RESULT_DELETE:
                 Log.d(LOG, "xxx detailActivityResult: 일기삭제됨");
                 int id = Objects.requireNonNull(data).getIntExtra("id", -1);
 
@@ -752,7 +803,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
                     else if (calendarFragment != null) onTabSelected(1);
                 }
                 break;
-            case Val.DETAIL_ACTIVITY_RESULT_UPDATE:
+            case Constants.DETAIL_ACTIVITY_RESULT_UPDATE:
                 Log.d(LOG, "xxx detailActivityResult: 일기수정됨");
                 Note item = (Note)(Objects.requireNonNull(data).getSerializableExtra("item"));
                 if(item != null) showWriteFragment(item);
@@ -793,7 +844,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(Val.SELECTED_TAB_INDEX, selectedTabIndex);
+        outState.putInt(Constants.SELECTED_TAB_INDEX, selectedTabIndex);
     }
 
     @Override
@@ -816,7 +867,8 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         @Override
         public void onLocationChanged(@NonNull Location location) {
             curLocation = location;                                 // 가져온 위치정보를 curLocation 객체에 대입
-            getCurrentAddress();                                    // 갱신된 위치정보를 주소로 반환 (작성 프래그먼트의 locationTextView 갱신)
+//            getCurrentAddress();                                    // 갱신된 위치정보를 주소로 반환 (작성 프래그먼트의 locationTextView 갱신)
+            reverseGeocoder();
             getCurrentWeather();                                    // 갱신된 위치정보를 날씨로 반환 (작성 프래그먼트의 weatherImageView 갱신)
             stopLocationService();
         }
@@ -833,7 +885,8 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         @Override
         public void onLocationChanged(@NonNull Location location) {
             curLocation = location;                                 // 가져온 위치정보를 curLocation 객체에 대입
-            getCurrentAddress();                                    // 갱신된 위치정보를 주소로 반환 (작성 프래그먼트의 locationTextView 갱신)
+//            getCurrentAddress();                                    // 갱신된 위치정보를 주소로 반환 (작성 프래그먼트의 locationTextView 갱신)
+            reverseGeocoder();
             getCurrentWeather();                                    // 갱신된 위치정보를 날씨로 반환 (작성 프래그먼트의 weatherImageView 갱신)
             stopLocationService();
         }

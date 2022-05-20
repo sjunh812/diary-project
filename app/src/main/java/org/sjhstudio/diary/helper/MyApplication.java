@@ -9,7 +9,7 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.sjhstudio.diary.utils.Val;
+import org.sjhstudio.diary.utils.Constants;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -45,17 +45,51 @@ public class MyApplication extends MultiDexApplication {
         super.onTerminate();
     }
 
-    public static void request(final int requestCode, final int method, final String url,
-                               final Map<String, String> params, final OnResponseListener listener) {
+    public static void request(
+            final int requestCode,
+            final int method,
+            final String url,
+            final Map<String, String> params,
+            final OnResponseListener listener
+    ) {
         StringRequest request = new StringRequest(
                 method,
                 url,
-                response -> listener.onResponse(requestCode, Val.VOLLEY_RESPONSE_OK, response),
-                error -> listener.onResponse(requestCode, Val.VOLLEY_RESPONSE_ERROR, error.getMessage())
+                response -> listener.onResponse(requestCode, Constants.VOLLEY_RESPONSE_OK, response),
+                error -> listener.onResponse(requestCode, Constants.VOLLEY_RESPONSE_ERROR, error.getMessage())
         ) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return super.getHeaders();
+            }
+        };
+
+        request.setShouldCache(false);  // 캐시x
+        request.setRetryPolicy(new DefaultRetryPolicy(10 * 1000, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        MyApplication.requestQueue.add(request);    // requestQueue 에 해당 request 추가
+    }
+
+    public static void requestWithHeader(
+            final int requestCode,
+            final int method,
+            final String url,
+            final Map<String, String> headers,
+            final OnResponseListener listener
+    ) {
+        StringRequest request = new StringRequest(
+                method,
+                url,
+                response -> listener.onResponse(requestCode, Constants.VOLLEY_RESPONSE_OK, response),
+                error -> listener.onResponse(requestCode, Constants.VOLLEY_RESPONSE_ERROR, error.getMessage())
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return headers;
             }
         };
 

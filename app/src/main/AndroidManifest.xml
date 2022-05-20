@@ -29,6 +29,11 @@
         android:theme="@style/Theme.DiaryProject"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
+
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="@string/naver_map_client_id" />
+
         <activity
             android:name=".SettingsActivity"
             android:exported="false" />

@@ -19,7 +19,7 @@ import android.widget.TextView;
 import org.sjhstudio.diary.adapters.PhotoAdapter;
 import org.sjhstudio.diary.custom.CustomDeleteDialog;
 import org.sjhstudio.diary.note.Note;
-import org.sjhstudio.diary.utils.Val;
+import org.sjhstudio.diary.utils.Constants;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -230,7 +230,7 @@ public class DetailActivity extends BaseActivity {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             intent.putExtra("id", id);
 
-            setResult(Val.DETAIL_ACTIVITY_RESULT_DELETE, intent);
+            setResult(Constants.DETAIL_ACTIVITY_RESULT_DELETE, intent);
             finish();
         });
     }
@@ -256,7 +256,7 @@ public class DetailActivity extends BaseActivity {
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.putExtra("item", this.item);
 
-                setResult(Val.DETAIL_ACTIVITY_RESULT_UPDATE, intent);
+                setResult(Constants.DETAIL_ACTIVITY_RESULT_UPDATE, intent);
                 finish();
         }
 
