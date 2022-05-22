@@ -76,8 +76,8 @@
                 android:elevation="1dp"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp">
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
 
                 <ImageView
                     android:id="@+id/weatherImageView"
@@ -91,10 +91,7 @@
                     android:layout_height="23dp"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@id/weatherImageView"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="5dp"
-                    android:paddingRight="5dp"
-                    android:paddingBottom="5dp"
+                    android:padding="7dp"
                     android:src="@drawable/navigate_down" />
 
                 <TextView
@@ -114,10 +111,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
                     android:layout_toRightOf="@id/dateTextView"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="5dp"
-                    android:paddingRight="5dp"
-                    android:paddingBottom="5dp"
+                    android:padding="7dp"
                     android:src="@drawable/navigate_down" />
 
                 <EditText
@@ -571,7 +565,7 @@
                                 android:layout_marginTop="10dp"
                                 android:text="일기 입력"
                                 android:textColor="@color/font"
-                                android:textSize="20sp"
+                                android:textSize="18sp"
                                 android:textStyle="bold" />
 
                             <androidx.core.widget.NestedScrollView
@@ -587,7 +581,8 @@
                                     android:gravity="top"
                                     android:hint="이곳을 터치해주세요."
                                     android:lineSpacingExtra="5dp"
-                                    android:padding="10dp"
+                                    android:paddingVertical="5dp"
+                                    android:paddingHorizontal="10dp"
                                     android:textColor="@color/font"
                                     android:textColorHint="@color/pastel_700"
                                     android:textSize="14sp" />

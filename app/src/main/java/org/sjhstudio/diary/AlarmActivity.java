@@ -19,6 +19,7 @@ import android.widget.TextView;
 import org.sjhstudio.diary.custom.CustomTimePickerDialog;
 import org.sjhstudio.diary.helper.AlarmHelper;
 import org.sjhstudio.diary.utils.Pref;
+import org.sjhstudio.diary.utils.Utils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -135,7 +136,7 @@ public class AlarmActivity extends BaseActivity {
         cal.set(Calendar.MINUTE, minute);
         Date date = cal.getTime();
 
-        String timeFormat = MainActivity.timeFormat.format(date);
+        String timeFormat = Utils.INSTANCE.getTimeFormat().format(date);
         timeTextView.setText(timeFormat);
     }
 

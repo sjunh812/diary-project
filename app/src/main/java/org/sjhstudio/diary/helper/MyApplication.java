@@ -62,11 +62,6 @@ public class MyApplication extends MultiDexApplication {
             protected Map<String, String> getParams() throws AuthFailureError {
                 return params;
             }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                return super.getHeaders();
-            }
         };
 
         request.setShouldCache(false);  // 캐시x

@@ -554,8 +554,8 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
                 curMonth = pickerDialog.getCurMonth() + 1;
                 curDay = pickerDialog.getCurDay();
                 Date newDate = new Date(curYear - 1900, curMonth - 1, curDay);
-                dateText = MainActivity.dateFormat2.format(newDate);
-                dateTextView.setText(MainActivity.dateFormat.format(newDate));
+                dateText = Utils.INSTANCE.getDateFormat2().format(newDate);
+                dateTextView.setText(Utils.INSTANCE.getDateFormat().format(newDate));
             }
         });
     }
@@ -634,10 +634,16 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         int moodIndex = updateItem.getMood();
         int starIndex = updateItem.getStarIndex();
         try {
-            Date date2 = MainActivity.dateFormat2.parse(date2Str);
-            curYear = date2.getYear() + 1900;
-            curMonth = date2.getMonth() + 1;
-            curDay = date2.getDate();
+            Date date2 = Utils.INSTANCE.getDateFormat2().parse(date2Str);
+//            curYear = date2.getYear() + 1900;
+//            curMonth = date2.getMonth() + 1;
+//            curDay = date2.getDate();
+            if(date2 != null) {
+                curYear = Utils.INSTANCE.getYear(date2);
+                curMonth = Utils.INSTANCE.getMonth(date2);
+                curDay = Utils.INSTANCE.getDay(date2);
+                System.out.println("xxx " + curYear + "," + curMonth + "," + curDay);
+            }
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -826,12 +832,14 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
 
                 if(updateItem == null) {                            // 새로 일기를 작성하는 경우
                     if(dateText != null) {                          // 사용자가 날짜를 바꾼 경우
-                        String date = dateText + " " + MainActivity.timeFormat2.format(new Date());
+                        String date = dateText + " "
+                                + Utils.INSTANCE.getTimeFormat2().format(new Date());
                         objs = new Object[]{weatherIndex, address, "", "", contents, moodIndex, filePaths, curYear, curMonth, date, starIndex};
                         callback.insertDB2(objs);
                     } else {                                        // 사용자가 날짜를 바꾸지 않은 경우
                         if(calDate != null) {                       // 기분달력으로 넘어온 날짜로 작성하는 경우
-                            String date = MainActivity.dateFormat2.format(calDate) + " " + MainActivity.timeFormat2.format(new Date());
+                            String date = Utils.INSTANCE.getDateFormat2().format(calDate) + " "
+                                    + Utils.INSTANCE.getTimeFormat2().format(new Date());
                             objs = new Object[]{weatherIndex, address, "", "", contents, moodIndex, filePaths, curYear, curMonth, date, starIndex};
                             callback.insertDB2(objs);
                         } else {
@@ -860,7 +868,8 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
                     updateItem.setStarIndex(starIndex);
 
                     if(dateText != null) {
-                        String date = dateText + " " + MainActivity.timeFormat2.format(new Date());
+                        String date = dateText + " "
+                                + Utils.INSTANCE.getTimeFormat2().format(new Date());
                         updateItem.setYear(curYear);
                         updateItem.setDay(curMonth);
                         updateItem.setCreateDateStr2(date);

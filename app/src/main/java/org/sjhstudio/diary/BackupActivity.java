@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -40,6 +41,7 @@ import org.sjhstudio.diary.utils.DialogUtils;
 import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.utils.PermissionUtils;
 import org.sjhstudio.diary.note.NoteDatabase;
+import org.sjhstudio.diary.utils.Utils;
 
 import java.util.Collections;
 import java.util.Date;
@@ -299,6 +301,7 @@ public class BackupActivity extends BaseActivity {
     /**
      * Queries the Drive REST API for files visible to this app and lists them in the content view.
      */
+    @SuppressLint("SetTextI18n")
     private void query() {
         if (mDriveServiceHelper != null) {
             Log.d(LOG, "Querying for files.");
@@ -311,7 +314,7 @@ public class BackupActivity extends BaseActivity {
                                 Log.d(LOG, "file ModifiedTime : " + file.getModifiedTime());
 
                                 Date date = new Date(file.getModifiedTime().getValue());
-                                backupDate = MainActivity.dateFormat.format(date);
+                                backupDate = Utils.INSTANCE.getDateFormat().format(date);
 
                                 recentDateTextView.setText("최근 수정 날짜 : " + backupDate);
                                 setIsDeleteFile(false);

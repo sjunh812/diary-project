@@ -1,5 +1,6 @@
 package org.sjhstudio.diary.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -34,6 +35,7 @@ import org.sjhstudio.diary.R;
 import org.sjhstudio.diary.custom.MyRadioButton;
 import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.note.NoteDatabaseCallback;
+import org.sjhstudio.diary.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -243,6 +245,7 @@ public class GraphFragment extends Fragment {
         radioGroup = (RadioGroup)rootView.findViewById(R.id.radioGroup);
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 HashMap<Integer, Integer> hashMap = null;
@@ -253,12 +256,12 @@ public class GraphFragment extends Fragment {
                     hashMap = callback.selectMoodCount(true, false, false);
                     describeTextView.setText("전체 통계 중 제일 많은 기분은 ");
                 } else if(checkedId == R.id.yearButton) {
-                    moodTitleTextView.setText(MainActivity.yearFormat.format(new Date()) + "년");
+                    moodTitleTextView.setText(Utils.INSTANCE.getCurrentYear() + "년");
                     selectRadioIndex = 1;
                     hashMap = callback.selectMoodCount(false, true, false);
                     describeTextView.setText("올해 통계 중 제일 많은 기분은 ");
                 } else if(checkedId == R.id.monthButton) {
-                    moodTitleTextView.setText(Integer.parseInt(MainActivity.monthFormat.format(new Date())) + "월");
+                    moodTitleTextView.setText(Utils.INSTANCE.getCurrentMonth() + "월");
                     selectRadioIndex = 2;
                     hashMap = callback.selectMoodCount(false, false, true);
                     describeTextView.setText("이번달 통계 중 제일 많은 기분은 ");

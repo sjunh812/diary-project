@@ -13,8 +13,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -37,8 +35,6 @@ import com.pedro.library.AutoPermissionsListener;
 import com.stanfy.gsonxml.GsonXml;
 import com.stanfy.gsonxml.GsonXmlBuilder;
 import com.stanfy.gsonxml.XmlParserCreator;
-//import com.theartofdev.edmodo.cropper.CropImage;
-//import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.sjhstudio.diary.fragment.CalendarFragment;
 import org.sjhstudio.diary.fragment.GraphFragment;
@@ -71,7 +67,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -94,19 +89,8 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
     private GPSListener gpsListener;                    // 위치 정보를 가져오기 위해 필요한 리스너
     private LowVersionGPSListener lowVersionGPSListener;// 위치 정보를 가져오기 위해 필요한 리스너 (api 29 이전 버전)
 
-    // date format
-    // 추후 Utils 클래스에 정리필요..
-    public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
-    public static SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
-    public static SimpleDateFormat timeFormat = new SimpleDateFormat("a HH:mm");
-    public static SimpleDateFormat timeFormat2 = new SimpleDateFormat("HH:mm:SS");
-    public static SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
-    public static SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
-    public static SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
-
     private NoteDatabase db;                            // 일기 목록을 담은 db
     private Location curLocation;                       // 현재 위치
-    private String curWeatherStr;                       // 현재 날씨 String
     private Date curDate;                               // 현재 날짜
     private Note updateItem = null;                     // 일기 목록에서 수정할 Note 객체
     private int selectedTabIndex = 0;                   // 현재 선택되어있는 탭 번호 (onSaveInstanceState() 호출시 Bundle 객체로 저장)
@@ -133,7 +117,6 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
             DialogUtils.Companion.showPermissionGuideDialog(this, () -> {
                 AutoPermissions.Companion.loadAllPermissions(this, Constants.REQUEST_ALL_PERMISSIONS);
                 Pref.setPPermissionGuide(this, true);
-
                 return Unit.INSTANCE;
             });
         } else {
@@ -175,7 +158,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
 
                     isSelected2 = true;
                     onTabSelected(position);
-                    Log.d(LOG, "position : " + position);
+
                     return Unit.INSTANCE;
                 });
             } else {
@@ -194,7 +177,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
     }
 
     private void registerRemovedReceiver() {
-        // 리시버등록(앱제거시, 비밀번호 삭제)
+        // 리시버등록(앱 제거시, 비밀번호삭제)
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
@@ -252,11 +235,9 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
                 float minDistance = 0;                                         // 업데이트 거리간격 0
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-//                    gpsListener = new GPSListener();                           // 위치정보를 가져오기 위해 리스너 설정
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, gpsListener);    // 위치 업데이트
                     locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDistance, gpsListener);    // 위치 업데이트
                 } else {
-//                    lowVersionGPSListener = new LowVersionGPSListener();       // 위치정보를 가져오기 위해 리스너 설정
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, lowVersionGPSListener);    // 위치 업데이트
                     locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDistance, lowVersionGPSListener);    // 위치 업데이트
                 }
@@ -264,52 +245,11 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         } catch(Exception e) { e.printStackTrace(); }
     }
 
-    /**
-     * 주소 가져오기
-     */
-    public void getCurrentAddress() {
-        Geocoder geoCoder = new Geocoder(this);
-
-        try {
-            List<Address> list = geoCoder.getFromLocation(curLocation.getLatitude(), curLocation.getLongitude(), 5);
-            Log.d(LOG, "latitude : " + curLocation.getLatitude() + " longitude : " + curLocation.getLongitude());
-
-            if(list != null && list.size() > 0) {
-                Address address = list.get(0);                          // 현재 주소 정보를 가진 Address 객체
-                String adminArea = address.getAdminArea();              // 인천광역시, 서울특별시..
-                String locality = address.getLocality();                // 시
-                String subLocality = address.getSubLocality();          // 구
-                String thoroughfare = address.getThoroughfare();        // 동
-                String subThoroughfare = address.getSubThoroughfare();  // 읍 면?
-                String subStr = subLocality;
-
-                if(locality == null) {                                  // 서울특별시나 인천광역시와 같이 '시'가 없는 지역인 경우 예외 처리
-                    locality = adminArea;
-                }
-
-                if(subLocality == null) {                               // 구, 동이 없는 지역인 경우 예외 처리
-                    subStr = thoroughfare;
-                    if(thoroughfare == null) {
-                        subStr = subThoroughfare;
-                        if(subThoroughfare == null) {
-                            subStr = "";
-                        }
-                    }
-                }
-
-                StringBuilder stringBuilder = new StringBuilder().append(locality).append(" ").append(subStr);
-                Log.d(LOG, stringBuilder.toString());
-                if(writeFragment != null) {
-                    writeFragment.setLocationTextView(stringBuilder.toString());
-                }
-            }
-        } catch(Exception e) { e.printStackTrace(); }
-    }
-
-    public void reverseGeocoder() {
-        //https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=126.9044504,37.5270122&ouput=json
+    public void callCurrentAddress() {
+        // Use Naver reverse geocoding
         String url = "https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc";
-        String get = "?coords=" + curLocation.getLongitude() + "," + curLocation.getLatitude()
+        String get = "?coords="
+                + curLocation.getLongitude() + "," + curLocation.getLatitude()
                 + "&" + "output=json";
         url += get;
 
@@ -326,16 +266,11 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         );
     }
 
-    /**
-     * 날씨 가져오기
-     */
-    public void getCurrentWeather() {
-        /* 현재 위치의 위도, 경도들 이용하여 기상청이 만든 격자포멧으로 변환 */
-        Map<String, Double> map = KMAGrid.getKMAGrid(curLocation.getLongitude(), curLocation.getLatitude());
-
+    public void callCurrentWeather() {
+        // 현재 위치의 위도, 경도들 이용하여 기상청이 만든 격자포멧으로 변환
+        Map<String, Double> map = KMAGrid.getKMAGrid(curLocation.getLatitude(), curLocation.getLongitude());
         double gridX = map.get("X");
         double gridY = map.get("Y");
-        //Log.d(LOG, "LOG : gridX = " + gridX + ", gridY = " + gridY);
 
         String url = "https://www.kma.go.kr/wid/queryDFS.jsp";
         url += "?gridx=" + Math.round(gridX);
@@ -360,10 +295,10 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         if(date == null) curDate = new Date();                  // 현재 날짜정보
         else curDate = date;
 
-        String curYear = yearFormat.format(curDate);            // yyyy
-        String curMonth = monthFormat.format(curDate);          // MM
-        String curDay = dayFormat.format(curDate);              // dd
-        String _date = dateFormat.format(curDate);              // yyyy년 MM월 dd일
+        String curYear = Utils.INSTANCE.getYearFormat().format(curDate);            // yyyy
+        String curMonth = Utils.INSTANCE.getMonthFormat().format(curDate);          // MM
+        String curDay = Utils.INSTANCE.getDayFormat().format(curDate);              // dd
+        String _date = Utils.INSTANCE.getDateFormat().format(calDate);  // yyyy년 MM월 dd일
 
         if(writeFragment != null && _date != null) {
             writeFragment.setDateTextView(_date);
@@ -590,6 +525,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
             case "getCurrentLocation":
                 getCurrentLocation(null);
                 break;
+
             case "checkGPS":
                 if(!Utils.INSTANCE.checkGPS(this)) {
                     DialogUtils.Companion.showGPSDialog(this, () -> {
@@ -599,6 +535,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
                     });
                 }
                 break;
+
             case "showStopWriteDialog":
                 DialogUtils.Companion.showStopWriteDialog(this, () -> {
                     selectedTabIndex = 0;
@@ -606,6 +543,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
                     return Unit.INSTANCE;
                 });
                 break;
+
             default:
                 Log.d(LOG, "onRequest() 예외발생..");
                 break;
@@ -633,23 +571,17 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
     /**
      * OnResponseListener
      * using Volley
-     * @param requestCode
-     * @param responseCode
-     * @param response
      */
     @Override
     public void onResponse(int requestCode, int responseCode, String response) {
         if(responseCode == Constants.VOLLEY_RESPONSE_OK) {
             switch(requestCode) {
-                case Constants.REQUEST_WEATHER_BY_GRID:
-                    XmlParserCreator creator = new XmlParserCreator() { // Xml -> Gson
-                        @Override
-                        public XmlPullParser createParser() {
-                            try {
-                                return XmlPullParserFactory.newInstance().newPullParser();
-                            } catch(Exception e) {
-                                throw new RuntimeException(e);
-                            }
+                case Constants.REQUEST_WEATHER_BY_GRID: // 날씨 api
+                    XmlParserCreator creator = () -> {
+                        try {
+                            return XmlPullParserFactory.newInstance().newPullParser();
+                        } catch(Exception e) {
+                            throw new RuntimeException(e);
                         }
                     };
 
@@ -660,7 +592,8 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
                     try {
                         WeatherResult result = gsonXml.fromXml(response, WeatherResult.class);
                         WeatherItem item = result.body.data.get(0);
-                        curWeatherStr = item.getWfKor();
+                        // 현재 날씨 String
+                        String curWeatherStr = item.getWfKor();
                         Log.e(LOG, "getWfKor(): " + curWeatherStr);
 
                         if(writeFragment != null) writeFragment.setWeatherImageView(curWeatherStr);
@@ -670,7 +603,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
 
                     break;
 
-                case Constants.REQUEST_REVERSE_GEOCODER:
+                case Constants.REQUEST_REVERSE_GEOCODER:    // Naver reverse geocoding
                     Gson gson = new Gson();
                     Log.d("TAG", response);
                     ReverseGeocoder data = gson.fromJson(response, ReverseGeocoder.class);
@@ -687,7 +620,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
                                 dong += " ";
                             }
                         }
-                        String address = gungu + dong + lee;
+                        String address = gungu + dong;
                         Log.d("TAG", address);
 
                         writeFragment.setLocationTextView(address);
@@ -731,7 +664,8 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
      * ActivityResultLauncher
      * (startActivityForResult() is deprecated)
      */
-    public final ActivityResultLauncher<CropImageContractOptions> cropImageActivityResult = registerForActivityResult(new CropImageContract(), result -> {
+    public final ActivityResultLauncher<CropImageContractOptions> cropImageActivityResult =
+            registerForActivityResult(new CropImageContract(), result -> {
         // Crop activity 콜백
         if(result.isSuccessful()) {
             Log.d(LOG, "xxx cropImageActivityResult: Success");
@@ -746,7 +680,8 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         }
     });
 
-    public final ActivityResultLauncher<Intent> cameraResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    public final ActivityResultLauncher<Intent> cameraResult =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         // 카메라 콜백
         int resultCode = result.getResultCode();
 
@@ -765,7 +700,8 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         }
     });
 
-    public final ActivityResultLauncher<Intent> albumResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    public final ActivityResultLauncher<Intent> albumResult =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         // 앨범 콜백
         int resultCode = result.getResultCode();
         Intent data = result.getData();
@@ -781,14 +717,16 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         }
     });
 
-    final ActivityResultLauncher<Intent> fontChangeResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    final ActivityResultLauncher<Intent> fontChangeResult =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         int resultCode = result.getResultCode();
 
         if (resultCode == RESULT_OK) recreate();
         else Log.d(LOG, "xxx fontChangeResult: RESULT_NOT_OK");
     });
 
-    final ActivityResultLauncher<Intent> detailActivityResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    final ActivityResultLauncher<Intent> detailActivityResult =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         int resultCode = result.getResultCode();
         Intent data = result.getData();
 
@@ -802,13 +740,17 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
                     if (selectedTabIndex == 0) if(listFragment != null) listFragment.update();
                     else if (calendarFragment != null) onTabSelected(1);
                 }
+
                 break;
+
             case Constants.DETAIL_ACTIVITY_RESULT_UPDATE:
                 Log.d(LOG, "xxx detailActivityResult: 일기수정됨");
                 Note item = (Note)(Objects.requireNonNull(data).getSerializableExtra("item"));
                 if(item != null) showWriteFragment(item);
                 else onTabSelected(2);
+
                 break;
+
             default:
                 Log.d(LOG, "xxx detailActivityResult: 예외 응답");
                 break;
@@ -818,23 +760,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         switch(requestCode) {
-//            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
-//                if (resultCode == RESULT_OK) {
-//                    Log.d(LOG, "onActivityResult : CROP_IMAGE_ACTIVITY_REQUEST_CODE (RESULT_OK)");
-//
-//                    CropImage.ActivityResult result = CropImage.getActivityResult(data);
-//                    String filePath = Objects.requireNonNull(result).getUri().getPath();
-//
-//                    if (writeFragment != null) {
-//                        writeFragment.setPhotoAdapter(filePath);
-//                    }
-//                } else {
-//                    Log.d(LOG, "onActivityResult : CROP_IMAGE_ACTIVITY_REQUEST_CODE (NOT RESULT_OK)");
-//                }
-//                break;
-
             case OptionFragment.REQUEST_FONT_CHANGE:
                 if (resultCode == RESULT_OK) recreate();
                 break;
@@ -850,7 +776,12 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        AutoPermissions.Companion.parsePermissions(this, requestCode, permissions, this);
+        AutoPermissions.Companion.parsePermissions(
+                this,
+                requestCode,
+                permissions,
+                this
+        );
     }
 
     @Override
@@ -859,17 +790,13 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
     @Override
     public void onGranted(int i, String[] strings) {}
 
-    /**
-     * LocationListener
-     */
     class GPSListener implements LocationListener {
 
         @Override
         public void onLocationChanged(@NonNull Location location) {
-            curLocation = location;                                 // 가져온 위치정보를 curLocation 객체에 대입
-//            getCurrentAddress();                                    // 갱신된 위치정보를 주소로 반환 (작성 프래그먼트의 locationTextView 갱신)
-            reverseGeocoder();
-            getCurrentWeather();                                    // 갱신된 위치정보를 날씨로 반환 (작성 프래그먼트의 weatherImageView 갱신)
+            curLocation = location;
+            callCurrentWeather();
+            callCurrentAddress();
             stopLocationService();
         }
 
@@ -878,16 +805,16 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
 
         @Override
         public void onProviderDisabled(@NonNull String provider) {}
+
     }
 
     class LowVersionGPSListener implements LocationListener {
 
         @Override
         public void onLocationChanged(@NonNull Location location) {
-            curLocation = location;                                 // 가져온 위치정보를 curLocation 객체에 대입
-//            getCurrentAddress();                                    // 갱신된 위치정보를 주소로 반환 (작성 프래그먼트의 locationTextView 갱신)
-            reverseGeocoder();
-            getCurrentWeather();                                    // 갱신된 위치정보를 날씨로 반환 (작성 프래그먼트의 weatherImageView 갱신)
+            curLocation = location;
+            callCurrentWeather();
+            callCurrentAddress();
             stopLocationService();
         }
 
@@ -899,5 +826,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
 
         @Override
         public void onProviderDisabled(@NonNull String provider) {}
+
     }
+
 }

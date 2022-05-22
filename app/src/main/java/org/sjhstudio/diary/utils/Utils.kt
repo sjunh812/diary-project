@@ -12,18 +12,39 @@ import java.util.*
 
 object Utils {
 
-    @SuppressLint("SimpleDateFormat")
-    val yearFormat = SimpleDateFormat("yyyy")
-    @SuppressLint("SimpleDateFormat")
-    val monthFormat = SimpleDateFormat("MM")
-    @SuppressLint("SimpleDateFormat")
-    val dayFormat = SimpleDateFormat("dd")
-    @SuppressLint("SimpleDateFormat")
-    val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일")
-    @SuppressLint("SimpleDateFormat")
-    val dateFormat2 = SimpleDateFormat("yyyy-MM-dd")
-    @SuppressLint("SimpleDateFormat")
-    val dateFormat3 = SimpleDateFormat("yyyyMMdd")
+    val calendar = Calendar.getInstance()
+
+    @SuppressLint("SimpleDateFormat") val yearFormat = SimpleDateFormat("yyyy")
+    @SuppressLint("SimpleDateFormat") val monthFormat = SimpleDateFormat("MM")
+    @SuppressLint("SimpleDateFormat") val dayFormat = SimpleDateFormat("dd")
+    @SuppressLint("SimpleDateFormat") val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일")
+    @SuppressLint("SimpleDateFormat") val dateFormat2 = SimpleDateFormat("yyyy-MM-dd")
+    @SuppressLint("SimpleDateFormat") val dateFormat3 = SimpleDateFormat("yyyyMMdd")
+    @SuppressLint("SimpleDateFormat") val timeFormat = SimpleDateFormat("a HH:mm")
+    @SuppressLint("SimpleDateFormat") val timeFormat2 = SimpleDateFormat("HH:mm:SS")
+
+    fun getYear(date: Date): Int {
+        calendar.time = date
+        return calendar.get(Calendar.YEAR)
+    }
+
+    fun getMonth(date: Date): Int {
+        calendar.time = date
+        return calendar.get(Calendar.MONTH) + 1
+    }
+
+    fun getDay(date: Date): Int {
+        calendar.time = date
+        return calendar.get(Calendar.DAY_OF_MONTH)
+    }
+
+    fun getCurrentYear(): Int {
+        return Integer.parseInt(yearFormat.format(Date()))
+    }
+
+    fun getCurrentMonth(): Int {
+        return Integer.parseInt(monthFormat.format(Date()))
+    }
 
     // GPS 체크
     fun checkGPS(context: Context): Boolean {
@@ -47,14 +68,6 @@ object Utils {
         } else {
             if(underOreo) vibrator.vibrate(time)
         }
-    }
-
-    fun getCurrentYear(): Int {
-        return Integer.parseInt(yearFormat.format(Date()))
-    }
-
-    fun getCurrentMonth(): Int {
-        return Integer.parseInt(monthFormat.format(Date()))
     }
 
 }

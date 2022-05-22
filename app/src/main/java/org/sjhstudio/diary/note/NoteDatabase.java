@@ -9,6 +9,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import org.sjhstudio.diary.MainActivity;
+import org.sjhstudio.diary.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -236,10 +237,12 @@ public class NoteDatabase {
                     if(_createDate != null && _createDate.length() > 10) {
                         try {
                             Date date = timeFormat.parse(_createDate);
-                            createDateStr = MainActivity.dateFormat.format(date);
-                            createDateStr2 = MainActivity.dateFormat2.format(date);
-                            time = MainActivity.timeFormat.format(date);
-                            dayOfWeek = MainActivity.getDayOfWeek(date);
+                            if(date != null) {
+                                createDateStr = Utils.INSTANCE.getDateFormat().format(date);
+                                createDateStr2 = Utils.INSTANCE.getDateFormat2().format(date);
+                                time = Utils.INSTANCE.getTimeFormat().format(date);
+                                dayOfWeek = MainActivity.getDayOfWeek(date);
+                            }
                         } catch(Exception e) {
                             e.printStackTrace();
                         }
@@ -295,9 +298,11 @@ public class NoteDatabase {
                     if(_createDate != null && _createDate.length() > 10) {
                         try {
                             Date date = timeFormat.parse(_createDate);
-                            createDateStr = MainActivity.dateFormat.format(date);
-                            time = MainActivity.timeFormat.format(date);
-                            dayOfWeek = MainActivity.getDayOfWeek(date);
+                            if(date != null) {
+                                createDateStr = Utils.INSTANCE.getDateFormat().format(date);
+                                time = Utils.INSTANCE.getTimeFormat().format(date);
+                                dayOfWeek = MainActivity.getDayOfWeek(date);
+                            }
                         } catch(Exception e) {
                             e.printStackTrace();
                         }
@@ -351,9 +356,11 @@ public class NoteDatabase {
                     if(_createDate != null && _createDate.length() > 10) {
                         try {
                             Date date = timeFormat.parse(_createDate);
-                            createDateStr = MainActivity.dateFormat.format(date);
-                            time = MainActivity.timeFormat.format(date);
-                            dayOfWeek = MainActivity.getDayOfWeek(date);
+                            if(date != null) {
+                                createDateStr = Utils.INSTANCE.getDateFormat().format(date);
+                                time = Utils.INSTANCE.getTimeFormat().format(date);
+                                dayOfWeek = MainActivity.getDayOfWeek(date);
+                            }
                         } catch(Exception e) {
                             e.printStackTrace();
                         }
@@ -376,10 +383,8 @@ public class NoteDatabase {
 
     public HashMap<Integer, Integer> selectMoodCount(boolean isAll, boolean isYear, boolean isMonth) {
         HashMap<Integer, Integer> hashMap = new HashMap<>();
-
-        Date date = new Date();
-        int curYear = Integer.parseInt(MainActivity.yearFormat.format(date));
-        int curMonth = Integer.parseInt(MainActivity.monthFormat.format(date));
+        int curYear = Utils.INSTANCE.getCurrentYear();
+        int curMonth = Utils.INSTANCE.getCurrentMonth();
 
         if(db != null) {
             String sql = null;
@@ -523,7 +528,7 @@ public class NoteDatabase {
         cal.setTime(date);
         cal.add(Calendar.MONTH, amount);
 
-        return MainActivity.dateFormat2.format(cal.getTime());
+        return Utils.INSTANCE.getDateFormat2().format(cal.getTime());
     }
 
     public String getDay(int amount) {
@@ -532,6 +537,6 @@ public class NoteDatabase {
         cal.setTime(date);
         cal.add(Calendar.DAY_OF_MONTH, amount);
 
-        return MainActivity.dateFormat2.format(cal.getTime());
+        return Utils.INSTANCE.getDateFormat2().format(cal.getTime());
     }
 }
