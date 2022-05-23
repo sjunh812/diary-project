@@ -12,6 +12,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import org.sjhstudio.diary.helper.MyTheme;
+import org.sjhstudio.diary.utils.BaseActivity;
 import org.sjhstudio.diary.utils.Pref;
 
 import java.util.Objects;

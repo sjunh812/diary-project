@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Switch
 import androidx.appcompat.widget.Toolbar
+import org.sjhstudio.diary.utils.BaseActivity
 import org.sjhstudio.diary.utils.Pref
 
 class SettingsActivity: BaseActivity() {

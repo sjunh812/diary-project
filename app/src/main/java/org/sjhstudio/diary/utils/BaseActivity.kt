@@ -1,4 +1,4 @@
-package org.sjhstudio.diary
+package org.sjhstudio.diary.utils
 
 import android.content.Context
 import android.content.res.Configuration
@@ -8,7 +8,6 @@ import android.view.MenuItem
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import org.sjhstudio.diary.helper.MyTheme
-import org.sjhstudio.diary.utils.Pref
 
 open class BaseActivity: AppCompatActivity() {
 
@@ -43,7 +42,6 @@ open class BaseActivity: AppCompatActivity() {
 
             baseContext.applicationContext.createConfigurationContext(it)
             baseContext.resources.displayMetrics.setTo(metrics)
-
         }
     }
 
@@ -57,4 +55,5 @@ open class BaseActivity: AppCompatActivity() {
 
         return super.onOptionsItemSelected(item)
     }
+
 }

@@ -1,7 +1,6 @@
 package org.sjhstudio.diary;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
@@ -9,11 +8,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +34,7 @@ import com.google.api.services.drive.model.File;
 import org.jetbrains.annotations.NotNull;
 import org.sjhstudio.diary.custom.CustomBackupDialog;
 import org.sjhstudio.diary.googledrive.DriveServiceHelper;
+import org.sjhstudio.diary.utils.BaseActivity;
 import org.sjhstudio.diary.utils.DialogUtils;
 import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.utils.PermissionUtils;

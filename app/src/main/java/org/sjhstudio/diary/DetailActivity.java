@@ -19,6 +19,7 @@ import android.widget.TextView;
 import org.sjhstudio.diary.adapters.PhotoAdapter;
 import org.sjhstudio.diary.custom.CustomDeleteDialog;
 import org.sjhstudio.diary.note.Note;
+import org.sjhstudio.diary.utils.BaseActivity;
 import org.sjhstudio.diary.utils.Constants;
 
 import java.io.File;

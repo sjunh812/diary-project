@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import org.sjhstudio.diary.custom.CustomPasswordCautionDialog;
 import org.sjhstudio.diary.helper.MyTheme;
+import org.sjhstudio.diary.utils.BaseActivity;
 import org.sjhstudio.diary.utils.Utils;
 
 import java.util.ArrayList;

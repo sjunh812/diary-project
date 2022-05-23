@@ -17,6 +17,7 @@ import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
 import org.sjhstudio.diary.helper.MyTheme;
+import org.sjhstudio.diary.utils.BaseActivity;
 import org.sjhstudio.diary.utils.Pref;
 import org.sjhstudio.diary.utils.Utils;
 

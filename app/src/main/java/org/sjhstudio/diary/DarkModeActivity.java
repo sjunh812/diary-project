@@ -1,7 +1,6 @@
 package org.sjhstudio.diary;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.Activity;
@@ -12,6 +11,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import org.sjhstudio.diary.helper.MyTheme;
+import org.sjhstudio.diary.utils.BaseActivity;
 
 
 public class DarkModeActivity extends BaseActivity {

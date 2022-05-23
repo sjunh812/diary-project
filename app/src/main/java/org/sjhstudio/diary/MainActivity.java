@@ -3,7 +3,6 @@ package org.sjhstudio.diary;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -44,6 +43,7 @@ import org.sjhstudio.diary.fragment.WriteFragment;
 import org.sjhstudio.diary.model.RGResults;
 import org.sjhstudio.diary.model.ReverseGeocoder;
 import org.sjhstudio.diary.utils.ApiKey;
+import org.sjhstudio.diary.utils.BaseActivity;
 import org.sjhstudio.diary.utils.DialogUtils;
 import org.sjhstudio.diary.helper.KMAGrid;
 import org.sjhstudio.diary.helper.MyApplication;
@@ -59,10 +59,8 @@ import org.sjhstudio.diary.utils.Utils;
 import org.sjhstudio.diary.utils.Constants;
 import org.sjhstudio.diary.weather.WeatherItem;
 import org.sjhstudio.diary.weather.WeatherResult;
-import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -146,7 +144,8 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
             FragmentTransaction transaction = manager.beginTransaction();
 
             if(!isSelected2 && selectedTabIndex == 2 &&
-                    writeFragment != null && !(writeFragment.isEmptyContent())) {
+                    writeFragment != null && !(writeFragment.isEmptyContent())
+            ) {
                 DialogUtils.Companion.showStopWriteDialog(this, () -> {
                     int position;
 
@@ -285,8 +284,6 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         try {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) locationManager.removeUpdates(gpsListener);
             else locationManager.removeUpdates(lowVersionGPSListener);
-
-            Log.d(LOG, "위치 업데이트 종료!!");
         } catch(Exception e) { e.printStackTrace(); }
     }
 
@@ -717,7 +714,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         }
     });
 
-    final ActivityResultLauncher<Intent> fontChangeResult =
+    public final ActivityResultLauncher<Intent> fontChangeResult =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         int resultCode = result.getResultCode();
 
@@ -756,16 +753,6 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
                 break;
         }
     });
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode) {
-            case OptionFragment.REQUEST_FONT_CHANGE:
-                if (resultCode == RESULT_OK) recreate();
-                break;
-        }
-    }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {

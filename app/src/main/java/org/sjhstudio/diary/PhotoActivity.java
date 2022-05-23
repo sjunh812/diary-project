@@ -1,7 +1,6 @@
 package org.sjhstudio.diary;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -10,7 +9,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import org.sjhstudio.diary.adapters.PhotoDetailAdapter;
-import org.sjhstudio.diary.helper.MyTheme;
+import org.sjhstudio.diary.utils.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.Objects;

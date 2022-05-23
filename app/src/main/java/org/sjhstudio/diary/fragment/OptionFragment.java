@@ -25,6 +25,7 @@ import org.sjhstudio.diary.AlarmActivity;
 import org.sjhstudio.diary.BackupActivity;
 import org.sjhstudio.diary.DarkModeActivity;
 import org.sjhstudio.diary.FontActivity;
+import org.sjhstudio.diary.MainActivity;
 import org.sjhstudio.diary.PasswordSettingsActivity;
 import org.sjhstudio.diary.R;
 import org.sjhstudio.diary.SettingsActivity;
@@ -33,12 +34,7 @@ import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.note.NoteDatabaseCallback;
 
 public class OptionFragment extends Fragment {
-    /** 상수 **/
-    public static final int REQUEST_FONT_CHANGE = 101;
-    public static final int REQUEST_ALARM_SETTING = 102;
-    public static final int REQUEST_DARK_MODE = 103;
 
-    /** data **/
     private NoteDatabaseCallback callback;  // DB 접근을 위한 callback
     private int curFontIndex = 0;           // 현재 선택한 폰트종류
 
@@ -66,22 +62,22 @@ public class OptionFragment extends Fragment {
         /* 폰트 설정 */
         RelativeLayout fontLayout = (RelativeLayout)rootView.findViewById(R.id.fontLayout);
         fontLayout.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), FontActivity.class);
-            getActivity().startActivityForResult(intent, REQUEST_FONT_CHANGE);
+            Intent intent = new Intent(requireContext(), FontActivity.class);
+            ((MainActivity)requireActivity()).fontChangeResult.launch(intent);
         });
 
         /* 알림 설정 */
         RelativeLayout noticeLayout = (RelativeLayout)rootView.findViewById(R.id.noticeLayout);
         noticeLayout.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), AlarmActivity.class);
-            getActivity().startActivityForResult(intent, REQUEST_ALARM_SETTING);
+            Intent intent = new Intent(requireContext(), AlarmActivity.class);
+            startActivity(intent);
         });
 
         /* 다크모드 설정 */
         RelativeLayout darkmodeLayout = (RelativeLayout)rootView.findViewById(R.id.darkmodeLayout);
         darkmodeLayout.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), DarkModeActivity.class);
-            getActivity().startActivityForResult(intent, REQUEST_DARK_MODE);
+            Intent intent = new Intent(requireContext(), DarkModeActivity.class);
+            startActivity(intent);
         });
 
         /* 기타설정 */
@@ -94,7 +90,7 @@ public class OptionFragment extends Fragment {
         /* 잠금설정 */
         RelativeLayout passwordLayout = (RelativeLayout)rootView.findViewById(R.id.passwordlayout);
         passwordLayout.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), PasswordSettingsActivity.class);
+            Intent intent = new Intent(requireContext(), PasswordSettingsActivity.class);
             requireActivity().startActivity(intent);
         });
 
@@ -109,18 +105,18 @@ public class OptionFragment extends Fragment {
                    editor.remove(MyTheme.PASSWORD);
                    editor.commit();
 
-                   Toast.makeText(getContext(), "비밀번호가 해제되었습니다.", Toast.LENGTH_SHORT).show();
+                   Toast.makeText(requireContext(), "비밀번호가 해제되었습니다.", Toast.LENGTH_SHORT).show();
                    return;
                }
             }
 
-            Toast.makeText(getContext(), "설정된 비밀번호가 없습니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "설정된 비밀번호가 없습니다.", Toast.LENGTH_SHORT).show();
         });
 
         /* 백업 및 복원하기 */
         RelativeLayout backupLayout = (RelativeLayout)rootView.findViewById(R.id.backupLayout);
         backupLayout.setOnClickListener(v -> {
-            Intent intent = new Intent(getContext(), BackupActivity.class);
+            Intent intent = new Intent(requireContext(), BackupActivity.class);
             startActivity(intent);
         });
 
@@ -128,7 +124,7 @@ public class OptionFragment extends Fragment {
         RelativeLayout reviewLayout = (RelativeLayout)rootView.findViewById(R.id.reviewLayout);
         reviewLayout.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("market://details?id=" + getContext().getPackageName()));
+            intent.setData(Uri.parse("market://details?id=" + requireContext().getPackageName()));
             startActivity(intent);
         });
 
@@ -167,9 +163,7 @@ public class OptionFragment extends Fragment {
     }
 
     private void setTitleTextView(View rootView) {
-        /** animation **/
-        // 타이틀 애니메이션
-        Animation translateRightAnim = AnimationUtils.loadAnimation(getContext(), R.anim.translate_right_animation);
+        Animation translateRightAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.translate_right_animation);
         translateRightAnim.setDuration(350);
         TextView titleTextView = (TextView)rootView.findViewById(R.id.titleTextView);
         titleTextView.startAnimation(translateRightAnim);
@@ -179,10 +173,8 @@ public class OptionFragment extends Fragment {
     private void setCountTextView(View rootView) {
         TextView allCountTextView = (TextView) rootView.findViewById(R.id.allCountTextView);
         TextView starCountTextView = (TextView) rootView.findViewById(R.id.starCountTextView);
-        // 작성한 일기 총 개수
-        int allCount = callback.selectAllCount();
-        // 즐겨찾기 총 개수
-        int starCount = callback.selectStarCount();
+        int allCount = callback.selectAllCount();   // 작성한 일기 총 개수
+        int starCount = callback.selectStarCount(); // 즐겨찾기 총 개수
 
         allCountTextView.setText(allCount + "개");
         starCountTextView.setText(starCount + "개");
@@ -190,11 +182,10 @@ public class OptionFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void setCurFontText(View rootView) {
-        Log.d("LOG", "index : " + curFontIndex);
         SharedPreferences pref = requireContext().getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
         if(pref != null) curFontIndex = pref.getInt(MyTheme.FONT_KEY, 0);
-        /** UI **/
         TextView curFontTextView = rootView.findViewById(R.id.curFontTextView);
+
         switch(curFontIndex) {
             case 100:
                 curFontTextView.setText("시스템 서체");
@@ -243,4 +234,5 @@ public class OptionFragment extends Fragment {
                 break;
         }
     }
+
 }

@@ -9,6 +9,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import org.sjhstudio.diary.helper.MyTheme
+import org.sjhstudio.diary.utils.BaseActivity
 import org.sjhstudio.diary.utils.Pref
 
 class PasswordSettingsActivity :

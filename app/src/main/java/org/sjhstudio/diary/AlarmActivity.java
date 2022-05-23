@@ -1,30 +1,31 @@
 package org.sjhstudio.diary;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import org.sjhstudio.diary.custom.CustomTimePickerDialog;
 import org.sjhstudio.diary.helper.AlarmHelper;
+import org.sjhstudio.diary.utils.BaseActivity;
 import org.sjhstudio.diary.utils.Pref;
 import org.sjhstudio.diary.utils.Utils;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 public class AlarmActivity extends BaseActivity {
+
     // 상수
     private static final String LOG = "AlarmActivity";
     public static final String SHARED_PREFERENCES_NAME2 = "pref2";  // 알림기능 관련 SharedPreference 이름
@@ -36,7 +37,6 @@ public class AlarmActivity extends BaseActivity {
     private RelativeLayout timeLayout;
     private CustomTimePickerDialog timePickerDialog;
     private Switch alarmSwitch;
-    private Switch locationSwitch;
     private TextView timeTextView;
 
     // Helper
@@ -59,45 +59,33 @@ public class AlarmActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("알림");
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         timeTextView = (TextView)findViewById(R.id.timeTextView);
 
         alarmSwitch = (Switch)findViewById(R.id.alarmSwitch);
-        alarmSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences pref = getApplicationContext().getSharedPreferences(SHARED_PREFERENCES_NAME2, Activity.MODE_PRIVATE);
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putBoolean(IS_ALARM_KEY, isChecked);
-                if(isChecked) {
-                    editor.putInt(HOUR_KEY, hour);
-                    editor.putInt(MINUTE_KEY, minute);
-                }
-                editor.commit();
+        alarmSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences pref = getApplicationContext().getSharedPreferences(SHARED_PREFERENCES_NAME2, Activity.MODE_PRIVATE);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putBoolean(IS_ALARM_KEY, isChecked);
 
-                isAlarm = isChecked;
-                setTimeLayout();
+            if(isChecked) {
+                editor.putInt(HOUR_KEY, hour);
+                editor.putInt(MINUTE_KEY, minute);
             }
+            editor.commit();
+
+            isAlarm = isChecked;
+            setTimeLayout();
         });
 
-        locationSwitch = (Switch)findViewById(R.id.locationSwitch);
+        @SuppressLint("UseSwitchCompatOrMaterialCode")
+        Switch locationSwitch = (Switch) findViewById(R.id.locationSwitch);
         locationSwitch.setChecked(Pref.getPAskLocation(this));
-        locationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d("LOG", "isAskGPSAgain : " + isChecked);
-                Pref.setPAskLocation(getApplicationContext(), isChecked);
-            }
-        });
+        locationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> Pref.setPAskLocation(getApplicationContext(), isChecked));
 
         timeLayout = (RelativeLayout)findViewById(R.id.timeLayout);
-        timeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setTimePickerDialog();
-            }
-        });
+        timeLayout.setOnClickListener(v -> setTimePickerDialog());
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences(SHARED_PREFERENCES_NAME2, Activity.MODE_PRIVATE);
         if(pref != null) {
@@ -143,42 +131,23 @@ public class AlarmActivity extends BaseActivity {
     private void setTimePickerDialog() {
         timePickerDialog.show();
 
-        timePickerDialog.setCancelButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                timePickerDialog.dismiss();
-            }
-        });
+        timePickerDialog.setCancelButtonOnClickListener(v -> timePickerDialog.dismiss());
 
-        timePickerDialog.setOkButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hour = timePickerDialog.get_hour();
-                minute = timePickerDialog.get_minute();
+        timePickerDialog.setOkButtonOnClickListener(v -> {
+            hour = timePickerDialog.get_hour();
+            minute = timePickerDialog.get_minute();
 
-                SharedPreferences pref = getApplicationContext().getSharedPreferences(SHARED_PREFERENCES_NAME2, Activity.MODE_PRIVATE);
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putBoolean(IS_ALARM_KEY, true);
-                editor.putInt(HOUR_KEY, hour);
-                editor.putInt(MINUTE_KEY, minute);
-                editor.commit();
+            SharedPreferences pref = getApplicationContext().getSharedPreferences(SHARED_PREFERENCES_NAME2, Activity.MODE_PRIVATE);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putBoolean(IS_ALARM_KEY, true);
+            editor.putInt(HOUR_KEY, hour);
+            editor.putInt(MINUTE_KEY, minute);
+            editor.commit();
 
-                alarmHelper.startAlarm(false);
-                setTimeTextView();
-                timePickerDialog.dismiss();
-            }
+            alarmHelper.startAlarm(false);
+            setTimeTextView();
+            timePickerDialog.dismiss();
         });
     }
-    
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
 
-        if(id == android.R.id.home) {   // 툴바 왼쪽 돌아가기 버튼 선택 시
-            finish();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

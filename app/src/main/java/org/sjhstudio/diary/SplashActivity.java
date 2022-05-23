@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import org.sjhstudio.diary.helper.MyTheme;
+import org.sjhstudio.diary.utils.BaseActivity;
 import org.sjhstudio.diary.utils.Pref;
 
 public class SplashActivity extends BaseActivity {
