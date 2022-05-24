@@ -12,6 +12,9 @@ import android.widget.RadioGroup;
 
 import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.utils.BaseActivity;
+import org.sjhstudio.diary.utils.Pref;
+
+import java.util.Objects;
 
 
 public class DarkModeActivity extends BaseActivity {
@@ -30,15 +33,12 @@ public class DarkModeActivity extends BaseActivity {
         setContentView(R.layout.activity_darkmode);
 
         // 현재 app 에 설정된 테마모드 인덱스를 SharedPreferences 를 이용해 가져옴
-        SharedPreferences pref = getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        if(pref != null) {
-            curModeIndex = pref.getInt(MyTheme.MODE_KEY, 0);
-        }
+        curModeIndex = Pref.getPModeKey(this);
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("다크모드");
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         RadioGroup modeGroup = (RadioGroup)findViewById(R.id.modeGroup);
         systemModeButton = (RadioButton)findViewById(R.id.systemModeButton);
@@ -50,15 +50,15 @@ public class DarkModeActivity extends BaseActivity {
                 switch(checkedId) {
                     case R.id.systemModeButton:
                         selectedModeIndex = 0;
-                        MyTheme.applyDarkmode(getApplicationContext(), selectedModeIndex);
+                        MyTheme.applyDarkMode(getApplicationContext(), selectedModeIndex);
                         break;
                     case R.id.lightModeButton:
                         selectedModeIndex = 1;
-                        MyTheme.applyDarkmode(getApplicationContext(), selectedModeIndex);
+                        MyTheme.applyDarkMode(getApplicationContext(), selectedModeIndex);
                         break;
                     case R.id.darkModeButton:
                         selectedModeIndex = 2;
-                        MyTheme.applyDarkmode(getApplicationContext(), selectedModeIndex);
+                        MyTheme.applyDarkMode(getApplicationContext(), selectedModeIndex);
                         break;
                 }
             }

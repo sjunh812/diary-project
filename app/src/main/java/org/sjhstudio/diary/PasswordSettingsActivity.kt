@@ -1,6 +1,5 @@
 package org.sjhstudio.diary
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -8,7 +7,6 @@ import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
-import org.sjhstudio.diary.helper.MyTheme
 import org.sjhstudio.diary.utils.BaseActivity
 import org.sjhstudio.diary.utils.Pref
 
@@ -21,6 +19,7 @@ class PasswordSettingsActivity :
 
     var setPW = false
     var toast: Toast? = null
+    var pw = ""
 
     private fun showToast(message: String) {
         toast?.cancel()
@@ -30,6 +29,7 @@ class PasswordSettingsActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        pw = Pref.getPPassword(this)
         setContentView(R.layout.activity_password_settings)
         init()
     }
@@ -41,12 +41,11 @@ class PasswordSettingsActivity :
 
     override fun onResume() {
         super.onResume()
-        val pref = getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE)
 
         if(setPW) {
             setPW = false
 
-            if(pref != null && pref.getString(MyTheme.PASSWORD, "")?.isNotEmpty() == true) {
+            if(pw.isNotEmpty()) {
                 findViewById<Switch>(R.id.pw_switch).isChecked = true
             }
         } else {
@@ -111,12 +110,10 @@ class PasswordSettingsActivity :
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
         when(buttonView?.id) {
             R.id.pw_switch -> {
-                val pref = getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE)
-
                 if(!isChecked) {
                     findViewById<Switch>(R.id.finger_print_switch).isChecked = false
                 } else {
-                    if(pref != null && pref.getString(MyTheme.PASSWORD, "").isNullOrEmpty()) {
+                    if(pw.isEmpty()) {
                         setPW = true
                         showToast("비밀번호를 먼저 생성해주세요.")
                         buttonView.isChecked = false

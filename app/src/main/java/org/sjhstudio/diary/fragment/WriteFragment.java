@@ -222,7 +222,7 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         initPhoto(view);
 
         if(requestListener != null && updateItem == null) {
-            if(PermissionUtils.Companion.checkLocationPermission(requireContext())) {
+            if(PermissionUtils.INSTANCE.checkLocationPermission(requireContext())) {
                 // 위치권한 허용.
                 if(calDate == null) requestListener.onRequest("getCurrentLocation");  // 메인 액티비티로부터 현재위치정보 가져오기
                 else requestListener.onRequest("getCurrentLocation", calDate);    // 메인 액티비티로부터 현재위치정보 가져오기(달력에서 넘어온 Date 사용)
@@ -774,10 +774,10 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
      */
     @Override
     public void showAddPhotoDialog() {
-        if(!PermissionUtils.Companion.checkStoragePermission(requireContext()) ||
-            !PermissionUtils.Companion.checkCameraPermission(requireContext()))
+        if(!PermissionUtils.INSTANCE.checkStoragePermission(requireContext()) ||
+            !PermissionUtils.INSTANCE.checkCameraPermission(requireContext()))
         {
-            DialogUtils.Companion.showStoragePermissionDialog(requireContext(), () -> {
+            DialogUtils.INSTANCE.showStoragePermissionDialog(requireContext(), () -> {
                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                 Uri uri = Uri.fromParts("package", requireActivity().getPackageName(), null);
                 intent.setData(uri);
@@ -785,7 +785,7 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
                 return Unit.INSTANCE;
             });
         } else {
-            DialogUtils.Companion.showAddPhotoDialog(
+            DialogUtils.INSTANCE.showAddPhotoDialog(
                     requireContext(),
                     () -> {
                         showCameraActivity();
@@ -977,7 +977,7 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         @Override
         public void onRefresh() {
             if(requestListener != null) {
-                if(PermissionUtils.Companion.checkLocationPermission(requireContext())) {
+                if(PermissionUtils.INSTANCE.checkLocationPermission(requireContext())) {
                     requestListener.onRequest("checkGPS");
 
                     if(Utils.INSTANCE.checkGPS(requireContext())) {

@@ -12,7 +12,7 @@ import java.util.*
 
 object Utils {
 
-    val calendar = Calendar.getInstance()
+    val calendar: Calendar = Calendar.getInstance()
 
     @SuppressLint("SimpleDateFormat") val yearFormat = SimpleDateFormat("yyyy")
     @SuppressLint("SimpleDateFormat") val monthFormat = SimpleDateFormat("MM")

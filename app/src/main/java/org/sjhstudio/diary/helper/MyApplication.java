@@ -92,5 +92,6 @@ public class MyApplication extends MultiDexApplication {
         request.setRetryPolicy(new DefaultRetryPolicy(10 * 1000, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         MyApplication.requestQueue.add(request);    // requestQueue 에 해당 request 추가
     }
+
 }
 

@@ -1,8 +1,6 @@
 package org.sjhstudio.diary.helper;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
@@ -12,36 +10,21 @@ import org.sjhstudio.diary.utils.Pref;
 import org.sjhstudio.diary.R;
 
 public class MyTheme {
-    /** 상수 **/
-    private static final String LOG = "MyTheme";
-    public static final String SHARED_PREFERENCES_NAME = "pref";
-    public static final String FONT_KEY = "font_key";
-    public static final String MODE_KEY = "mode_key";
-    public static final String PASSWORD = "password";
-    public static final String ASK_LOCATION = "ask_location";
 
     public static void applyTheme(@NonNull Context context) {
+        int font;  // THE얌전해진언니체
+        int fontSize;   // 보통
+        int mode;   // 시스템
 
-        int font = -1;  // THE얌전해진언니체
-        int fontSize = 2;   // 보통
-        int mode = 0;
-
-        SharedPreferences pref = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        if(pref != null) {
-            font = pref.getInt(FONT_KEY, -1);
-            mode = pref.getInt(MODE_KEY, 0);
-        }
+        font = Pref.getPFontKey(context);
+        mode = Pref.getPModeKey(context);
         fontSize = Pref.getPFontSize(context);
-
-        applyDarkmode(context, mode);
+        applyDarkMode(context, mode);
         applyTheme(context, font, fontSize);
     }
 
-    public static void applyDarkmode(Context context, int modeIndex) {
-        SharedPreferences pref = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putInt(MODE_KEY, modeIndex);
-        editor.commit();
+    public static void applyDarkMode(Context context, int modeIndex) {
+        Pref.setPModeKey(context, modeIndex);
 
         if(modeIndex == 0) {        // 시스템 설정에 따른 테마모드
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -57,11 +40,7 @@ public class MyTheme {
     }
 
     public static void applyTheme(@NonNull Context context, int font, int fontSize) {
-        SharedPreferences pref = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putInt(FONT_KEY, font);
-        editor.commit();
-
+        Pref.setPFontKey(context, font);
         Pref.setPFontSize(context, fontSize);
 
         switch(fontSize) {
@@ -122,4 +101,5 @@ public class MyTheme {
                 break;
         }
     }
+
 }

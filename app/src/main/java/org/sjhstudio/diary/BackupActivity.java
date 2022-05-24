@@ -39,6 +39,7 @@ import org.sjhstudio.diary.utils.DialogUtils;
 import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.utils.PermissionUtils;
 import org.sjhstudio.diary.note.NoteDatabase;
+import org.sjhstudio.diary.utils.Pref;
 import org.sjhstudio.diary.utils.Utils;
 
 import java.util.Collections;
@@ -75,8 +76,8 @@ public class BackupActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_backup);
 
-        if(!PermissionUtils.Companion.checkGoogleDrivePermission(this)) {
-            DialogUtils.Companion.showGoogleDrivePermissionDialog(this, () -> {
+        if(!PermissionUtils.INSTANCE.checkGoogleDrivePermission(this)) {
+            DialogUtils.INSTANCE.showGoogleDrivePermissionDialog(this, () -> {
                 finish();
                 return Unit.INSTANCE;
             });
@@ -108,7 +109,7 @@ public class BackupActivity extends BaseActivity {
                 } else if(msg.arg1 == 100) {            // 로그인한 계정에 백업파일이 존재하지않는 경우
                     recentDateTextView.setText("");
 
-                    SharedPreferences preferences = getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+                    SharedPreferences preferences = getSharedPreferences(Pref.PREF_NAME, Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.remove(signedAccount + "'s id");
                     editor.commit();
@@ -169,7 +170,7 @@ public class BackupActivity extends BaseActivity {
     }
 
     private void checkSigendSharedPreferences() {
-        SharedPreferences preferences = getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(Pref.PREF_NAME, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
         if(preferences.contains(signedAccount) && preferences.getBoolean(signedAccount, false)) {
@@ -197,7 +198,7 @@ public class BackupActivity extends BaseActivity {
     }
 
     private void addSignedAccountSharedPreferences(String signedAccount, boolean isSigned) {
-        SharedPreferences preferences = getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences(Pref.PREF_NAME, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(signedAccount, isSigned);
         editor.commit();
@@ -351,7 +352,7 @@ public class BackupActivity extends BaseActivity {
     }
 
     private void setFileId(String fileId) {
-        SharedPreferences pref = getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences(Pref.PREF_NAME, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.putString(signedAccount + "'s id", fileId);
         editor.commit();

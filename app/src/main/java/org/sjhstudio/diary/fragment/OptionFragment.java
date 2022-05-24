@@ -32,6 +32,7 @@ import org.sjhstudio.diary.SettingsActivity;
 import org.sjhstudio.diary.helper.AppHelper;
 import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.note.NoteDatabaseCallback;
+import org.sjhstudio.diary.utils.Pref;
 
 public class OptionFragment extends Fragment {
 
@@ -92,25 +93,6 @@ public class OptionFragment extends Fragment {
         passwordLayout.setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), PasswordSettingsActivity.class);
             requireActivity().startActivity(intent);
-        });
-
-        /* 잠금해제 */
-        RelativeLayout releasePasswordLayout = (RelativeLayout)rootView.findViewById(R.id.releasepasswordlayout);
-        releasePasswordLayout.setOnClickListener(v -> {
-            SharedPreferences pref = requireContext().getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-            if(pref != null) {
-               String password = pref.getString(MyTheme.PASSWORD, "");
-               if(!password.equals("")) {
-                   SharedPreferences.Editor editor = pref.edit();
-                   editor.remove(MyTheme.PASSWORD);
-                   editor.commit();
-
-                   Toast.makeText(requireContext(), "비밀번호가 해제되었습니다.", Toast.LENGTH_SHORT).show();
-                   return;
-               }
-            }
-
-            Toast.makeText(requireContext(), "설정된 비밀번호가 없습니다.", Toast.LENGTH_SHORT).show();
         });
 
         /* 백업 및 복원하기 */
@@ -182,8 +164,7 @@ public class OptionFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void setCurFontText(View rootView) {
-        SharedPreferences pref = requireContext().getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        if(pref != null) curFontIndex = pref.getInt(MyTheme.FONT_KEY, 0);
+        curFontIndex = Pref.getPFontKey(requireContext());
         TextView curFontTextView = rootView.findViewById(R.id.curFontTextView);
 
         switch(curFontIndex) {

@@ -31,8 +31,7 @@ public class FontActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_font);
 
-        SharedPreferences pref = getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        if(pref != null) curFontIndex = pref.getInt(MyTheme.FONT_KEY, 0);
+        curFontIndex = Pref.getPFontKey(this);
         curFontSizeIndex = Pref.getPFontSize(this);
 
         init();

@@ -1,30 +1,31 @@
 package org.sjhstudio.diary;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.utils.BaseActivity;
 import org.sjhstudio.diary.utils.Pref;
 
+@SuppressLint("CustomSplashScreen")
 public class SplashActivity extends BaseActivity {
-    private Handler handler = new Handler();    // 0.5초 딜레이를 위한 핸들러
-    private String password;
+
+    private static final String TAG = "SplashActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        SharedPreferences pref = getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        if(pref != null) {
-            password = pref.getString(MyTheme.PASSWORD, "");
-        }
+        String password = Pref.getPPassword(this);
+        Log.e(TAG, "password : " + password);
 
-        handler.postDelayed(()->{
+        new Handler().postDelayed(()->{
             Intent intent;
 
             if(Pref.getPUsePw(this)) intent = new Intent(this, MainPasswordActivity.class);
@@ -34,4 +35,5 @@ public class SplashActivity extends BaseActivity {
             finish();
         }, 800);    // 0.8초 뒤, 메인 액티비티로 전환
     }
+
 }

@@ -19,6 +19,7 @@ import org.sjhstudio.diary.AlarmActivity;
 import org.sjhstudio.diary.MainPasswordActivity;
 import org.sjhstudio.diary.R;
 import org.sjhstudio.diary.SplashActivity;
+import org.sjhstudio.diary.utils.Pref;
 
 import java.util.Calendar;
 
@@ -47,13 +48,8 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     private void initPassword(Context context) {
-        SharedPreferences pref = context.getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-        if(pref != null) {
-            SharedPreferences.Editor editor = pref.edit();
-            editor.remove(MyTheme.PASSWORD);
-            editor.commit();
-            Log.d("LOG", "앱이 삭제됨 : 비밀번호 초기화");
-        }
+        Pref.removePPassword(context);
+        Log.d("LOG", "앱이 삭제됨 : 비밀번호 초기화");
     }
 
     private void startNotification(Context context) {

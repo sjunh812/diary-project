@@ -16,6 +16,7 @@ import android.widget.TextView;
 import org.sjhstudio.diary.custom.CustomPasswordCautionDialog;
 import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.utils.BaseActivity;
+import org.sjhstudio.diary.utils.Pref;
 import org.sjhstudio.diary.utils.Utils;
 
 import java.util.ArrayList;
@@ -78,10 +79,7 @@ public class PasswordActivity extends BaseActivity {
 
     private void comparePassword() {
         if (input.equals(reInput)) {
-            SharedPreferences pref = getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putString(MyTheme.PASSWORD, input);
-            editor.apply();
+            Pref.setPPassword(this, input);
             startPasswordCautionDialog();
         } else {
             subTitleTextView.setText("비밀번호가 일치하지 않습니다\n처음부터 다시 시도해주세요");

@@ -41,8 +41,7 @@ public class MainPasswordActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_password);
 
-        SharedPreferences pref = getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        password = pref.getString(MyTheme.PASSWORD, "1111");
+        password = Pref.getPPassword(this);
         init();
         setBiometric();
     }

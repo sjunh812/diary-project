@@ -112,7 +112,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
 
         if(!Pref.getPPermissionGuide(this)) {
             Log.e(LOG, "권한안내 필요함.");
-            DialogUtils.Companion.showPermissionGuideDialog(this, () -> {
+            DialogUtils.INSTANCE.showPermissionGuideDialog(this, () -> {
                 AutoPermissions.Companion.loadAllPermissions(this, Constants.REQUEST_ALL_PERMISSIONS);
                 Pref.setPPermissionGuide(this, true);
                 return Unit.INSTANCE;
@@ -146,7 +146,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
             if(!isSelected2 && selectedTabIndex == 2 &&
                     writeFragment != null && !(writeFragment.isEmptyContent())
             ) {
-                DialogUtils.Companion.showStopWriteDialog(this, () -> {
+                DialogUtils.INSTANCE.showStopWriteDialog(this, () -> {
                     int position;
 
                     if(item.getItemId() == R.id.tab1) position = 0;
@@ -186,13 +186,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     Log.d("MyReceiver", "onReceive: " + intent);
-
-                    SharedPreferences pref = context.getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-                    if(pref != null) {
-                        SharedPreferences.Editor editor = pref.edit();
-                        editor.remove(MyTheme.PASSWORD);
-                        editor.apply();
-                    }
+                    Pref.removePPassword(MainActivity.this);
                 }
             };
 
@@ -205,10 +199,9 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         isSelected2 = flag;
     }
 
-
     /**
      * Get current location and date
-     * @param date  // null -> current date
+     * @param date  // null = today
      */
     public void getCurrentLocation(Date date) {
         if(date == null) curDate = new Date();                  // 현재 날짜정보
@@ -228,17 +221,37 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         }
 
         try {
-            if(PermissionUtils.Companion.checkLocationPermission(this)) {
+            if(PermissionUtils.INSTANCE.checkLocationPermission(this)) {
 //                curLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);   // 최근 위치정보
-                long minTime = 1000;                                          // 업데이트 주기 10초
-                float minDistance = 0;                                         // 업데이트 거리간격 0
+                long minTime = 1000;    // 업데이트 주기 10초
+                float minDistance = 0;  // 업데이트 거리간격 0
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, gpsListener);    // 위치 업데이트
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDistance, gpsListener);    // 위치 업데이트
+                    locationManager.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            minTime,
+                            minDistance,
+                            gpsListener
+                    );
+                    locationManager.requestLocationUpdates(
+                            LocationManager.NETWORK_PROVIDER,
+                            minTime,
+                            minDistance,
+                            gpsListener
+                    );
                 } else {
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, lowVersionGPSListener);    // 위치 업데이트
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, minTime, minDistance, lowVersionGPSListener);    // 위치 업데이트
+                    locationManager.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            minTime,
+                            minDistance,
+                            lowVersionGPSListener
+                    );
+                    locationManager.requestLocationUpdates(
+                            LocationManager.NETWORK_PROVIDER,
+                            minTime,
+                            minDistance,
+                            lowVersionGPSListener
+                    );
                 }
             }
         } catch(Exception e) { e.printStackTrace(); }
@@ -525,7 +538,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
 
             case "checkGPS":
                 if(!Utils.INSTANCE.checkGPS(this)) {
-                    DialogUtils.Companion.showGPSDialog(this, () -> {
+                    DialogUtils.INSTANCE.showGPSDialog(this, () -> {
                         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                         startActivity(intent);
                         return Unit.INSTANCE;
@@ -534,7 +547,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
                 break;
 
             case "showStopWriteDialog":
-                DialogUtils.Companion.showStopWriteDialog(this, () -> {
+                DialogUtils.INSTANCE.showStopWriteDialog(this, () -> {
                     selectedTabIndex = 0;
                     bottomNavigationView.setSelectedItemId(R.id.tab1);
                     return Unit.INSTANCE;
@@ -647,7 +660,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
 
             if(System.currentTimeMillis() <= backPressTime + 2000) super.onBackPressed();
         } else if(bottomNavigationView.getSelectedItemId() == R.id.tab3) {
-            DialogUtils.Companion.showStopWriteDialog(this, () -> {
+            DialogUtils.INSTANCE.showStopWriteDialog(this, () -> {
                 selectedTabIndex = 0;
                 bottomNavigationView.setSelectedItemId(R.id.tab1);
                 return Unit.INSTANCE;

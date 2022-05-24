@@ -35,6 +35,7 @@ import org.sjhstudio.diary.R;
 import org.sjhstudio.diary.custom.MyRadioButton;
 import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.note.NoteDatabaseCallback;
+import org.sjhstudio.diary.utils.Pref;
 import org.sjhstudio.diary.utils.Utils;
 
 import java.util.ArrayList;
@@ -157,10 +158,7 @@ public class GraphFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_graph, container, false);
 
-        // 폰트 정보
-        SharedPreferences pref = getContext().getSharedPreferences(MyTheme.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        if(pref != null) curFontIndex = pref.getInt(MyTheme.FONT_KEY, 0);
-
+        curFontIndex = Pref.getPFontKey(requireContext());  // 폰트 정보
         initAnimation();             // 애니메이션 초기화
         initChartUI(rootView);       // 차트 초기화
         initUI(rootView);            // UI 초기화
