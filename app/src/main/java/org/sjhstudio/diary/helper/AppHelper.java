@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo;
 import android.os.Build;
 
 public class AppHelper {
+
     private PackageInfo packageInfo = null;
     private String versionName;
     private String modelName;
@@ -36,4 +37,5 @@ public class AppHelper {
     public String getOsName() {
         return osName;
     }
+
 }

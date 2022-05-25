@@ -10,9 +10,7 @@ import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import org.sjhstudio.diary.utils.BaseActivity
 import org.sjhstudio.diary.utils.Pref
 
-class PasswordSettingsActivity :
-    BaseActivity(),
-    CompoundButton.OnCheckedChangeListener {
+class PasswordSettingsActivity: BaseActivity(), CompoundButton.OnCheckedChangeListener {
 
     private lateinit var pwSwitch: Switch
     private lateinit var fpSwitch: Switch

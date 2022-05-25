@@ -1,13 +1,10 @@
 package org.sjhstudio.diary.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +12,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -30,14 +25,12 @@ import org.sjhstudio.diary.PasswordSettingsActivity;
 import org.sjhstudio.diary.R;
 import org.sjhstudio.diary.SettingsActivity;
 import org.sjhstudio.diary.helper.AppHelper;
-import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.note.NoteDatabaseCallback;
 import org.sjhstudio.diary.utils.Pref;
 
 public class OptionFragment extends Fragment {
 
     private NoteDatabaseCallback callback;  // DB 접근을 위한 callback
-    private int curFontIndex = 0;           // 현재 선택한 폰트종류
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -53,29 +46,37 @@ public class OptionFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_option, container, false);
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState
+    ) {
+        View rootView = inflater.inflate(
+                R.layout.fragment_option,
+                container,
+                false
+        );
 
         setTitleTextView(rootView);
         setCountTextView(rootView);
         setCurFontText(rootView);
 
         /* 폰트 설정 */
-        RelativeLayout fontLayout = (RelativeLayout)rootView.findViewById(R.id.fontLayout);
+        RelativeLayout fontLayout = rootView.findViewById(R.id.fontLayout);
         fontLayout.setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), FontActivity.class);
             ((MainActivity)requireActivity()).fontChangeResult.launch(intent);
         });
 
         /* 알림 설정 */
-        RelativeLayout noticeLayout = (RelativeLayout)rootView.findViewById(R.id.noticeLayout);
+        RelativeLayout noticeLayout = rootView.findViewById(R.id.noticeLayout);
         noticeLayout.setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), AlarmActivity.class);
             startActivity(intent);
         });
 
         /* 다크모드 설정 */
-        RelativeLayout darkmodeLayout = (RelativeLayout)rootView.findViewById(R.id.darkmodeLayout);
+        RelativeLayout darkmodeLayout = rootView.findViewById(R.id.darkmodeLayout);
         darkmodeLayout.setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), DarkModeActivity.class);
             startActivity(intent);
@@ -89,21 +90,21 @@ public class OptionFragment extends Fragment {
         });
 
         /* 잠금설정 */
-        RelativeLayout passwordLayout = (RelativeLayout)rootView.findViewById(R.id.passwordlayout);
+        RelativeLayout passwordLayout = rootView.findViewById(R.id.passwordlayout);
         passwordLayout.setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), PasswordSettingsActivity.class);
             requireActivity().startActivity(intent);
         });
 
         /* 백업 및 복원하기 */
-        RelativeLayout backupLayout = (RelativeLayout)rootView.findViewById(R.id.backupLayout);
+        RelativeLayout backupLayout = rootView.findViewById(R.id.backupLayout);
         backupLayout.setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), BackupActivity.class);
             startActivity(intent);
         });
 
         /* 스토어 리뷰 */
-        RelativeLayout reviewLayout = (RelativeLayout)rootView.findViewById(R.id.reviewLayout);
+        RelativeLayout reviewLayout = rootView.findViewById(R.id.reviewLayout);
         reviewLayout.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(Uri.parse("market://details?id=" + requireContext().getPackageName()));
@@ -111,7 +112,7 @@ public class OptionFragment extends Fragment {
         });
 
         /* 피드백 보내기 */
-        RelativeLayout ideaLayout = (RelativeLayout)rootView.findViewById(R.id.ideaLayout);
+        RelativeLayout ideaLayout = rootView.findViewById(R.id.ideaLayout);
         ideaLayout.setOnClickListener(v -> {
             AppHelper helper = new AppHelper(getContext());
             String[] email = {"sjunh812@naver.com"};
@@ -147,14 +148,14 @@ public class OptionFragment extends Fragment {
     private void setTitleTextView(View rootView) {
         Animation translateRightAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.translate_right_animation);
         translateRightAnim.setDuration(350);
-        TextView titleTextView = (TextView)rootView.findViewById(R.id.titleTextView);
+        TextView titleTextView = rootView.findViewById(R.id.titleTextView);
         titleTextView.startAnimation(translateRightAnim);
     }
 
     @SuppressLint("SetTextI18n")
     private void setCountTextView(View rootView) {
-        TextView allCountTextView = (TextView) rootView.findViewById(R.id.allCountTextView);
-        TextView starCountTextView = (TextView) rootView.findViewById(R.id.starCountTextView);
+        TextView allCountTextView = rootView.findViewById(R.id.allCountTextView);
+        TextView starCountTextView = rootView.findViewById(R.id.starCountTextView);
         int allCount = callback.selectAllCount();   // 작성한 일기 총 개수
         int starCount = callback.selectStarCount(); // 즐겨찾기 총 개수
 
@@ -164,7 +165,8 @@ public class OptionFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void setCurFontText(View rootView) {
-        curFontIndex = Pref.getPFontKey(requireContext());
+        // 현재 선택한 폰트종류
+        int curFontIndex = Pref.getPFontKey(requireContext());
         TextView curFontTextView = rootView.findViewById(R.id.curFontTextView);
 
         switch(curFontIndex) {

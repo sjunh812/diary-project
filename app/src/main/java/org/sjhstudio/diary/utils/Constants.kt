@@ -18,4 +18,8 @@ object Constants {
     const val DETAIL_ACTIVITY_RESULT_DELETE = -10
     const val DETAIL_ACTIVITY_RESULT_UPDATE = -11
 
+    // Alarm
+    const val CHANNEL_ID = "alarm_id"
+    const val CHANNEL_NAME = "alarm"
+
 }

@@ -1,13 +1,11 @@
 package org.sjhstudio.diary.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import org.sjhstudio.diary.helper.MyTheme;
-
 public class Pref {
 
+    // Pref1
     public static final String PREF_NAME = "pref";
     public static final String ASK_LOCATION = "ask_location";   // GPS 알림
     public static final String FONT_KEY = "font_key";
@@ -18,6 +16,12 @@ public class Pref {
     public static final String USE_PW = "use_pw";   // 비밀번호 사용
     public static final String FINGER_PRINT = "finger_print";   // 지문 사용
     public static final String SKIP_NOTE = "skip_note"; // 일기요약(3줄)
+
+    // Pref2
+    public static final String PREF_NAME_2 = "pref2";   // 알림관련
+    public static final String USE_ALARM = "is_alarm_key";   // 알림기능 사용여부
+    public static final String ALARM_HOUR = "hour_key";   // 알림 시간
+    public static final String ALARM_MINUTE = "minute_key";   // 알림 분
 
     // GPS 요청여부
     public static Boolean getPAskLocation(Context context) {
@@ -129,6 +133,48 @@ public class Pref {
     public static void setPSkipNote(Context context, Boolean flag) {
         SharedPreferences pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         if(pref != null) pref.edit().putBoolean(SKIP_NOTE, flag).apply();
+    }
+
+    /**
+     * Pref1
+     * ============================================================================================
+     * Pref2
+     */
+
+    // 알림 사용여부
+    public static Boolean getPUseAlarm(Context context) {
+        SharedPreferences pref = context.getSharedPreferences(PREF_NAME_2, Context.MODE_PRIVATE);
+        if(pref != null) return pref.getBoolean(USE_ALARM, false);
+
+        return false;
+    }
+    public static void setPUseAlarm(Context context, Boolean flag) {
+        SharedPreferences pref = context.getSharedPreferences(PREF_NAME_2, Context.MODE_PRIVATE);
+        if(pref != null) pref.edit().putBoolean(USE_ALARM, flag).apply();
+    }
+
+    // 알림 시(hour)
+    public static int getPAlarmHour(Context context) {
+        SharedPreferences pref = context.getSharedPreferences(PREF_NAME_2, Context.MODE_PRIVATE);
+        if(pref != null) return pref.getInt(ALARM_HOUR, 22);
+
+        return 22;
+    }
+    public static void setPAlarmHour(Context context, int flag) {
+        SharedPreferences pref = context.getSharedPreferences(PREF_NAME_2, Context.MODE_PRIVATE);
+        if(pref != null) pref.edit().putInt(ALARM_HOUR, flag).apply();
+    }
+
+    // 알림 분(minute)
+    public static int getPAlarmMinute(Context context) {
+        SharedPreferences pref = context.getSharedPreferences(PREF_NAME_2, Context.MODE_PRIVATE);
+        if(pref != null) return pref.getInt(ALARM_MINUTE, 0);
+
+        return 0;
+    }
+    public static void setPAlarmMinute(Context context, int flag) {
+        SharedPreferences pref = context.getSharedPreferences(PREF_NAME_2, Context.MODE_PRIVATE);
+        if(pref != null) pref.edit().putInt(ALARM_MINUTE, flag).apply();
     }
 
 }

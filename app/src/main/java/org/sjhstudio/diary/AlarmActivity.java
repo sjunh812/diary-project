@@ -26,29 +26,17 @@ import java.util.Objects;
 
 public class AlarmActivity extends BaseActivity {
 
-    // 상수
-    private static final String LOG = "AlarmActivity";
-    public static final String SHARED_PREFERENCES_NAME2 = "pref2";  // 알림기능 관련 SharedPreference 이름
-    public static final String IS_ALARM_KEY = "is_alarm_key";       // 알림기능 사용 여부 KEY
-    public static final String HOUR_KEY = "hour_key";               // 알림 시간 KEY
-    public static final String MINUTE_KEY = "minute_key";           // 알림 분 KEY
+    private static final String TAG = "AlarmActivity";
 
-    // UI
     private RelativeLayout timeLayout;
     private CustomTimePickerDialog timePickerDialog;
-    private Switch alarmSwitch;
     private TextView timeTextView;
-
-    // Helper
-    private AlarmManager alarmManager;
+    private Switch alarmSwitch;
     private AlarmHelper alarmHelper;
 
-    // 데이터
     private boolean isAlarm = false;
     private int hour = 22;
     private int minute = 0;
-    private Calendar cal = Calendar.getInstance();
-    private PendingIntent pendingIntent = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,63 +44,49 @@ public class AlarmActivity extends BaseActivity {
         setContentView(R.layout.activity_alarm);
 
         alarmHelper = new AlarmHelper(this);
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("알림");
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        timeTextView = (TextView)findViewById(R.id.timeTextView);
-
-        alarmSwitch = (Switch)findViewById(R.id.alarmSwitch);
+        timeTextView = findViewById(R.id.timeTextView);
+        alarmSwitch = findViewById(R.id.alarmSwitch);
         alarmSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences pref = getApplicationContext().getSharedPreferences(SHARED_PREFERENCES_NAME2, Activity.MODE_PRIVATE);
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putBoolean(IS_ALARM_KEY, isChecked);
+            Pref.setPUseAlarm(getApplicationContext(), isChecked);
 
             if(isChecked) {
-                editor.putInt(HOUR_KEY, hour);
-                editor.putInt(MINUTE_KEY, minute);
+                Pref.setPAlarmHour(getApplicationContext(), hour);
+                Pref.setPAlarmMinute(getApplicationContext(), minute);
             }
-            editor.commit();
 
             isAlarm = isChecked;
             setTimeLayout();
         });
 
         @SuppressLint("UseSwitchCompatOrMaterialCode")
-        Switch locationSwitch = (Switch) findViewById(R.id.locationSwitch);
+        Switch locationSwitch = findViewById(R.id.locationSwitch);
         locationSwitch.setChecked(Pref.getPAskLocation(this));
         locationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> Pref.setPAskLocation(getApplicationContext(), isChecked));
 
-        timeLayout = (RelativeLayout)findViewById(R.id.timeLayout);
+        timeLayout = findViewById(R.id.timeLayout);
         timeLayout.setOnClickListener(v -> setTimePickerDialog());
 
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(SHARED_PREFERENCES_NAME2, Activity.MODE_PRIVATE);
-        if(pref != null) {
-            isAlarm = pref.getBoolean(IS_ALARM_KEY, false);
-            hour = pref.getInt(HOUR_KEY, 22);
-            minute = pref.getInt(MINUTE_KEY, 0);
+        isAlarm = Pref.getPUseAlarm(getApplicationContext());
+        hour = Pref.getPAlarmHour(getApplicationContext());
+        minute = Pref.getPAlarmMinute(getApplicationContext());
+        timePickerDialog = new CustomTimePickerDialog(this, hour, minute);
 
-            timePickerDialog = new CustomTimePickerDialog(this, hour, minute);
-
-            setTimeLayout();
-            setAlarmSwitch();
-            setTimeTextView();
-        } else {
-            timePickerDialog = new CustomTimePickerDialog(this);
-            setTimeLayout();
-        }
-    }
-
-    private void setAlarmSwitch() {
         alarmSwitch.setChecked(isAlarm);
+        setTimeTextView();
+        setTimeLayout();
     }
 
     private void setTimeLayout() {
         if(isAlarm) {
+            Log.d(TAG, "HOUR : " + hour + ",  MINUTE : " + minute);
             timeLayout.setVisibility(View.VISIBLE);
             alarmHelper.startAlarm(false);
-            Log.d(LOG, "HOUR : " + hour + ",  MINUTE : " + minute);
         } else {
             timeLayout.setVisibility(View.GONE);
             alarmHelper.stopAlarm();
@@ -120,6 +94,7 @@ public class AlarmActivity extends BaseActivity {
     }
 
     private void setTimeTextView() {
+        Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, hour);
         cal.set(Calendar.MINUTE, minute);
         Date date = cal.getTime();
@@ -130,19 +105,14 @@ public class AlarmActivity extends BaseActivity {
 
     private void setTimePickerDialog() {
         timePickerDialog.show();
-
         timePickerDialog.setCancelButtonOnClickListener(v -> timePickerDialog.dismiss());
-
         timePickerDialog.setOkButtonOnClickListener(v -> {
             hour = timePickerDialog.get_hour();
             minute = timePickerDialog.get_minute();
 
-            SharedPreferences pref = getApplicationContext().getSharedPreferences(SHARED_PREFERENCES_NAME2, Activity.MODE_PRIVATE);
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putBoolean(IS_ALARM_KEY, true);
-            editor.putInt(HOUR_KEY, hour);
-            editor.putInt(MINUTE_KEY, minute);
-            editor.commit();
+            Pref.setPUseAlarm(getApplicationContext(), true);
+            Pref.setPAlarmHour(getApplicationContext(), hour);
+            Pref.setPAlarmMinute(getApplicationContext(), minute);
 
             alarmHelper.startAlarm(false);
             setTimeTextView();

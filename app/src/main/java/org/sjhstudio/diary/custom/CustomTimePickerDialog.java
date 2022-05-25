@@ -14,19 +14,13 @@ import androidx.annotation.NonNull;
 import org.sjhstudio.diary.R;
 
 public class CustomTimePickerDialog extends Dialog {
+
     ImageButton cancelButton;
     TimePicker timePicker;
     Button okButton;
 
     int _hour;
     int _minute;
-
-    public CustomTimePickerDialog(@NonNull Context context) {
-        super(context);
-
-        _hour = 22;
-        _minute = 0;
-    }
 
     public CustomTimePickerDialog(@NonNull Context context, int hour, int minute) {
         super(context);
@@ -35,18 +29,14 @@ public class CustomTimePickerDialog extends Dialog {
         _minute = minute;
     }
 
-    public CustomTimePickerDialog(@NonNull Context context, int themeResId) {
-        super(context, themeResId);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.time_picker_dialog);
 
-        cancelButton = (ImageButton)findViewById(R.id.cancelButton);
-        timePicker = (TimePicker) findViewById(R.id.timePicker);
-        okButton = (Button)findViewById(R.id.okButton);
+        cancelButton = findViewById(R.id.cancelButton);
+        timePicker = findViewById(R.id.timePicker);
+        okButton = findViewById(R.id.okButton);
 
         initTimePicker();
     }
@@ -60,12 +50,9 @@ public class CustomTimePickerDialog extends Dialog {
             timePicker.setCurrentMinute(_minute);
         }
 
-        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-            @Override
-            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                _hour = hourOfDay;
-                _minute = minute;
-            }
+        timePicker.setOnTimeChangedListener((view, hourOfDay, minute) -> {
+            _hour = hourOfDay;
+            _minute = minute;
         });
     }
 
@@ -84,4 +71,5 @@ public class CustomTimePickerDialog extends Dialog {
     public int get_minute() {
         return _minute;
     }
+
 }
