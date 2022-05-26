@@ -674,8 +674,8 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
      * ActivityResultLauncher
      * (startActivityForResult() is deprecated)
      */
-    public final ActivityResultLauncher<CropImageContractOptions> cropImageActivityResult =
-            registerForActivityResult(new CropImageContract(), result -> {
+    public final ActivityResultLauncher<CropImageContractOptions> cropImageActivityResult = registerForActivityResult(
+            new CropImageContract(), result -> {
         // Crop activity 콜백
         if(result.isSuccessful()) {
             Log.d(LOG, "xxx cropImageActivityResult: Success");
@@ -690,8 +690,8 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         }
     });
 
-    public final ActivityResultLauncher<Intent> cameraResult =
-            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    public final ActivityResultLauncher<Intent> cameraResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), result -> {
         // 카메라 콜백
         int resultCode = result.getResultCode();
 
@@ -710,8 +710,8 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         }
     });
 
-    public final ActivityResultLauncher<Intent> albumResult =
-            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    public final ActivityResultLauncher<Intent> albumResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), result -> {
         // 앨범 콜백
         int resultCode = result.getResultCode();
         Intent data = result.getData();
@@ -727,16 +727,16 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         }
     });
 
-    public final ActivityResultLauncher<Intent> fontChangeResult =
-            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    public final ActivityResultLauncher<Intent> fontChangeResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), result -> {
         int resultCode = result.getResultCode();
 
         if (resultCode == RESULT_OK) recreate();
         else Log.d(LOG, "xxx fontChangeResult: RESULT_NOT_OK");
     });
 
-    final ActivityResultLauncher<Intent> detailActivityResult =
-            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+    final ActivityResultLauncher<Intent> detailActivityResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), result -> {
         int resultCode = result.getResultCode();
         Intent data = result.getData();
 

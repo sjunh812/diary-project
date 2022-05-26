@@ -243,8 +243,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:cardBackgroundColor="@color/background_sub"
-                        app:cardCornerRadius="5dp"
-                        app:cardElevation="1dp"
+                        app:cardCornerRadius="15dp"
+                        app:cardElevation="0dp"
                         app:cardUseCompatPadding="true">
 
                         <LinearLayout
@@ -299,7 +299,7 @@
                                             android:layout_height="35dp"
                                             android:background="@drawable/mood_angry_color"
                                             android:clickable="false"
-                                            app:backgroundTint="@color/cardview_shadow_end_color"
+                                            app:backgroundTint="@color/transparent"
                                             app:backgroundTintMode="add" />
 
                                         <TextView
@@ -326,7 +326,7 @@
                                             android:layout_height="35dp"
                                             android:background="@drawable/mood_cool_color"
                                             android:clickable="false"
-                                            app:backgroundTint="@color/cardview_shadow_end_color"
+                                            app:backgroundTint="@color/transparent"
                                             app:backgroundTintMode="add" />
 
                                         <TextView
@@ -352,7 +352,7 @@
                                             android:layout_height="35dp"
                                             android:background="@drawable/mood_crying_color"
                                             android:clickable="false"
-                                            app:backgroundTint="@color/cardview_shadow_end_color"
+                                            app:backgroundTint="@color/transparent"
                                             app:backgroundTintMode="add" />
 
                                         <TextView
@@ -386,7 +386,7 @@
                                             android:layout_height="35dp"
                                             android:background="@drawable/mood_ill_color"
                                             android:clickable="false"
-                                            app:backgroundTint="@color/cardview_shadow_end_color"
+                                            app:backgroundTint="@color/transparent"
                                             app:backgroundTintMode="add" />
 
                                         <TextView
@@ -413,7 +413,7 @@
                                             android:layout_height="35dp"
                                             android:background="@drawable/mood_laugh_color"
                                             android:clickable="false"
-                                            app:backgroundTint="@color/cardview_shadow_end_color"
+                                            app:backgroundTint="@color/transparent"
                                             app:backgroundTintMode="add" />
 
                                         <TextView
@@ -439,7 +439,7 @@
                                             android:layout_height="35dp"
                                             android:background="@drawable/mood_meh_color"
                                             android:clickable="false"
-                                            app:backgroundTint="@color/cardview_shadow_end_color"
+                                            app:backgroundTint="@color/transparent"
                                             app:backgroundTintMode="add" />
 
                                         <TextView
@@ -474,7 +474,7 @@
                                             android:layout_height="35dp"
                                             android:background="@drawable/mood_sad"
                                             android:clickable="false"
-                                            app:backgroundTint="@color/cardview_shadow_end_color"
+                                            app:backgroundTint="@color/transparent"
                                             app:backgroundTintMode="add" />
 
                                         <TextView
@@ -501,7 +501,7 @@
                                             android:layout_height="35dp"
                                             android:background="@drawable/mood_smile_color"
                                             android:clickable="false"
-                                            app:backgroundTint="@color/cardview_shadow_end_color"
+                                            app:backgroundTint="@color/transparent"
                                             app:backgroundTintMode="add" />
 
                                         <TextView
@@ -527,7 +527,7 @@
                                             android:layout_height="35dp"
                                             android:background="@drawable/mood_yawn_color"
                                             android:clickable="false"
-                                            app:backgroundTint="@color/cardview_shadow_end_color"
+                                            app:backgroundTint="@color/transparent"
                                             app:backgroundTintMode="add" />
 
                                         <TextView
@@ -548,8 +548,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:cardBackgroundColor="@color/background_sub"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="2dp"
+                        app:cardCornerRadius="15dp"
+                        app:cardElevation="0dp"
                         app:cardUseCompatPadding="true">
 
                         <LinearLayout
@@ -595,8 +595,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:cardBackgroundColor="@color/background_sub"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="1dp"
+                        app:cardCornerRadius="15dp"
+                        app:cardElevation="0dp"
                         app:cardUseCompatPadding="true">
 
                         <LinearLayout
