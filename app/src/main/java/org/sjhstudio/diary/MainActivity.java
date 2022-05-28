@@ -10,7 +10,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.location.Location;
 import android.location.LocationListener;
@@ -47,7 +46,6 @@ import org.sjhstudio.diary.utils.BaseActivity;
 import org.sjhstudio.diary.utils.DialogUtils;
 import org.sjhstudio.diary.helper.KMAGrid;
 import org.sjhstudio.diary.helper.MyApplication;
-import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.helper.OnRequestListener;
 import org.sjhstudio.diary.helper.OnTabItemSelectedListener;
 import org.sjhstudio.diary.note.Note;
@@ -172,11 +170,11 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         if(savedInstanceState == null) onTabSelected(0);
         else onTabSelected(savedInstanceState.getInt(Constants.SELECTED_TAB_INDEX));
 
+        // 리시버등록(앱 제거시, 비밀번호삭제)
         registerRemovedReceiver();
     }
 
     private void registerRemovedReceiver() {
-        // 리시버등록(앱 제거시, 비밀번호삭제)
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);

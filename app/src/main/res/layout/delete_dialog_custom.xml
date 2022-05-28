@@ -45,6 +45,7 @@
         android:gravity="center"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="25dp"
+        android:lineSpacingExtra="5dp"
         android:text="사진을 삭제하시겠습니까?"
         android:textSize="18sp"
         android:textColor="@color/font" />
