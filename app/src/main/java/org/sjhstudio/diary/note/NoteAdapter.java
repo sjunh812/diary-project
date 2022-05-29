@@ -16,38 +16,20 @@ import org.sjhstudio.diary.helper.OnNoteItemTouchListener;
 
 import java.util.ArrayList;
 
-public class NoteAdapter extends RecyclerView.Adapter<NoteViewHolder> implements OnNoteItemClickListener, OnNoteItemTouchListener
-, OnNoteItemLongClickListener{
+public class NoteAdapter extends RecyclerView.Adapter<NoteViewHolder>
+        implements OnNoteItemClickListener, OnNoteItemTouchListener, OnNoteItemLongClickListener {
+
+    private final Context mContext;
+
     private ArrayList<Note> items = new ArrayList<>();
-    private Context context;
     private OnNoteItemClickListener clickListener;
     private OnNoteItemTouchListener touchListener;
     private OnNoteItemLongClickListener longClickListener;
 
     private int layoutType = 0;
-    private long duration = 1000;
-    private boolean isStar = false;
 
     public NoteAdapter(Context context) {
-        this.context = context;
-    }
-
-    public void addItem(Note item) {
-        if(items.size() != 0) {
-            items.add(items.get(items.size() - 1));
-
-            for(int i = items.size() - 2; i >= 0; i--) {
-                items.set(i + 1, items.get(i));
-            }
-
-            items.set(0, item);
-        } else {
-            items.add(item);
-        }
-    }
-
-    public ArrayList<Note> getItems() {
-        return items;
+        mContext = context;
     }
 
     public void setItems(ArrayList<Note> items) {
@@ -58,9 +40,11 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteViewHolder> implements
         this.layoutType = layoutType;
     }
 
+    // 즐겨찾기 일기목록
     public void setStar() {
         for(int i = 0; i < items.size(); i++) {
             Note item = items.get(i);
+
             if(item.getStarIndex() == 0) {
                 items.remove(i);
                 i--;
@@ -68,23 +52,18 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteViewHolder> implements
         }
     }
 
-    public void setIsStar(boolean isStar) {
-        this.isStar = isStar;
-    }
-
     @NonNull
     @Override
     public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = inflater.inflate(R.layout.list_item, parent, false);
 
-        return new NoteViewHolder(itemView, layoutType, context);
+        return new NoteViewHolder(itemView, layoutType, mContext);
     }
 
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
         Note item = items.get(position);
-
         holder.setItem(item);
         holder.setOnItemClickListener(clickListener);
         holder.setOnItemTouchListener(touchListener);
@@ -95,6 +74,11 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteViewHolder> implements
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return items.get(position).get_id();
     }
 
     public Note getItem(int position) {
@@ -133,4 +117,5 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteViewHolder> implements
             longClickListener.onLongClick(holder, view, position);
         }
     }
+
 }

@@ -131,10 +131,13 @@ public class ListFragment extends Fragment {
         translateRightAnim = AnimationUtils.loadAnimation(getContext(), R.anim.translate_right_animation);
         translateRightAnim.setDuration(350);
         curYear = Utils.INSTANCE.getCurrentYear();     // 현재년도 가져오기
+
         calculateYearArray();           // 현재년도와 DB 내 마지막 년도를 이용하여 years 배열 설정 (년도 스피너의 어뎁터에 사용될)
         initSpinnerPosition();          // 초기 스피너 포지션 값을 지정하기위해 selectedYearPos 와 selectedMonthPos 초기화 (금년, 금월로 지정)
+
         yearAdapter = new MyArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, years);
         monthAdapter = new MyArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, months);
+
         return rootView;
     }
 
@@ -184,8 +187,9 @@ public class ListFragment extends Fragment {
         });
 
         listRecyclerView = rootView.findViewById(R.id.listRecyclerView);
+        listRecyclerView.setHasFixedSize(true);
         listRecyclerView.setAdapter(adapter);
-        listRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        listRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
         listRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {

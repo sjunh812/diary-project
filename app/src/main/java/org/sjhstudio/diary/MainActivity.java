@@ -81,7 +81,6 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
     private OptionFragment optionFragment;              // 더보기
 
     private LocationManager locationManager;
-
     private GPSListener gpsListener;                    // 위치 정보를 가져오기 위해 필요한 리스너
     private LowVersionGPSListener lowVersionGPSListener;// 위치 정보를 가져오기 위해 필요한 리스너 (api 29 이전 버전)
 
@@ -306,7 +305,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         String curYear = Utils.INSTANCE.getYearFormat().format(curDate);            // yyyy
         String curMonth = Utils.INSTANCE.getMonthFormat().format(curDate);          // MM
         String curDay = Utils.INSTANCE.getDayFormat().format(curDate);              // dd
-        String _date = Utils.INSTANCE.getDateFormat().format(calDate);  // yyyy년 MM월 dd일
+        String _date = Utils.INSTANCE.getDateFormat().format(curDate);  // yyyy년 MM월 dd일
 
         if(writeFragment != null && _date != null) {
             writeFragment.setDateTextView(_date);

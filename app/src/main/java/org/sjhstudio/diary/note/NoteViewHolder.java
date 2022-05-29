@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class NoteViewHolder extends RecyclerView.ViewHolder {
+
     // Default view
     private LinearLayout contentsLayout;
     private ImageView moodImageView;
@@ -52,7 +53,6 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
     private TextView timeTextView2;
     private TextView weekTextView2;
     private LinearLayout showPhotoStateView;
-    private ImageView starImageView2;
 
     private ViewPager2 photoViewPager;
     private PhotoAdapter photoAdapter;
@@ -70,7 +70,6 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         this.context = context;
         initPhoto();
-
         contentsLayout = itemView.findViewById(R.id.contentsLayout);
         moodImageView = itemView.findViewById(R.id.moodImageView);
         weatherImageView = itemView.findViewById(R.id.weatherImageView);
@@ -91,7 +90,6 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         timeTextView2 = itemView.findViewById(R.id.timeTextView2);
         weekTextView2 = itemView.findViewById(R.id.weekTextView2);
         showPhotoStateView = itemView.findViewById(R.id.showPhotoStateView);
-        starImageView2 = itemView.findViewById(R.id.starImageView2);
 
         contentsLayout.setOnClickListener(v -> {
             int position = getAdapterPosition();

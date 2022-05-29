@@ -17,7 +17,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,7 +38,6 @@ import org.sjhstudio.diary.MainActivity;
 import org.sjhstudio.diary.adapters.PhotoAdapter;
 import org.sjhstudio.diary.custom.CustomDatePickerDialog;
 import org.sjhstudio.diary.custom.CustomDeleteDialog;
-import org.sjhstudio.diary.custom.CustomDialog;
 import org.sjhstudio.diary.R;
 import org.sjhstudio.diary.helper.OnRequestListener;
 import org.sjhstudio.diary.helper.OnTabItemSelectedListener;
@@ -127,7 +125,6 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-
         if(context instanceof OnTabItemSelectedListener) tabListener = (OnTabItemSelectedListener)context;
         if(context instanceof OnRequestListener) requestListener = (OnRequestListener)context;
         if(context instanceof NoteDatabaseCallback)  callback = (NoteDatabaseCallback)context;
@@ -208,8 +205,11 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_write, container, false);
-        return rootView;
+        return inflater.inflate(
+                R.layout.fragment_write,
+                container,
+                false
+        );
     }
 
     @Override
@@ -754,8 +754,8 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     // 일기내용이 비어있는지..
     // 비어있는경우 팝업없이 종료가능!!
     public Boolean isEmptyContent() {
-        Log.d(LOG, "moodIndex : " + moodIndex + ", contentEditText : " + contentsEditText.getText());
-        return curButton == null && (contentsEditText.getText().toString().equals("") || contentsEditText.getText() == null);
+//        Log.d(LOG, "moodIndex : " + moodIndex + ", contentEditText : " + contentsEditText.getText());
+        return curButton == null && (contentsEditText == null || contentsEditText.getText() == null || contentsEditText.getText().toString().equals(""));
     }
 
     /**
@@ -999,4 +999,5 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
             }
         }
     }
+
 }
