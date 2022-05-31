@@ -1,9 +1,7 @@
 package org.sjhstudio.diary.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -20,6 +18,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.github.mikephil.charting.charts.PieChart;
@@ -30,30 +29,20 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.MPPointF;
 
-import org.sjhstudio.diary.MainActivity;
 import org.sjhstudio.diary.R;
 import org.sjhstudio.diary.custom.MyRadioButton;
-import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.note.NoteDatabaseCallback;
 import org.sjhstudio.diary.utils.Pref;
 import org.sjhstudio.diary.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 public class GraphFragment extends Fragment {
-    /** 상수 **/
-    private static final String LOG = "GraphFragment";
 
-    /** radio button 관련 **/
-    private RadioGroup radioGroup;
     private MyRadioButton allButton;
     private MyRadioButton yearButton;
     private MyRadioButton monthButton;
-
-    /** 기분별 통계 관련 **/
-    private TextView titleTextView;
     private TextView moodTitleTextView;
     private TextView moodTotalCountTextView;
     private TextView angryCount;
@@ -88,24 +77,20 @@ public class GraphFragment extends Fragment {
     private TextView moodTextView;
     private FrameLayout backgroundGraphLayout;
 
-    /** 차트 라이브러리 객체 **/
     private PieChart chart1;
-
-    /** callback **/
     private NoteDatabaseCallback callback;
 
-    /** data **/
-    private Context context;
-    int[] moodIconRes = {R.drawable.icon_mood_angry_color_small, R.drawable.icon_mood_cool_color_small,  R.drawable.icon_mood_crying_color_small,
+    int[] moodIconRes = {
+            R.drawable.icon_mood_angry_color_small, R.drawable.icon_mood_cool_color_small, R.drawable.icon_mood_crying_color_small,
             R.drawable.icon_mood_ill_color_small, R.drawable.icon_mood_laugh_color_small, R.drawable.icon_mood_meh_color_small,
-            R.drawable.icon_mood_sad_color_small, R.drawable.icon_mood_smile_color_small, R.drawable.icon_mood_yawn_color_small};
+            R.drawable.icon_mood_sad_color_small, R.drawable.icon_mood_smile_color_small, R.drawable.icon_mood_yawn_color_small
+    };
     private ArrayList<Integer> colors = new ArrayList<>();      // 색깔 정보를 담은 배열
     private int curFontIndex = -1;                              // 현재 사용중인 폰트 종류
     private int selectRadioIndex = 0;                           // 전체: 0, 올해: 1, 이번달: 2 (default: 전체)
     private int maxMoodIndex = -1;                              // 제일 많은 기분 종류
     private int maxCount = -1;                                  // 제일 많은 기분의 개수
 
-    /** animation **/
     private Animation translateRightAnim;
     private Animation moodAnimation;
     private Animation crownAnimation;
@@ -113,8 +98,6 @@ public class GraphFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.context = context;
-
         if(context instanceof NoteDatabaseCallback) {
             callback = (NoteDatabaseCallback)context;
         }
@@ -141,7 +124,6 @@ public class GraphFragment extends Fragment {
         crown7.clearAnimation();
         crown8.clearAnimation();
         crown9.clearAnimation();
-
         angryImageView.clearAnimation();
         coolImageView.clearAnimation();
         cryingImageView.clearAnimation();
@@ -156,13 +138,17 @@ public class GraphFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_graph, container, false);
+        View rootView = inflater.inflate(
+                R.layout.fragment_graph,
+                container,
+                false
+        );
 
         curFontIndex = Pref.getPFontKey(requireContext());  // 폰트 정보
-        initAnimation();             // 애니메이션 초기화
-        initChartUI(rootView);       // 차트 초기화
-        initUI(rootView);            // UI 초기화
-        initRadioButton(rootView);           // 라디오 버튼 초기화
+        initAnimation();    // 애니메이션 초기화
+        initChartUI(rootView);  // 차트 초기화
+        initUI(rootView);   // UI 초기화
+        initRadioButton(rootView);  // 라디오 버튼 초기화
 
         return rootView;
     }
@@ -171,7 +157,6 @@ public class GraphFragment extends Fragment {
         translateRightAnim = AnimationUtils.loadAnimation(getContext(), R.anim.translate_right_animation);
         moodAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.mood_icon_animation);
         crownAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.crown_icon_animation);
-
         translateRightAnim.setDuration(350);    // 타이틀 애니메이션 주기 -> 0.35초
     }
 
@@ -198,7 +183,9 @@ public class GraphFragment extends Fragment {
     }
 
     private void initUI(View rootView) {
-        titleTextView = (TextView)rootView.findViewById(R.id.titleTextView);
+        TextView titleTextView = (TextView) rootView.findViewById(R.id.titleTextView);
+        titleTextView.startAnimation(translateRightAnim);
+
         moodTotalCountTextView = (TextView)rootView.findViewById(R.id.moodTotalCountTextView);
         moodTitleTextView = (TextView)rootView.findViewById(R.id.moodTitleTextView);
         angryCount = (TextView)rootView.findViewById(R.id.angryCount);
@@ -232,43 +219,38 @@ public class GraphFragment extends Fragment {
         describeTextView = (TextView)rootView.findViewById(R.id.describeTextView);
         moodTextView = (TextView)rootView.findViewById(R.id.moodTextView);
         backgroundGraphLayout = (FrameLayout)rootView.findViewById(R.id.background_graph);
-
-        titleTextView.startAnimation(translateRightAnim);
     }
 
+    @SuppressLint("SetTextI18n")
     private void initRadioButton(View rootView) {
         allButton = (MyRadioButton)rootView.findViewById(R.id.allButton);
         yearButton = (MyRadioButton)rootView.findViewById(R.id.yearButton);
         monthButton = (MyRadioButton)rootView.findViewById(R.id.monthButton);
-        radioGroup = (RadioGroup)rootView.findViewById(R.id.radioGroup);
+        RadioGroup radioGroup = (RadioGroup) rootView.findViewById(R.id.radioGroup);
 
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                HashMap<Integer, Integer> hashMap = null;
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            HashMap<Integer, Integer> hashMap = null;
 
-                if(checkedId == R.id.allButton) {
-                    moodTitleTextView.setText("전체");
-                    selectRadioIndex = 0;
-                    hashMap = callback.selectMoodCount(true, false, false);
-                    describeTextView.setText("전체 통계 중 제일 많은 기분은 ");
-                } else if(checkedId == R.id.yearButton) {
-                    moodTitleTextView.setText(Utils.INSTANCE.getCurrentYear() + "년");
-                    selectRadioIndex = 1;
-                    hashMap = callback.selectMoodCount(false, true, false);
-                    describeTextView.setText("올해 통계 중 제일 많은 기분은 ");
-                } else if(checkedId == R.id.monthButton) {
-                    moodTitleTextView.setText(Utils.INSTANCE.getCurrentMonth() + "월");
-                    selectRadioIndex = 2;
-                    hashMap = callback.selectMoodCount(false, false, true);
-                    describeTextView.setText("이번달 통계 중 제일 많은 기분은 ");
-                }
-
-                chart1.setCenterTextTypeface(getCurTypeFace());
-                chart1.setCenterTextSize(17f);
-                setData1(hashMap);
+            if(checkedId == R.id.allButton) {
+                moodTitleTextView.setText("전체");
+                selectRadioIndex = 0;
+                hashMap = callback.selectMoodCount(true, false, false);
+                describeTextView.setText("전체 통계 중 제일 많은 기분은 ");
+            } else if(checkedId == R.id.yearButton) {
+                moodTitleTextView.setText(Utils.INSTANCE.getCurrentYear() + "년");
+                selectRadioIndex = 1;
+                hashMap = callback.selectMoodCount(false, true, false);
+                describeTextView.setText("올해 통계 중 제일 많은 기분은 ");
+            } else if(checkedId == R.id.monthButton) {
+                moodTitleTextView.setText(Utils.INSTANCE.getCurrentMonth() + "월");
+                selectRadioIndex = 2;
+                hashMap = callback.selectMoodCount(false, false, true);
+                describeTextView.setText("이번달 통계 중 제일 많은 기분은 ");
             }
+
+            chart1.setCenterTextTypeface(getCurTypeFace());
+            chart1.setCenterTextSize(17f);
+            setData1(hashMap);
         });
 
         setSelectedRadioButton();       // 선택된 라디오버튼 index 에 따라 라디오버튼 Checked 활성화
@@ -288,6 +270,7 @@ public class GraphFragment extends Fragment {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void setData1(HashMap<Integer, Integer> hashMap) {
         ArrayList<PieEntry> entries = new ArrayList<>();
 
@@ -304,9 +287,13 @@ public class GraphFragment extends Fragment {
                 setMoodCount(i, count);
                 totalCount += count;
                 addColor(i);                // 기분 종류에 맞게 색깔 설정
-                entries.add(new PieEntry(count, "", getResources().getDrawable(moodIconRes[i])));
+                entries.add(new PieEntry(
+                        count,
+                        "",
+                        ContextCompat.getDrawable(requireContext(), moodIconRes[i])
+                ));
             } else {
-                setMoodCount(i, count);     // 개수 0가 경우
+                setMoodCount(i, count);     // 개수 0
             }
         }
 
@@ -329,9 +316,7 @@ public class GraphFragment extends Fragment {
         PieData data = new PieData(dataSet);
         data.setValueTextSize(15f);                         // 그래프 내 text 크기
         data.setValueTextColor(Color.WHITE);                // 그래프 내 text 색상
-        if(context != null) {                               // 그래프 내 text 폰트
-            data.setValueTypeface(getCurTypeFace());
-        }
+        data.setValueTypeface(getCurTypeFace());            // 그래프 내 text 폰트
 
         chart1.setData(data);
         chart1.invalidate();
@@ -381,7 +366,6 @@ public class GraphFragment extends Fragment {
 
     private void setCrownImage() {
         clearAnimation();
-
         crown.setVisibility(View.GONE);
         crown2.setVisibility(View.GONE);
         crown3.setVisibility(View.GONE);
@@ -514,46 +498,46 @@ public class GraphFragment extends Fragment {
                 typeface = Typeface.SANS_SERIF;
                 break;
             case -1:
-                typeface = Typeface.createFromAsset(context.getAssets(), "font.ttf");
+                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font.ttf");
                 break;
             case 0:
-                typeface = Typeface.createFromAsset(context.getAssets(), "font1.ttf");
+                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font1.ttf");
                 break;
             case 1:
-                typeface = Typeface.createFromAsset(context.getAssets(), "font2.ttf");
+                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font2.ttf");
                 break;
             case 2:
-                typeface = Typeface.createFromAsset(context.getAssets(), "font3.ttf");
+                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font3.ttf");
                 break;
             case 3:
-                typeface = Typeface.createFromAsset(context.getAssets(), "font4.ttf");
+                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font4.ttf");
                 break;
             case 4:
-                typeface = Typeface.createFromAsset(context.getAssets(), "font5.ttf");
+                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font5.ttf");
                 break;
             case 5:
-                typeface = Typeface.createFromAsset(context.getAssets(), "font6.ttf");
+                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font6.ttf");
                 break;
             case 6:
-                typeface = Typeface.createFromAsset(context.getAssets(), "font7.ttf");
+                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font7.ttf");
                 break;
             case 7:
-                typeface = Typeface.createFromAsset(context.getAssets(), "font8.ttf");
+                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font8.ttf");
                 break;
             case 8:
-                typeface = Typeface.createFromAsset(context.getAssets(), "font9.ttf");
+                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font9.ttf");
                 break;
             case 9:
-                typeface = Typeface.createFromAsset(context.getAssets(), "font10.ttf");
+                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font10.ttf");
                 break;
             case 10:
-                typeface = Typeface.createFromAsset(context.getAssets(), "font11.ttf");
+                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font11.ttf");
                 break;
             case 11:
-                typeface = Typeface.createFromAsset(context.getAssets(), "font12.ttf");
+                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font12.ttf");
                 break;
             default:
-                typeface = Typeface.createFromAsset(context.getAssets(), "font1.ttf");
+                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font1.ttf");
                 break;
         }
 
@@ -568,4 +552,5 @@ public class GraphFragment extends Fragment {
 //
 //        return newDrawable;
 //    }
+
 }
