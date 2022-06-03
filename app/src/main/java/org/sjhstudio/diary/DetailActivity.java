@@ -2,10 +2,17 @@ package org.sjhstudio.diary;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,15 +23,26 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import org.sjhstudio.diary.adapters.PhotoAdapter;
 import org.sjhstudio.diary.custom.CustomDeleteDialog;
 import org.sjhstudio.diary.note.Note;
 import org.sjhstudio.diary.utils.BaseActivity;
 import org.sjhstudio.diary.utils.Constants;
+import org.sjhstudio.diary.utils.Utils;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class DetailActivity extends BaseActivity {
 
@@ -120,6 +138,104 @@ public class DetailActivity extends BaseActivity {
             contentsTextView.setText(item.getContents());
             locationTextView.setText(item.getAddress());
             setPhoto(item.getPicture());
+
+            findViewById(R.id.txt_btn).setOnClickListener(v -> {
+                try {
+                    Date date = Utils.INSTANCE.getDateFormat().parse(item.getCreateDateStr());
+                    String folderName = getString(R.string.app_name);
+                    if(date == null) {
+                        Snackbar.make(dateTextView, "예상치 못한 오류가 발생했습니다. 피드백 해주시면 감사하겠습니다.", 1000).show();
+                        return;
+                    }
+                    String subFolderName = Utils.INSTANCE.getYearFormat().format(date);
+                    String fileName = Utils.INSTANCE.getMonthDayFormat().format(date) + "/" + item.getDayOfWeek() + "_" + System.currentTimeMillis() + ".txt";
+
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        ContentValues values = new ContentValues();
+                        values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
+                        values.put(MediaStore.MediaColumns.MIME_TYPE, "text/plain");
+                        values.put(MediaStore.MediaColumns.RELATIVE_PATH, "Download" + "/" + folderName + "/" + subFolderName);
+
+                        Uri fileUri = getContentResolver().insert(MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY), values);
+                        ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(fileUri, "w", null);
+                        FileOutputStream fos = new FileOutputStream(pfd.getFileDescriptor());
+                        fos.write((item.getCreateDateStr()
+                                + " "
+                                + item.getDayOfWeek()
+                                + "\n"
+                                + item.getTime()
+                                + "\n기분 : "
+                                + Utils.INSTANCE.getMoodString(item.getMood())
+                                + "\n"
+                                + item.getContents()
+                        ).getBytes());
+                        fos.flush();
+                        fos.close();
+                        Snackbar.make(dateTextView, "성공적으로 txt 파일을 생성했습니다!", 1000).show();
+                    } else {
+                        //..?
+                    }
+                } catch (ParseException | IOException e) {
+                    e.printStackTrace();
+                    Snackbar.make(dateTextView, "예상치 못한 오류가 발생했습니다. 피드백 해주시면 감사하겠습니다.", 1000).show();
+                }
+
+//                else {
+//                    dir = new File(
+//                            Environment.getExternalStorageDirectory()
+//                                    + "/" + folderName
+//                    );
+//                    File storageFile = Environment.getExternalStorageDirectory();
+//                    Uri fileUri = FileProvider.getUriForFile(this, "org.sjhstudio.diary.fileprovider", storageFile);
+//                }
+//                fileUri = requireContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+//
+//                return fileUri;
+//
+//                //``````````````````````
+//                String folderName = "1일 1일기/";
+//                String fileName = item.getCreateDateStr() + " " + item.getDayOfWeek() + " " + item.getTime() + ".txt";
+//                File dir = null;
+//                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//                    dir = new File(
+//                            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+//                                    + "/" + folderName
+//                    );
+//                } else {
+//                    dir = new File(
+//                            Environment.getExternalStorageDirectory()
+//                                    + "/" + folderName
+//                    );
+//                }
+//
+//                if(!dir.exists()) {
+//                    boolean success = dir.mkdirs();
+//                    if(!success) dir = null;
+//                }
+//
+//                if(dir != null) {
+//                    File file = new File(dir, fileName);
+//
+//                    try {
+//                        FileOutputStream fos = new FileOutputStream(file);
+//                        OutputStreamWriter osw = new OutputStreamWriter(fos);
+//                        osw.append(item.getCreateDateStr())
+//                                .append(" ")
+//                                .append(item.getDayOfWeek())
+//                                .append("\n")
+//                                .append(item.getTime())
+//                                .append("\n기분 : ")
+//                                .append(String.valueOf(item.getMood()))
+//                                .append("\n")
+//                                .append(item.getContents()
+//                                );
+//                        osw.flush();
+//                        osw.close();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+            });
         }
     }
 
@@ -128,7 +244,7 @@ public class DetailActivity extends BaseActivity {
             String[] picturePaths = paths.split(",");
 
             if(picturePaths.length > 0) {
-                photoAdapter.setItems(new ArrayList<String>(Arrays.asList(picturePaths)));
+                photoAdapter.setItems(new ArrayList<>(Arrays.asList(picturePaths)));
                 photoAdapter.notifyDataSetChanged();
                 totalBanner.setText(String.valueOf(photoAdapter.getItemCount()));
                 photoContainer.setVisibility(View.VISIBLE);

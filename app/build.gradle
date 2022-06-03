@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "org.sjhstudio.diary"
-        minSdkVersion 22
+        minSdkVersion 23
         targetSdkVersion 31
         versionCode 29
         versionName "1.6.2"
@@ -49,8 +49,8 @@ configurations {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'org.jetbrains:annotations:15.0'
     testImplementation 'junit:junit:4.13.2'
@@ -85,15 +85,14 @@ dependencies {
     }
 
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation "androidx.core:core-ktx:1.7.0"
-//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "androidx.core:core-ktx:1.8.0"
     implementation 'androidx.biometric:biometric:1.1.0'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     // Crop image
     implementation 'com.github.CanHub:Android-Image-Cropper:4.2.1'
 
-    // Detail image view
+    // Detail imageView
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'  // before
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'    // after
 }

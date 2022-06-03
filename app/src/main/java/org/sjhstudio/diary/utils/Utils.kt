@@ -20,6 +20,7 @@ object Utils {
     @SuppressLint("SimpleDateFormat") val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일")
     @SuppressLint("SimpleDateFormat") val dateFormat2 = SimpleDateFormat("yyyy-MM-dd")
     @SuppressLint("SimpleDateFormat") val dateFormat3 = SimpleDateFormat("yyyyMMdd")
+    @SuppressLint("SimpleDateFormat") val monthDayFormat = SimpleDateFormat("M월_d일")
     @SuppressLint("SimpleDateFormat") val timeFormat = SimpleDateFormat("a HH:mm")
     @SuppressLint("SimpleDateFormat") val timeFormat2 = SimpleDateFormat("HH:mm:SS")
 
@@ -67,6 +68,22 @@ object Utils {
             vibrator.vibrate(VibrationEffect.createOneShot(time, amplitude))
         } else {
             if(underOreo) vibrator.vibrate(time)
+        }
+    }
+
+    // Get mood string
+    fun getMoodString(i: Int): String {
+        return when(i) {
+            0 -> "화남"
+            1 -> "쿨"
+            2 -> "슬픔"
+            3 -> "아픔"
+            4 -> "웃음"
+            5 -> "보통"
+            6 -> "나쁨"
+            7 -> "좋음"
+            8 -> "피곤"
+            else -> "?"
         }
     }
 

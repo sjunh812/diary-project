@@ -179,16 +179,30 @@
             android:background="@color/background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="30dp"
+            android:layout_marginHorizontal="30dp"
             android:layout_marginBottom="25dp"
+            android:gravity="center_vertical"
             android:layout_alignParentBottom="true">
+
+            <Button
+                android:id="@+id/txt_btn"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:background="@drawable/ripple_radius_5_pastel_300"
+                android:textAllCaps="false"
+                android:text="txt 파일로 내보내기"
+                android:textColor="@color/pastel_700"
+                android:textSize="10dp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/locationTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginLeft="7dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="7dp"
                 android:text="고양시 일산서구"
                 android:textColor="@color/pastel_700"
                 android:textSize="15sp" />
@@ -197,7 +211,8 @@
                 android:id="@+id/weatherImageView"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_toLeftOf="@+id/locationTextView" />
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/locationTextView" />
 
         </RelativeLayout>
 
