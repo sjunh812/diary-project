@@ -1,8 +1,9 @@
 package org.sjhstudio.diary;
 
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.FileProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.ContentValues;
@@ -32,17 +33,15 @@ import org.sjhstudio.diary.utils.BaseActivity;
 import org.sjhstudio.diary.utils.Constants;
 import org.sjhstudio.diary.utils.Utils;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
 
 public class DetailActivity extends BaseActivity {
 
@@ -63,25 +62,22 @@ public class DetailActivity extends BaseActivity {
     private TextView totalBanner;
 
     private Note item;
-    private Animation moodAnim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-        toolbar.setTitle("일기상세");
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        moodAnim = AnimationUtils.loadAnimation(this, R.anim.mood_icon_animation);
-
         init();
         processIntent();
     }
 
     private void init() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("일기상세");
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
         moodImageView = findViewById(R.id.moodImageView);
         dateTextView = findViewById(R.id.dateTextView);
         weekTextView = findViewById(R.id.weekTextView);
@@ -91,18 +87,20 @@ public class DetailActivity extends BaseActivity {
         locationTextView = findViewById(R.id.locationTextView);
         starImageView = findViewById(R.id.starImageView);
 
+        Animation moodAnim = AnimationUtils.loadAnimation(this, R.anim.mood_icon_animation);
         moodImageView.startAnimation(moodAnim);
+
         initPhoto();
     }
 
     private void initPhoto() {
-        ViewPager2 photoViewPager = findViewById(R.id.photo_view_pager);
         photoContainer = findViewById(R.id.photo_container);
         currentBanner = findViewById(R.id.current_banner);
         totalBanner = findViewById(R.id.total_banner);
 
-        photoViewPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         photoAdapter = new PhotoAdapter(this, null);
+        ViewPager2 photoViewPager = findViewById(R.id.photo_view_pager);
+        photoViewPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         photoViewPager.setAdapter(photoAdapter);
         photoViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -128,7 +126,6 @@ public class DetailActivity extends BaseActivity {
 
         if (intent != null) {
             item = (Note) intent.getSerializableExtra("item");
-
             setMoodImage(item.getMood());
             setWeatherImage(item.getWeather());
             setStarImage(item.getStarIndex());
@@ -139,103 +136,85 @@ public class DetailActivity extends BaseActivity {
             locationTextView.setText(item.getAddress());
             setPhoto(item.getPicture());
 
+            // txt 파일로 내보내기
             findViewById(R.id.txt_btn).setOnClickListener(v -> {
-                try {
-                    Date date = Utils.INSTANCE.getDateFormat().parse(item.getCreateDateStr());
-                    String folderName = getString(R.string.app_name);
-                    if(date == null) {
-                        Snackbar.make(dateTextView, "예상치 못한 오류가 발생했습니다. 피드백 해주시면 감사하겠습니다.", 1000).show();
-                        return;
-                    }
-                    String subFolderName = Utils.INSTANCE.getYearFormat().format(date);
-                    String fileName = Utils.INSTANCE.getMonthDayFormat().format(date) + "/" + item.getDayOfWeek() + "_" + System.currentTimeMillis() + ".txt";
+                exportToTXTFile();
+            });
+        }
+    }
 
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        ContentValues values = new ContentValues();
-                        values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
-                        values.put(MediaStore.MediaColumns.MIME_TYPE, "text/plain");
-                        values.put(MediaStore.MediaColumns.RELATIVE_PATH, "Download" + "/" + folderName + "/" + subFolderName);
+    // txt 파일로 내보내기
+    private void exportToTXTFile() {
+        try {
+            Date date = Utils.INSTANCE.getDateFormat().parse(item.getCreateDateStr());
+            if(date == null) {
+                Snackbar.make(
+                        dateTextView,
+                        "예상치 못한 오류가 발생했습니다. 피드백 해주시면 감사하겠습니다.",
+                        1000
+                ).show();
 
-                        Uri fileUri = getContentResolver().insert(MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY), values);
-                        ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(fileUri, "w", null);
-                        FileOutputStream fos = new FileOutputStream(pfd.getFileDescriptor());
-                        fos.write((item.getCreateDateStr()
-                                + " "
-                                + item.getDayOfWeek()
-                                + "\n"
-                                + item.getTime()
-                                + "\n기분 : "
-                                + Utils.INSTANCE.getMoodString(item.getMood())
-                                + "\n"
-                                + item.getContents()
-                        ).getBytes());
-                        fos.flush();
-                        fos.close();
-                        Snackbar.make(dateTextView, "성공적으로 txt 파일을 생성했습니다!", 1000).show();
-                    } else {
-                        //..?
+                return;
+            }
+
+            String folderName = getString(R.string.app_name);
+            String subFolderName = Utils.INSTANCE.getYearFormat().format(date);
+            String fileName = Utils.INSTANCE.getMonthDayFormat().format(date) + " " + item.getDayOfWeek() + "(" + item.get_id() + ").txt";
+            String contents = (item.getCreateDateStr()
+                    + " " + item.getDayOfWeek()
+                    + "\n" + item.getTime()
+                    + "\n기분 : " + Utils.INSTANCE.getMoodString(item.getMood())
+                    + "\n" + item.getContents()
+            );
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                System.out.println("xxx Android 30이상 : ContentValues 이용");
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
+                values.put(MediaStore.MediaColumns.MIME_TYPE, "text/plain");
+                values.put(MediaStore.MediaColumns.RELATIVE_PATH, "Download" + "/" + folderName + "/" + subFolderName);
+
+                Uri fileUri = getContentResolver().insert(MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY), values);
+                ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(fileUri, "w", null);
+                FileOutputStream fos = new FileOutputStream(pfd.getFileDescriptor());
+                fos.write(contents.getBytes());
+                fos.flush();
+                fos.close();
+                Snackbar.make(
+                        dateTextView,
+                        "성공적으로 txt 파일을 생성했습니다!",
+                        1000
+                ).show();
+            } else {
+                System.out.println("xxx Android 29이하 : File 이용");
+                File storage = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS);
+
+                if(!storage.exists()) {
+                    boolean success = storage.mkdirs();
+                    if(!success) {
+                        storage = null;
                     }
-                } catch (ParseException | IOException e) {
-                    e.printStackTrace();
-                    Snackbar.make(dateTextView, "예상치 못한 오류가 발생했습니다. 피드백 해주시면 감사하겠습니다.", 1000).show();
                 }
 
-//                else {
-//                    dir = new File(
-//                            Environment.getExternalStorageDirectory()
-//                                    + "/" + folderName
-//                    );
-//                    File storageFile = Environment.getExternalStorageDirectory();
-//                    Uri fileUri = FileProvider.getUriForFile(this, "org.sjhstudio.diary.fileprovider", storageFile);
-//                }
-//                fileUri = requireContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-//
-//                return fileUri;
-//
-//                //``````````````````````
-//                String folderName = "1일 1일기/";
-//                String fileName = item.getCreateDateStr() + " " + item.getDayOfWeek() + " " + item.getTime() + ".txt";
-//                File dir = null;
-//                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//                    dir = new File(
-//                            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
-//                                    + "/" + folderName
-//                    );
-//                } else {
-//                    dir = new File(
-//                            Environment.getExternalStorageDirectory()
-//                                    + "/" + folderName
-//                    );
-//                }
-//
-//                if(!dir.exists()) {
-//                    boolean success = dir.mkdirs();
-//                    if(!success) dir = null;
-//                }
-//
-//                if(dir != null) {
-//                    File file = new File(dir, fileName);
-//
-//                    try {
-//                        FileOutputStream fos = new FileOutputStream(file);
-//                        OutputStreamWriter osw = new OutputStreamWriter(fos);
-//                        osw.append(item.getCreateDateStr())
-//                                .append(" ")
-//                                .append(item.getDayOfWeek())
-//                                .append("\n")
-//                                .append(item.getTime())
-//                                .append("\n기분 : ")
-//                                .append(String.valueOf(item.getMood()))
-//                                .append("\n")
-//                                .append(item.getContents()
-//                                );
-//                        osw.flush();
-//                        osw.close();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-            });
+                File file = new File(storage, fileName);
+                FileOutputStream fos = new FileOutputStream(file);
+                OutputStreamWriter osw = new OutputStreamWriter(fos);
+                osw.append(contents);
+                osw.flush();
+                osw.close();
+                Snackbar.make(
+                        dateTextView,
+                        "성공적으로 txt 파일을 생성했습니다!",
+                        1000
+                ).show();
+            }
+        } catch (ParseException | IOException e) {
+            e.printStackTrace();
+            Snackbar.make(
+                    dateTextView,
+                    "예상치 못한 오류가 발생했습니다. 피드백 해주시면 감사하겠습니다.",
+                    1000
+            ).show();
         }
     }
 
@@ -282,7 +261,7 @@ public class DetailActivity extends BaseActivity {
             case 7:     // 좋음
                 moodImageView.setImageResource(R.drawable.mood_smile_color);
                 break;
-            case 8:     // 졸림
+            case 8:     // 피곤
                 moodImageView.setImageResource(R.drawable.mood_yawn_color);
                 break;
             default:    // default(미소)
@@ -372,11 +351,11 @@ public class DetailActivity extends BaseActivity {
             case R.id.tab2: // 일기수정
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.putExtra("item", this.item);
-
                 setResult(Constants.DETAIL_ACTIVITY_RESULT_UPDATE, intent);
                 finish();
         }
 
         return super.onOptionsItemSelected(item);
     }
+
 }

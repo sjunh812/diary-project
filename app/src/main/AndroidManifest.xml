@@ -38,30 +38,37 @@
         <activity
             android:name=".SettingsActivity"
             android:exported="false" />
+
         <activity
             android:name=".PasswordSettingsActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false" />
+
         <activity
             android:name=".MainPasswordActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false" />
+
         <activity
             android:name=".PasswordActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false" />
+
         <activity
             android:name=".BackupActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false" />
+
         <activity
             android:name=".DetailActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false" />
+
         <activity
             android:name=".PhotoActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false" />
+
         <activity
             android:name=".DarkModeActivity"
             android:configChanges="orientation|screenSize"
@@ -96,6 +103,7 @@
             android:name=".AlarmActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false" />
+
         <activity
             android:name=".SplashActivity"
             android:configChanges="orientation|screenSize"
@@ -106,20 +114,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".FontActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize" /> <!-- 크롭 액티비티 -->
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- 크롭 액티비티 -->
         <activity
             android:name="com.canhub.cropper.CropImageActivity"
             android:configChanges="orientation|screenSize"
             android:exported="true"
-            android:theme="@style/Base.Theme.AppCompat" /> <!-- 내용 제공자(카메라 앱과 파일 공유) -->
+            android:theme="@style/Base.Theme.AppCompat" />
+
+        <!-- 내용 제공자(카메라 앱과 파일 공유) -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="org.sjhstudio.diary.fileprovider"
@@ -129,6 +143,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/external" />
         </provider>
+
     </application>
 
 </manifest>

@@ -1,12 +1,15 @@
 package org.sjhstudio.diary.utils
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.location.LocationManager
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import android.widget.Toast
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -20,7 +23,7 @@ object Utils {
     @SuppressLint("SimpleDateFormat") val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일")
     @SuppressLint("SimpleDateFormat") val dateFormat2 = SimpleDateFormat("yyyy-MM-dd")
     @SuppressLint("SimpleDateFormat") val dateFormat3 = SimpleDateFormat("yyyyMMdd")
-    @SuppressLint("SimpleDateFormat") val monthDayFormat = SimpleDateFormat("M월_d일")
+    @SuppressLint("SimpleDateFormat") val monthDayFormat = SimpleDateFormat("M월 d일")
     @SuppressLint("SimpleDateFormat") val timeFormat = SimpleDateFormat("a HH:mm")
     @SuppressLint("SimpleDateFormat") val timeFormat2 = SimpleDateFormat("HH:mm:SS")
 
