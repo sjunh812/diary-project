@@ -170,13 +170,11 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
 
         // 사진 설정
         if(item.getPicture() != null && !item.getPicture().equals("")) {
-            String picturePaths[] = item.getPicture().split(",");
+            String[] picturePaths = item.getPicture().split(",");
             if(picturePaths.length > 0) {
-                photoAdapter.setItems(new ArrayList<String>(Arrays.asList(picturePaths)));
-//                photoAdapter.getItems().remove(photoAdapter.getItemCount()-1);
+                photoAdapter.setItems(new ArrayList<>(Arrays.asList(picturePaths)));
                 photoAdapter.notifyDataSetChanged();
                 totalBanner.setText(String.valueOf(photoAdapter.getItemCount()));
-
                 existPictureImageView.setVisibility(View.VISIBLE);
                 photoViewPager.setVisibility(View.VISIBLE);
                 photoIndicator.setVisibility(View.VISIBLE);

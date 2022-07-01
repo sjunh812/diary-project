@@ -33,7 +33,12 @@ class PhotoAdapter(val context: Context, val fragment: Fragment?): RecyclerView.
         private var photo: ImageView = itemView.findViewById(R.id.photo)
 
         fun setPhoto(filePath: String) {
-            Glide.with(context).load(Uri.parse("file://$filePath")).transform(FitCenter(), RoundedCorners(20)).into(photo)
+            println("xxx filePath : $filePath")
+
+            Glide.with(context)
+                .load(Uri.parse("file://$filePath"))
+                .transform(FitCenter(), RoundedCorners(20))
+                .into(photo)
 
             photo.setOnClickListener {
                 println("click!!")
@@ -42,7 +47,6 @@ class PhotoAdapter(val context: Context, val fragment: Fragment?): RecyclerView.
                     listener?.showAddPhotoDialog()
                 } else {
                     val intent  = Intent(context, PhotoActivity::class.java)
-//                    intent.putExtra("picturePath", filePath)
                     intent.putExtra("position", adapterPosition)
                     intent.putExtra("picturePaths", items)
                     context.startActivity(intent);
@@ -59,6 +63,7 @@ class PhotoAdapter(val context: Context, val fragment: Fragment?): RecyclerView.
                 }
             })
         }
+
     }
 
     fun addItem(item: String) {
@@ -73,10 +78,11 @@ class PhotoAdapter(val context: Context, val fragment: Fragment?): RecyclerView.
     }
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
-        holder.setPhoto(items.get(position))
+        holder.setPhoto(items[position])
     }
 
     override fun getItemCount(): Int {
         return items.size
     }
+
 }

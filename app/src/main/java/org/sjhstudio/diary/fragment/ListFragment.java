@@ -209,7 +209,7 @@ public class ListFragment extends Fragment {
             dialog.show();
             dialog.setOnSearchBtnClickListener(v2 -> {
                 if(dialog.getKeyword().trim().isEmpty()) {
-                    Snackbar.make(dialog.findViewById(R.id.search_et), getString(R.string.enter_search_keyword), 700).show();
+                    Snackbar.make(dialog.getWindow().getDecorView(), getString(R.string.enter_search_keyword), 700).show();
                     return;
                 }
                 dialog.dismiss();

@@ -125,7 +125,7 @@ public class DetailActivity extends BaseActivity {
         Intent intent = getIntent();
 
         if (intent != null) {
-            item = (Note) intent.getSerializableExtra("item");
+            item = (Note)intent.getSerializableExtra("item");
             setMoodImage(item.getMood());
             setWeatherImage(item.getWeather());
             setStarImage(item.getStarIndex());
@@ -162,9 +162,9 @@ public class DetailActivity extends BaseActivity {
             String fileName = Utils.INSTANCE.getMonthDayFormat().format(date) + " " + item.getDayOfWeek() + "(" + item.get_id() + ").txt";
             String contents = (item.getCreateDateStr()
                     + " " + item.getDayOfWeek()
-                    + "\n" + item.getTime()
+                    + " " + item.getTime()
                     + "\n기분 : " + Utils.INSTANCE.getMoodString(item.getMood())
-                    + "\n" + item.getContents()
+                    + "\n\n" + item.getContents()
             );
 
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -182,8 +182,8 @@ public class DetailActivity extends BaseActivity {
                 fos.close();
                 Snackbar.make(
                         dateTextView,
-                        "성공적으로 txt 파일을 생성했습니다!",
-                        1000
+                        "성공적으로 txt 파일을 생성했습니다!, Download 폴더를 확인해주세요.",
+                        2000
                 ).show();
             } else {
                 System.out.println("xxx Android 29이하 : File 이용");
@@ -204,7 +204,7 @@ public class DetailActivity extends BaseActivity {
                 osw.close();
                 Snackbar.make(
                         dateTextView,
-                        "성공적으로 txt 파일을 생성했습니다!",
+                        "성공적으로 txt 파일을 생성했습니다!, Download 폴더를 확인해주세요.",
                         1000
                 ).show();
             }

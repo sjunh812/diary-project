@@ -28,6 +28,7 @@ public class PhotoDetailAdapter extends RecyclerView.Adapter<PhotoDetailAdapter.
     }
 
     class PhotoDetailViewHolder extends RecyclerView.ViewHolder {
+
         private final SubsamplingScaleImageView scaleImageView = itemView.findViewById(R.id.scale_image_view);
 
         public PhotoDetailViewHolder(@NonNull View itemView) {
@@ -38,6 +39,7 @@ public class PhotoDetailAdapter extends RecyclerView.Adapter<PhotoDetailAdapter.
             scaleImageView.setImage(ImageSource.uri(Uri.parse("file://" + data)));
 //            photoView.setImageURI(Uri.parse("file://" + data));
         }
+
     }
 
     public void setItems(ArrayList<String> items) {
