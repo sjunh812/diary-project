@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -128,6 +129,11 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         listFragment = new ListFragment();
         graphFragment = new GraphFragment();
         optionFragment = new OptionFragment();
+        writeFragment = (WriteFragment) getSupportFragmentManager().findFragmentByTag("write_fragment");
+        if (writeFragment == null) {
+            writeFragment = new WriteFragment();
+            System.out.println("xxx hi");
+        }
 
         // location manager
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
@@ -144,6 +150,8 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
                     writeFragment != null && !(writeFragment.isEmptyContent())
             ) {
                 DialogUtils.INSTANCE.showStopWriteDialog(this, () -> {
+                    if (writeFragment != null) writeFragment.deleteFilesCache(true);
+                    writeFragment = new WriteFragment();
                     int position;
 
                     if(item.getItemId() == R.id.tab1) position = 0;
@@ -487,7 +495,11 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
 
             case R.id.tab3:
                 selectedTabIndex = 2;
-                writeFragment = new WriteFragment();
+//                if (writeFragment == null) {
+//                    writeFragment = new WriteFragment();
+//                } else {
+//                    writeFragment = (WriteFragment) getSupportFragmentManager().findFragmentByTag("write_fragment");
+//                }
 
                 if(calDate != null) {                   // 기분달력으로부터 넘어온 경우
                     writeFragment.setCalDate(calDate);  // 기분달력에서 가져온 Date 정보 전달
@@ -499,7 +511,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
                     updateItem = null;                  // updateItem 초기화
                 }
 
-                transaction.replace(R.id.container, writeFragment);
+                transaction.replace(R.id.container, writeFragment, "write_fragment");
                 transaction.commit();
                 return true;
 
@@ -545,6 +557,8 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
 
             case "showStopWriteDialog":
                 DialogUtils.INSTANCE.showStopWriteDialog(this, () -> {
+                    if (writeFragment != null) writeFragment.deleteFilesCache(true);
+                    writeFragment = new WriteFragment();
                     selectedTabIndex = 0;
                     bottomNavigationView.setSelectedItemId(R.id.tab1);
                     return Unit.INSTANCE;
@@ -658,6 +672,8 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
             if(System.currentTimeMillis() <= backPressTime + 2000) super.onBackPressed();
         } else if(bottomNavigationView.getSelectedItemId() == R.id.tab3) {
             DialogUtils.INSTANCE.showStopWriteDialog(this, () -> {
+                if (writeFragment != null) writeFragment.deleteFilesCache(true);
+                writeFragment = new WriteFragment();
                 selectedTabIndex = 0;
                 bottomNavigationView.setSelectedItemId(R.id.tab1);
                 return Unit.INSTANCE;
@@ -679,7 +695,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
             Uri uriContent = result.getUriContent();
             if(uriContent != null) {
                 String filePath = result.getUriFilePath(this, true);
-                if (writeFragment != null) writeFragment.setPhotoAdapter(filePath);
+                if (writeFragment != null) writeFragment.addPhoto(filePath);
             }
         } else {
             String errorMsg = Objects.requireNonNull(result.getError()).toString();

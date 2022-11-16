@@ -12,5 +12,4 @@
         android:clickable="true"
         android:longClickable="true"
         android:scaleType="fitCenter" />
-
 </FrameLayout>

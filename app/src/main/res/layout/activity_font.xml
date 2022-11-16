@@ -128,8 +128,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="7dp"
-                                android:fontFamily="@font/font"
-                                android:text=" THE얌전해진언니체"
+                                android:fontFamily="@font/main_font"
+                                android:text=" 국립공원 꼬미체"
                                 android:textColor="@color/font"
                                 android:textSize="14sp" />
 

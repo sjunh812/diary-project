@@ -1,5 +1,6 @@
 package org.sjhstudio.diary.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -35,13 +36,14 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 
 import org.sjhstudio.diary.MainActivity;
+import org.sjhstudio.diary.R;
 import org.sjhstudio.diary.adapters.PhotoAdapter;
 import org.sjhstudio.diary.custom.CustomDatePickerDialog;
 import org.sjhstudio.diary.custom.CustomDeleteDialog;
-import org.sjhstudio.diary.R;
 import org.sjhstudio.diary.helper.OnRequestListener;
 import org.sjhstudio.diary.helper.OnTabItemSelectedListener;
 import org.sjhstudio.diary.helper.WriteFragmentListener;
+import org.sjhstudio.diary.model.LocalNote;
 import org.sjhstudio.diary.note.Note;
 import org.sjhstudio.diary.note.NoteDatabaseCallback;
 import org.sjhstudio.diary.utils.DialogUtils;
@@ -51,14 +53,17 @@ import org.sjhstudio.diary.utils.Utils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 
 import kotlin.Unit;
 
 public class WriteFragment extends Fragment implements WriteFragmentListener {
 
-    private static final String LOG = "WriteFragment";  // log
+    private static final String LOG = "log";  // log
+    private static final String LOCAL_NOTE = "local_note";
 
+    private TextView titleTextView;
     private ImageView weatherImageView;
     private ImageView weatherAddImageView;
     private LinearLayout weatherView;
@@ -93,21 +98,20 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     // Listener
     private OnTabItemSelectedListener tabListener;      // 메인 액티비티에서 관리하는 하단 탭 선택 리스터
     private OnRequestListener requestListener;          // 메인 액티비티에서 현재 위치 정보를 가져오게 해주는 리스너
-    private MoodButtonClickListener moodButtonListener; // 감정표현 버튼 눌림에 따른 버튼 스케일 효과를 위한 리스터
 
     // DB
     private NoteDatabaseCallback callback;              // db 쿼리문 실행을 위한 콜백 인터페이스
 
-    // Data
+    private final Calendar calendar = Calendar.getInstance();
+
     private Note updateItem = null;
     private Date calDate = null;
     private String address = "";                        // 위치 정보
     private String contents = "";                       // 일기 내용
     private String filePaths = "";                      // 사진 경로 (여러개일 경우 ','로 구분!!)
-    private String recentFilePaths = "";                // 사진이 있는 일기 수정 시, 기존 사진 경로 (백업 필요)
+//    private String defaultPaths = "";                   // 일기 수정 시, 기존 사진 경로
     private String dateText = null;                     // yyyy-MM-dd HH:mm (사용자가 직접 일기 날짜를 지정한 경우 이용됨)
     private Uri fileUri;                                // 카메라로 찍고 난 후 저장되는 파일의 Uri
-    private Object[] objs;                              // db 에 데이터 삽입을 위해 필요한 Object[] 객체
     private int weatherIndex = -1;                      // 날씨 정보(0:맑음, 1:구름 조금, 2:구름 많음, 3:흐림, 4:비, 5:눈/비, 6:눈)
     private int moodIndex = -1;                         // 0~8 총 9개의 기분을 index 로 표현(-1은 사용자가 아무런 기분도 선택하지 않은 경우)
     private int curYear;
@@ -115,90 +119,109 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     private int curDay;
     private int starIndex = 0;                          // 0: 즐겨찾기無,  1: 즐겨찾기有
     private boolean isWeatherViewOpen = false;
-    public boolean needDeleteCache = true;            // 캐시 삭제 필요 여부
-    private ArrayList<String> deletePath = new ArrayList<>();
+
+    private String existPaths = "";
+    private final ArrayList<String> addPaths = new ArrayList<>();
+    private final ArrayList<String> deletePaths = new ArrayList<>();
+    public Boolean cancelWriting = false;
+
     private Animation moodAnim;
     private Animation translateLeftAnim;
     private Animation translateRightAnim;
     private Animation translateRightTitleAnim;
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+//        combineFilePath();                                  // photoAdapter 에 저장되있는 파일경로들을 하나로 합침
+        deleteFilesCache(true);
+        setMoodIndex();                                     // 현재 눌린 기분버튼 종류에 따라 moodIndex 설정
+        setContents();                                      // contentsEditText 에 사용자가 입력한 내용을 contents 에 저장
+        LocalNote localNote = new LocalNote(
+                weatherIndex,
+                dateText,
+                locationEditText.getText().toString(),
+                moodIndex,
+                contentsEditText.getText().toString(),
+                existPaths,
+                starIndex,
+                updateItem
+        );
+
+        outState.putSerializable(LOCAL_NOTE, localNote);
+        System.out.println("xxx local note: " + localNote);
+    }
+
+    @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if(context instanceof OnTabItemSelectedListener) tabListener = (OnTabItemSelectedListener)context;
-        if(context instanceof OnRequestListener) requestListener = (OnRequestListener)context;
-        if(context instanceof NoteDatabaseCallback)  callback = (NoteDatabaseCallback)context;
+        if (context instanceof OnTabItemSelectedListener)
+            tabListener = (OnTabItemSelectedListener) context;
+        if (context instanceof OnRequestListener) requestListener = (OnRequestListener) context;
+        if (context instanceof NoteDatabaseCallback) callback = (NoteDatabaseCallback) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         requestListener.stopLocationService();  // 위치탐색종료
-        deleteFilesCache(); // 남아있는 파일캐시 삭제
+//        deleteFilesCache(); // 남아있는 파일캐시 삭제
 
-        if(tabListener != null) tabListener = null;
-        if(requestListener != null) requestListener = null;
-        if(callback != null) callback = null;
+        if (tabListener != null) tabListener = null;
+        if (requestListener != null) requestListener = null;
+        if (callback != null) callback = null;
     }
 
-    /**
-     * Delete files cache
-     * (다중 경로)
-     */
-    public void deleteFilesCache() {
-        if(updateItem != null) {
-            // 일기수정
-            for(String filePath : photoAdapter.getItems()) {
-                Log.d(LOG, "xxx picture path : " + filePath);
-                if(!recentFilePaths.contains(filePath)) {
-                    Log.d(LOG, "    delete picture path : " + filePath + "\n");
-                    new File(filePath).delete();
-                }
-            }
+    public void deleteFilesCache(Boolean cancelWriting) {
+        System.out.println("xxx =================== 사진경로 삭제 ===================");
+        System.out.println("xxx 기존 경로: " + existPaths);
+        System.out.println("xxx 저장 경로: " + photoAdapter.getItems());
+        System.out.println("xxx 삭제 경로: " + deletePaths);
+        System.out.println("xxx 추가 경로: " + addPaths);
+        System.out.println("xxx 작성 취소 여부: " + cancelWriting);
 
-            for(String deletePath : deletePath) {
-                Log.d(LOG, "xxx delete dialog picture path : " + deletePath + "\n");
-                new File(deletePath).delete();
+        if (!cancelWriting) {
+            for (String path : deletePaths) {
+                new File(path).delete();
             }
         } else {
-            // 일기작성
-            if(needDeleteCache) {
-                if(filePaths == null || filePaths.equals("")) combineFilePath();
+            for (String path : deletePaths) {
+                if (addPaths.contains(path)) new File(path).delete();
+            }
 
-                if(filePaths != null && !filePaths.equals("")) {
-                    String[] picturePaths = filePaths.split(",");
-
-                    for (String picturePath : picturePaths) {
-                        Log.d(LOG, "xxx delete picture path : " + picturePath);
-                        File file = new File(picturePath);
-                        file.delete();
-                    }
-
-                    filePaths = "";
-                }
+            for (String path : addPaths) {
+                new File(path).delete();
             }
         }
+
+//        if (!defaultPaths.isEmpty() && photoAdapter.getItemCount() != 0) {
+//            String[] paths = defaultPaths.split(",");
+//
+//            for (String path : paths) {
+//                if (!photoAdapter.getItems().contains(path)) {
+//                    System.out.println("xxx 현 경로에 없는 기존 경로 = 삭제필요..");
+//                    new File(path).delete();
+//                }
+//            }
+////            for (String filePath : photoAdapter.getItems()) {
+////                if (!recentFilePaths.contains(filePath)) {
+////                    System.out.println("xxx filePath ")
+////                    new File(filePath).delete();
+////                }
+////            }
+//        }
     }
 
-    /**
-     * Delete file cache
-     * (단일 경로)
-     */
     public void deleteFileCache(String filePath) {
-        if(filePath != null && !filePath.equals("")) {
-            File file = new File(filePath);
-            file.delete();
-        }
+        if (filePath != null && !filePath.equals("")) new File(filePath).delete();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        // 사용자가 GPS 기능을 켰는지 확인
-        if(requestListener != null) {
-            requestListener.onRequest("checkGPS");
-        }
-        if(photoAdapter.getItemCount() > 0) addPhotoBtn.setVisibility(View.VISIBLE);
+        if (requestListener != null) requestListener.onRequest("checkGPS");
+
+        if (photoAdapter.getItemCount() > 0) addPhotoBtn.setVisibility(View.VISIBLE);
         else addPhotoBtn.setVisibility(View.GONE);
     }
 
@@ -221,24 +244,23 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         initMoodUI(view);
         initPhoto(view);
 
-        if(requestListener != null && updateItem == null) {
-            if(PermissionUtils.INSTANCE.checkLocationPermission(requireContext())) {
-                // 위치권한 허용.
-                if(calDate == null) requestListener.onRequest("getCurrentLocation");  // 메인 액티비티로부터 현재위치정보 가져오기
-                else requestListener.onRequest("getCurrentLocation", calDate);    // 메인 액티비티로부터 현재위치정보 가져오기(달력에서 넘어온 Date 사용)
-            } else {
-                // 위치권한 거부.
-                if(calDate == null) requestListener.getDateOnly(null);
+        if (requestListener != null && updateItem == null) {
+            if (PermissionUtils.INSTANCE.checkLocationPermission(requireContext())) {   // 위치권한 허용.
+                if (calDate == null) requestListener.onRequest("getCurrentLocation");
+                else requestListener.onRequest("getCurrentLocation", calDate);
+            } else {    // 위치권한 거부.
+                if (calDate == null) requestListener.getDateOnly(null);
                 else requestListener.getDateOnly(calDate);
             }
         }
 
-        if(updateItem != null) setUpdateItem();
+        if (updateItem != null) setUpdateItem();
+
+        initSaveInstanceState(savedInstanceState);
     }
 
     private void initAnimationUI() {
         MyAnimationListener animationListener = new MyAnimationListener();
-
         moodAnim = AnimationUtils.loadAnimation(getContext(), R.anim.mood_icon_animation);
         translateLeftAnim = AnimationUtils.loadAnimation(getContext(), R.anim.translate_left_animation);
         translateRightAnim = AnimationUtils.loadAnimation(getContext(), R.anim.translate_right_animation);
@@ -249,35 +271,34 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     }
 
     private void initBasicUI(View rootView) {
-        // title
-        TextView titleTextView = rootView.findViewById(R.id.titleTextView);
+        // Title
+        titleTextView = rootView.findViewById(R.id.titleTextView);
         titleTextView.startAnimation(translateRightTitleAnim);
-        if(updateItem == null) titleTextView.setText("일기작성");
-        else titleTextView.setText("일기수정");
+        titleTextView.setText("일기작성");
 
-        // 날짜 관련
+        // Date
         dateTextView = rootView.findViewById(R.id.dateTextView);
         ImageView dateTextImageView = rootView.findViewById(R.id.dateTextImageView);
-        dateTextView.setOnClickListener(v -> setDatePickerDialog());
-        dateTextImageView.setOnClickListener(v -> setDatePickerDialog());
+        dateTextView.setOnClickListener(v -> showDatePickerDialog());
+        dateTextImageView.setOnClickListener(v -> showDatePickerDialog());
 
-        // 날씨 관련
+        // Weather
         weatherImageView = rootView.findViewById(R.id.weatherImageView);
         weatherAddImageView = rootView.findViewById(R.id.weatherAddImageView);
-        weatherView = rootView.findViewById(R.id.weatherView);                // 날씨를 직접 설정시 나타나는 뷰
+        weatherView = rootView.findViewById(R.id.weatherView);                      // 날씨선택 뷰
         weatherImageView.setOnClickListener(new OpenWeatherClickListener());
         weatherAddImageView.setOnClickListener(new OpenWeatherClickListener());
 
-        // edit text
-        locationEditText = rootView.findViewById(R.id.locationTextView);          // 위치를 나타내는 edit text
-        contentsEditText = rootView.findViewById(R.id.contentsEditText);          // 일기 내용
+        // EditText
+        locationEditText = rootView.findViewById(R.id.locationTextView);            // 위치
+        contentsEditText = rootView.findViewById(R.id.contentsEditText);            // 일기내용
 
-        // 새로고침
+        // Swipe refresh
         swipeRefreshLayout = rootView.findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.pastel_700));
+        swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(requireContext(), R.color.pastel_700));
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshListener());
 
-        // 버튼
+        // Button
         starButton = rootView.findViewById(R.id.starButton);
         ImageButton saveButton = rootView.findViewById(R.id.saveButton);
         ImageButton deleteButton = rootView.findViewById(R.id.deleteButton);
@@ -297,7 +318,8 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     }
 
     private void initMoodUI(View rootView) {
-        moodButtonListener = new MoodButtonClickListener();     // 감정 선택에 따른 버튼 스케일 변화 리스너 초기화
+        // 감정표현 버튼 눌림에 따른 버튼 스케일 효과를 위한 리스터
+        MoodButtonClickListener moodButtonListener = new MoodButtonClickListener();     // 감정 선택에 따른 버튼 스케일 변화 리스너 초기화
         button1 = rootView.findViewById(R.id.button1);
         button2 = rootView.findViewById(R.id.button2);
         button3 = rootView.findViewById(R.id.button3);
@@ -319,16 +341,15 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     }
 
     private void initPhoto(View rootView) {
-        // 기본 photo UI
         addPictureImageView = rootView.findViewById(R.id.addPictureImageView);
-        rootView.findViewById(R.id.pictureContainer).setOnClickListener( v -> showAddPhotoDialog());
+        rootView.findViewById(R.id.pictureContainer).setOnClickListener(v -> showAddPhotoDialog());
 
-        // photo indicator 관련
+        // Photo indicator
         photoIndicator = rootView.findViewById(R.id.photo_indicator);
         currentBanner = rootView.findViewById(R.id.current_banner);
         totalBanner = rootView.findViewById(R.id.total_banner);
 
-        // photo view pager 관련
+        // ViewPager
         photoViewPager = rootView.findViewById(R.id.photo_view_pager);
         photoViewPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         photoAdapter = new PhotoAdapter(requireContext(), this);
@@ -351,142 +372,149 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
             }
         });
 
-        // 사진추가(여러장)
+        // Add photo
         addPhotoBtn = rootView.findViewById(R.id.add_photo_btn);
         addPhotoBtn.setOnClickListener(v -> showAddPhotoDialog());
     }
 
-    /** 문자열로 나타낸 날씨를 통해 날씨 이미지 설정 **/
-    public void setWeatherImageView(String weatherStr) {
-        if(weatherStr.equals("맑음")) {
-            weatherImageView.setImageResource(R.drawable.weather_icon_1);
-            weatherIndex = 0;
-        } else if(weatherStr.equals("구름 조금")) {
-            weatherImageView.setImageResource(R.drawable.weather_icon_2);
-            weatherIndex = 1;
-        } else if(weatherStr.equals("구름 많음")) {
-            weatherImageView.setImageResource(R.drawable.weather_icon_3);
-            weatherIndex = 2;
-        } else if(weatherStr.equals("흐림")) {
-            weatherImageView.setImageResource(R.drawable.weather_icon_4);
-            weatherIndex = 3;
-        } else if(weatherStr.equals("비")) {
-            weatherImageView.setImageResource(R.drawable.weather_icon_5);
-            weatherIndex = 4;
-        } else if(weatherStr.equals("비/눈")) {
-            weatherImageView.setImageResource(R.drawable.weather_icon_6);
-            weatherIndex = 5;
-        } else if(weatherStr.equals("눈")){
-            weatherImageView.setImageResource(R.drawable.weather_icon_7);
-            weatherIndex = 6;
-        } else if(weatherStr.equals("소나기")) {
-            weatherImageView.setImageResource(R.drawable.weather_icon_5);
-            weatherIndex = 4;
-        } else {
-            Log.d(LOG, "Unknown weather string : " + weatherStr);
+    private void initSaveInstanceState(@Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            LocalNote localNote = (LocalNote) savedInstanceState.getSerializable(LOCAL_NOTE);
+            Note updateNote = (Note) localNote.getUpdateNote();
+
+            if (updateNote != null) {
+                updateItem = updateNote;
+//                setUpdateItem(!localNote.getFilePaths().isEmpty());
+                setUpdateItem();
+            }
+
+            setLocalItem(localNote);
         }
     }
 
-    /** 날씨 인덱스를 통해 날씨 이미지 설정 **/
-    public void setWeatherImageView2(int weatherIndex) {
-        if(weatherIndex == 0) {
-            weatherImageView.setImageResource(R.drawable.weather_icon_1);
-        } else if(weatherIndex == 1) {
-            weatherImageView.setImageResource(R.drawable.weather_icon_2);
-        } else if(weatherIndex == 2) {
-            weatherImageView.setImageResource(R.drawable.weather_icon_3);
-        } else if(weatherIndex == 3) {
-            weatherImageView.setImageResource(R.drawable.weather_icon_4);
-        } else if(weatherIndex == 4) {
-            weatherImageView.setImageResource(R.drawable.weather_icon_5);
-        } else if(weatherIndex == 5) {
-            weatherImageView.setImageResource(R.drawable.weather_icon_6);
-        } else if(weatherIndex == 6){
-            weatherImageView.setImageResource(R.drawable.weather_icon_7);
-        } else {
-            Log.d(LOG, "Unknown weather index : " + weatherIndex);
+    public void setWeatherImageView(String weatherStr) {
+        switch (weatherStr) {
+            case "맑음":
+                weatherImageView.setImageResource(R.drawable.weather_icon_1);
+                weatherIndex = 0;
+                break;
+            case "구름 조금":
+                weatherImageView.setImageResource(R.drawable.weather_icon_2);
+                weatherIndex = 1;
+                break;
+            case "구름 많음":
+                weatherImageView.setImageResource(R.drawable.weather_icon_3);
+                weatherIndex = 2;
+                break;
+            case "흐림":
+                weatherImageView.setImageResource(R.drawable.weather_icon_4);
+                weatherIndex = 3;
+                break;
+            case "비":
+            case "소나기":
+                weatherImageView.setImageResource(R.drawable.weather_icon_5);
+                weatherIndex = 4;
+                break;
+            case "비/눈":
+                weatherImageView.setImageResource(R.drawable.weather_icon_6);
+                weatherIndex = 5;
+                break;
+            case "눈":
+                weatherImageView.setImageResource(R.drawable.weather_icon_7);
+                weatherIndex = 6;
+                break;
+            default:
+                Log.d(LOG, "Unknown weather string: " + weatherStr);
+                break;
         }
+    }
+
+    public void setWeatherImageView2(int weatherIndex) {
+        if (weatherIndex == 0) weatherImageView.setImageResource(R.drawable.weather_icon_1);
+        else if (weatherIndex == 1) weatherImageView.setImageResource(R.drawable.weather_icon_2);
+        else if (weatherIndex == 2) weatherImageView.setImageResource(R.drawable.weather_icon_3);
+        else if (weatherIndex == 3) weatherImageView.setImageResource(R.drawable.weather_icon_4);
+        else if (weatherIndex == 4) weatherImageView.setImageResource(R.drawable.weather_icon_5);
+        else if (weatherIndex == 5) weatherImageView.setImageResource(R.drawable.weather_icon_6);
+        else if (weatherIndex == 6) weatherImageView.setImageResource(R.drawable.weather_icon_7);
+        else Log.d(LOG, "Unknown weather index: " + weatherIndex);
     }
 
     public void setLocationTextView(String location) {
-        locationEditText.setText(location);
         address = location;
+        if (locationEditText != null) locationEditText.setText(location);
     }
 
     public void setDateTextView(String date) {
-        if(dateTextView != null) dateTextView.setText(date);
+        if (dateTextView != null) dateTextView.setText(date);
     }
 
-    /** photo adapter 세팅 (사진 추가 시) **/
-    public void setPhotoAdapter(String filePath) {
-        photoAdapter.addItem(filePath);
+//    public void setPhotoAdapter(String filePath) {
+//        photoAdapter.addItem(filePath);
+//        photoAdapter.notifyDataSetChanged();
+//        photoViewPager.setCurrentItem(photoAdapter.getItemCount() - 1);
+//
+//        if (photoAdapter.getItemCount() > 0) addPhotoBtn.setVisibility(View.VISIBLE);
+//
+//        addPictureImageView.setVisibility(View.GONE);
+//        photoViewPager.setVisibility(View.VISIBLE);
+//        photoIndicator.setVisibility(View.VISIBLE);
+//        totalBanner.setText(String.valueOf(photoAdapter.getItemCount()));
+//    }
+
+    public void addPhoto(String path) {
+        addPaths.add(path);
+        photoAdapter.addItem(path);
         photoAdapter.notifyDataSetChanged();
         photoViewPager.setCurrentItem(photoAdapter.getItemCount() - 1);
-        if(photoAdapter.getItemCount() > 0) addPhotoBtn.setVisibility(View.VISIBLE);
+
+        if (photoAdapter.getItemCount() > 0) addPhotoBtn.setVisibility(View.VISIBLE);
+
         addPictureImageView.setVisibility(View.GONE);
         photoViewPager.setVisibility(View.VISIBLE);
         photoIndicator.setVisibility(View.VISIBLE);
         totalBanner.setText(String.valueOf(photoAdapter.getItemCount()));
     }
 
-    public void setCurDate(int curYear, int curMonth, int curDay) {
-        this.curYear = curYear;
-        this.curMonth = curMonth;
-        this.curDay = curDay;
+    public void setCurDate(int year, int month, int day) {
+        curYear = year;
+        curMonth = month;
+        curDay = day;
     }
 
     public void setContents() {
         contents = contentsEditText.getText().toString();
     }
 
-    /** curButton 객체 값으로 기분 인덱스 설정 **/
     public void setMoodIndex() {
-        if(curButton == null) {
-            // 사용자가 아무런 기분도 선택하지 않는 상황
-            // 선택할 수 있도록 토스트바를 띄워줘야함
-            moodIndex = -1;
-        } else if(curButton == button1) {
-            moodIndex = 0;
-        } else if(curButton == button2) {
-            moodIndex = 1;
-        } else if(curButton == button3) {
-            moodIndex = 2;
-        } else if(curButton == button4) {
-            moodIndex = 3;
-        } else if(curButton == button5) {
-            moodIndex = 4;
-        } else if(curButton == button6) {
-            moodIndex = 5;
-        } else if(curButton == button7) {
-            moodIndex = 6;
-        } else if(curButton == button8) {
-            moodIndex = 7;
-        } else {
-            moodIndex = 8;
-        }
+        if (curButton == button1) moodIndex = 0;
+        else if (curButton == button2) moodIndex = 1;
+        else if (curButton == button3) moodIndex = 2;
+        else if (curButton == button4) moodIndex = 3;
+        else if (curButton == button5) moodIndex = 4;
+        else if (curButton == button6) moodIndex = 5;
+        else if (curButton == button7) moodIndex = 6;
+        else if (curButton == button8) moodIndex = 7;
+        else if (curButton == button9) moodIndex = 8;
+        else moodIndex = -1;
     }
 
-    /** 기분 인덱스를 이용하여 버튼 애니메이션 및 curButton 설정 **/
     public void setMoodButton(int moodIndex) {
-        if (moodIndex == 0) {
-            setButtonAnim(button1);
-        } else if (moodIndex == 1) {
-            setButtonAnim(button2);
-        } else if (moodIndex == 2) {
-            setButtonAnim(button3);
-        } else if (moodIndex == 3) {
-            setButtonAnim(button4);
-        } else if (moodIndex == 4) {
-            setButtonAnim(button5);
-        } else if (moodIndex == 5) {
-            setButtonAnim(button6);
-        } else if (moodIndex == 6) {
-            setButtonAnim(button7);
-        } else if (moodIndex == 7) {
-            setButtonAnim(button8);
-        } else {
-            setButtonAnim(button9);
+        if (curButton != null) {
+            curButton.setScaleX(1.0f);
+            curButton.setScaleY(1.0f);
+            curButton.clearAnimation();
         }
+
+        if (moodIndex == 0) setButtonAnim(button1);
+        else if (moodIndex == 1) setButtonAnim(button2);
+        else if (moodIndex == 2) setButtonAnim(button3);
+        else if (moodIndex == 3) setButtonAnim(button4);
+        else if (moodIndex == 4) setButtonAnim(button5);
+        else if (moodIndex == 5) setButtonAnim(button6);
+        else if (moodIndex == 6) setButtonAnim(button7);
+        else if (moodIndex == 7) setButtonAnim(button8);
+        else setButtonAnim(button9);
     }
 
     private void setButtonAnim(Button button) {
@@ -500,131 +528,58 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         this.calDate = calDate;
     }
 
-    public void setSwipeRefresh(boolean isRefresh) {
-        if(swipeRefreshLayout != null) swipeRefreshLayout.setRefreshing(isRefresh);
-    }
-
-    /** 일기삭제 Dialog (일기 수정 시에만 나타나는 다이얼로그) **/
-    public void setDeleteNoteDialog() {
-        deleteNoteDialog = new CustomDeleteDialog(requireContext());
-        deleteNoteDialog.show();
-        deleteNoteDialog.setCancelable(true);
-        deleteNoteDialog.setTitleTextView("일기 삭제");
-        deleteNoteDialog.setDeleteTextView("일기를 삭제하시겠습니까?");
-        deleteNoteDialog.setDeleteButtonOnClickListener(v -> {
-            deleteNoteDialog.dismiss();
-
-            int id = updateItem.get_id();
-            String paths = updateItem.getPicture();
-
-            if(paths != null && !paths.equals("")) {
-                String picturePaths[] = paths.split(",");
-
-                for(int i = 0; i < picturePaths.length; i++) {
-                    File file = new File(picturePaths[i]);
-                    file.delete();
-                }
-            }
-
-            callback.deleteDB(id);                  // 해당 db 삭제
-            tabListener.setIsSelected(true);
-            tabListener.onTabSelected(0);
-        });
-    }
-
-    /** 날짜선택 Dialog **/
-    public void setDatePickerDialog() {
-        pickerDialog = new CustomDatePickerDialog(requireContext(), curYear, curMonth, curDay);
-        pickerDialog.show();
-        pickerDialog.setCancelable(true);
-
-        pickerDialog.setCancelButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pickerDialog.dismiss();
-            }
-        });
-
-        pickerDialog.setOkButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pickerDialog.dismiss();
-
-                curYear = pickerDialog.getCurYear();
-                curMonth = pickerDialog.getCurMonth() + 1;
-                curDay = pickerDialog.getCurDay();
-                Date newDate = new Date(curYear - 1900, curMonth - 1, curDay);
-                dateText = Utils.INSTANCE.getDateFormat2().format(newDate);
-                dateTextView.setText(Utils.INSTANCE.getDateFormat().format(newDate));
-            }
-        });
-    }
-
-    /** 사진삭제 Dialog **/
-    @Override
-    public void setDeletePictureDialog(int position) {
-        deleteDialog = new CustomDeleteDialog(requireContext());
-        deleteDialog.show();
-        deleteDialog.setCancelable(true);
-
-        deleteDialog.setDeleteButtonOnClickListener(v -> {
-            deleteDialog.dismiss();
-
-            if(updateItem != null) {            // 일기 수정 시
-                deletePath.add(photoAdapter.getItems().get(position));
-            } else {                            // 일기 처음 작성 시
-                deleteFileCache(photoAdapter.getItems().get(position));     // 삭제한 사진경로의 파일 삭제
-            }
-
-            photoAdapter.getItems().remove(position);
-            photoAdapter.notifyDataSetChanged();
-
-            if(photoAdapter.getItemCount() < 1) {                       // 사진을 모두 삭제하여 사진이 없는 경우
-                addPhotoBtn.setVisibility(View.GONE);
-                photoViewPager.setVisibility(View.GONE);
-                photoIndicator.setVisibility(View.GONE);
-                addPictureImageView.setVisibility(View.VISIBLE);
-            }
-            totalBanner.setText(String.valueOf(photoAdapter.getItemCount()));
-        });
-    }
-
-    /**
-     * 사진촬영
-     * (결과는 MainActivity 로 전달.)
-     */
-    public void showCameraActivity() {
-        Uri uri;
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            uri = createUri();
+    private void setStarButton(int index) {
+        if (index == 0) {
+            starIndex = 0;
+            Glide.with(WriteFragment.this)
+                    .load(ContextCompat.getDrawable(requireContext(), R.drawable.star_icon))
+                    .into(starButton);
         } else {
-            File file = createFile();
-            uri = FileProvider.getUriForFile(requireContext(), "org.sjhstudio.diary.fileprovider", file);
-        }
-
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-
-        if(intent.resolveActivity(requireContext().getPackageManager()) != null) {
-            ((MainActivity)requireActivity()).cameraResult.launch(intent);
+            starIndex = 1;
+            Glide.with(WriteFragment.this)
+                    .load(ContextCompat.getDrawable(requireContext(), R.drawable.star_icon_color))
+                    .into(starButton);
         }
     }
 
-    /**
-     * 앨범 가져오기
-     * (결과는 MainActivity 로 전달.)
-     */
-    public void showAlbumActivity() {
-        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        ((MainActivity)requireActivity()).albumResult.launch(intent);
+    public void setSwipeRefresh(boolean isRefresh) {
+        if (swipeRefreshLayout != null) swipeRefreshLayout.setRefreshing(isRefresh);
     }
 
     public void setItem(Note item) {
         updateItem = item;
     }
 
-    public void setUpdateItem() {
+    private void setLocalItem(LocalNote item) {
+        weatherIndex = item.getWeatherIndex();
+        contentsEditText.setText(item.getContents());
+
+        if (item.getDate() != null) {
+            try {
+                Date date = Utils.INSTANCE.getDateFormat2().parse(item.getDate());
+
+                if (date != null) {
+                    curYear = Utils.INSTANCE.getYear(date);
+                    curMonth = Utils.INSTANCE.getMonth(date);
+                    curDay = Utils.INSTANCE.getDay(date);
+                    setDateTextView(Utils.INSTANCE.getDateFormat().format(date));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        setLocationTextView(item.getAddress());
+        setStarButton(item.getStarIndex());
+        setUpdatePhoto(item.getFilePaths());
+
+        if (item.getWeatherIndex() != -1) setWeatherImageView2(item.getWeatherIndex());
+        if (item.getMoodIndex() != -1) setMoodButton(item.getMoodIndex());
+    }
+
+    private void setUpdateItem() {
+        titleTextView.setText("일기수정");
+
         String date = updateItem.getCreateDateStr();
         String date2Str = updateItem.getCreateDateStr2();
         String address = updateItem.getAddress();
@@ -633,38 +588,36 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         int weatherIndex = updateItem.getWeather();
         int moodIndex = updateItem.getMood();
         int starIndex = updateItem.getStarIndex();
+
         try {
             Date date2 = Utils.INSTANCE.getDateFormat2().parse(date2Str);
-//            curYear = date2.getYear() + 1900;
-//            curMonth = date2.getMonth() + 1;
-//            curDay = date2.getDate();
-            if(date2 != null) {
+
+            if (date2 != null) {
                 curYear = Utils.INSTANCE.getYear(date2);
                 curMonth = Utils.INSTANCE.getMonth(date2);
                 curDay = Utils.INSTANCE.getDay(date2);
-                System.out.println("xxx " + curYear + "," + curMonth + "," + curDay);
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         this.weatherIndex = weatherIndex;
         this.contentsEditText.setText(contents);
+        this.existPaths = paths;
+
         setDateTextView(date);
         setLocationTextView(address);
         setWeatherImageView2(weatherIndex);
-        checkStarButton(starIndex);
+        setStarButton(starIndex);
         setMoodButton(moodIndex);
         setUpdatePhoto(paths);
-        needDeleteCache = false;
     }
 
     public void setUpdatePhoto(String paths) {
-        if(paths != null && !paths.equals("")) {
+        if (paths != null && !paths.equals("")) {
             String[] picturePaths = paths.split(",");
-            if(picturePaths.length > 0) {
-                recentFilePaths = paths;      // 수정하기 취소 시, 기존에 올렸던 파일을 복구하기위해 recentFilePath 에 미리 경로를 저장
 
+            if (picturePaths.length > 0) {
                 photoAdapter.setItems(new ArrayList<>(Arrays.asList(picturePaths)));
                 photoAdapter.notifyDataSetChanged();
 
@@ -684,40 +637,176 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         }
     }
 
-    public Uri getFileUri() {
-        return fileUri;
-    }
-
+    @SuppressLint("NonConstantResourceId")
     private View getSelectedMoodButton(View v) {
         int id = v.getId();
 
-        switch(id) {
-            case R.id.angryView: return button1;
-            case R.id.coolView: return button2;
-            case R.id.cryingView: return button3;
-            case R.id.illView: return button4;
-            case R.id.laughView: return button5;
-            case R.id.mehView: return button6;
-            case R.id.sadView: return button7;
-            case R.id.smileView: return button8;
-            case R.id.yawnView: return button9;
+        switch (id) {
+            case R.id.angryView:
+                return button1;
+            case R.id.coolView:
+                return button2;
+            case R.id.cryingView:
+                return button3;
+            case R.id.illView:
+                return button4;
+            case R.id.laughView:
+                return button5;
+            case R.id.mehView:
+                return button6;
+            case R.id.sadView:
+                return button7;
+            case R.id.smileView:
+                return button8;
+            case R.id.yawnView:
+                return button9;
         }
 
         return null;
     }
 
-    private void checkStarButton(int index) {
-        if(index == 0) {
-            starIndex = 0;
-            Glide.with(WriteFragment.this)
-                    .load(ContextCompat.getDrawable(requireContext(), R.drawable.star_icon))
-                    .into(starButton);
-        } else {
-            starIndex = 1;
-            Glide.with(WriteFragment.this)
-                    .load(ContextCompat.getDrawable(requireContext(), R.drawable.star_icon_color))
-                    .into(starButton);
+    public Boolean isEmptyContent() {
+        return curButton == null && (contentsEditText == null || contentsEditText.getText() == null || contentsEditText.getText().toString().equals(""));
+    }
+
+    public void combineFilePath() {
+        filePaths = "";
+        for (int i = 0; i < photoAdapter.getItemCount(); i++) {
+            String filePath = photoAdapter.getItems().get(i);
+
+            if (i == photoAdapter.getItemCount() - 1) filePaths += filePath;
+            else filePaths += filePath + ",";
         }
+    }
+
+    public void showDeleteNoteDialog() {
+        deleteNoteDialog = new CustomDeleteDialog(requireContext());
+        deleteNoteDialog.show();
+        deleteNoteDialog.setCancelable(true);
+        deleteNoteDialog.setTitleTextView("일기 삭제");
+        deleteNoteDialog.setDeleteTextView("일기를 삭제하시겠습니까?");
+        deleteNoteDialog.setDeleteButtonOnClickListener(v -> {
+            deleteNoteDialog.dismiss();
+
+            int id = updateItem.get_id();
+            String paths = updateItem.getPicture();
+
+            deleteFilesCache(false);
+
+            for(String path : photoAdapter.getItems()) {
+                new File(path).delete();
+            }
+
+//            if (paths != null && !paths.equals("")) {
+//                String[] picturePaths = paths.split(",");
+//
+//                for (String picturePath : picturePaths) {
+//                    File file = new File(picturePath);
+//                    file.delete();
+//                }
+//            }
+
+            callback.deleteDB(id);  // 해당 db 삭제
+            tabListener.setIsSelected(true);
+            tabListener.onTabSelected(0);
+        });
+    }
+
+    public void showDatePickerDialog() {
+        pickerDialog = new CustomDatePickerDialog(requireContext(), curYear, curMonth, curDay);
+        pickerDialog.show();
+        pickerDialog.setCancelable(true);
+        pickerDialog.setCancelButtonOnClickListener(v -> pickerDialog.dismiss());
+        pickerDialog.setOkButtonOnClickListener(v -> {
+            pickerDialog.dismiss();
+
+            curYear = pickerDialog.getCurYear();
+            curMonth = pickerDialog.getCurMonth() + 1;
+            curDay = pickerDialog.getCurDay();
+
+            calendar.set(Calendar.YEAR, curYear);
+            calendar.set(Calendar.MONTH, curMonth - 1);
+            calendar.set(Calendar.DAY_OF_MONTH, curDay);
+
+            Date newDate = calendar.getTime();
+
+            dateText = Utils.INSTANCE.getDateFormat2().format(newDate);
+            dateTextView.setText(Utils.INSTANCE.getDateFormat().format(newDate));
+        });
+    }
+
+    @Override
+    public void showAddPhotoDialog() {
+        if (!PermissionUtils.INSTANCE.checkStoragePermission(requireContext())
+                || !PermissionUtils.INSTANCE.checkCameraPermission(requireContext())
+        ) {
+            DialogUtils.INSTANCE.showStoragePermissionDialog(
+                    requireContext(),
+                    () -> {
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", requireActivity().getPackageName(), null);
+                        intent.setData(uri);
+                        requireActivity().startActivity(intent);
+
+                        return Unit.INSTANCE;
+                    });
+        } else {
+            DialogUtils.INSTANCE.showAddPhotoDialog(
+                    requireContext(),
+                    () -> {
+                        showCameraActivity();
+                        return Unit.INSTANCE;
+                    },
+                    () -> {
+                        showAlbumActivity();
+                        return Unit.INSTANCE;
+                    });
+        }
+    }
+
+    @Override
+    public void showDeletePictureDialog(int position) {
+        deleteDialog = new CustomDeleteDialog(requireContext());
+        deleteDialog.show();
+        deleteDialog.setCancelable(true);
+        deleteDialog.setDeleteButtonOnClickListener(v -> {
+            deleteDialog.dismiss();
+            deletePaths.add(photoAdapter.getItems().get(position));
+            photoAdapter.getItems().remove(position);
+            photoAdapter.notifyDataSetChanged();
+
+            if (photoAdapter.getItemCount() < 1) {  // 사진을 모두 삭제한 경우
+                addPhotoBtn.setVisibility(View.GONE);
+                photoViewPager.setVisibility(View.GONE);
+                photoIndicator.setVisibility(View.GONE);
+                addPictureImageView.setVisibility(View.VISIBLE);
+            }
+
+            totalBanner.setText(String.valueOf(photoAdapter.getItemCount()));
+        });
+    }
+
+    public void showCameraActivity() {
+        Uri uri;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            uri = createUri();
+        } else {
+            File file = createFile();
+            uri = FileProvider.getUriForFile(requireContext(), "org.sjhstudio.diary.fileprovider", file);
+        }
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+
+        if (intent.resolveActivity(requireContext().getPackageManager()) != null) {
+            ((MainActivity) requireActivity()).cameraResult.launch(intent);
+        }
+    }
+
+    public void showAlbumActivity() {
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        ((MainActivity) requireActivity()).albumResult.launch(intent);
     }
 
     private File createFile() {
@@ -746,62 +835,14 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         return fileUri;
     }
 
-    // 사용자가 기분을 골랐는지..
-    public boolean isEmpty() {
-        return curButton == null;
-    }
-
-    // 일기내용이 비어있는지..
-    // 비어있는경우 팝업없이 종료가능!!
-    public Boolean isEmptyContent() {
-//        Log.d(LOG, "moodIndex : " + moodIndex + ", contentEditText : " + contentsEditText.getText());
-        return curButton == null && (contentsEditText == null || contentsEditText.getText() == null || contentsEditText.getText().toString().equals(""));
-    }
-
-    /**
-     * Photo Adapter 내 사진경로 합치기
-     * (','로 구분)
-     */
-    public void combineFilePath() {
-        for(String filePath : photoAdapter.getItems()) {
-            filePaths += filePath + ",";
-        }
-    }
-
-    /**
-     * 사진추가 다이얼로그
-     * (저장공간 권한확인 필요)
-     */
-    @Override
-    public void showAddPhotoDialog() {
-        if(!PermissionUtils.INSTANCE.checkStoragePermission(requireContext()) ||
-            !PermissionUtils.INSTANCE.checkCameraPermission(requireContext()))
-        {
-            DialogUtils.INSTANCE.showStoragePermissionDialog(requireContext(), () -> {
-                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                Uri uri = Uri.fromParts("package", requireActivity().getPackageName(), null);
-                intent.setData(uri);
-                requireActivity().startActivity(intent);
-                return Unit.INSTANCE;
-            });
-        } else {
-            DialogUtils.INSTANCE.showAddPhotoDialog(
-                    requireContext(),
-                    () -> {
-                        showCameraActivity();
-                        return Unit.INSTANCE;
-                    },
-                    () -> {
-                        showAlbumActivity();
-                        return Unit.INSTANCE;
-                    });
-        }
+    public Uri getFileUri() {
+        return fileUri;
     }
 
     class StarButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            if(starIndex == 0) {
+            if (starIndex == 0) {
                 starIndex = 1;
                 Glide.with(WriteFragment.this)
                         .load(ContextCompat.getDrawable(requireContext(), R.drawable.star_icon_color))
@@ -818,28 +859,27 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     class SaveButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            if(tabListener != null) {
-                if(isEmpty()) {     // 사용자가 기분을 고르지 않은 경우
+            if (tabListener != null) {
+                if (curButton == null) {
                     Toast.makeText(getContext(), "오늘의 기분을 골라주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                needDeleteCache = false;
                 combineFilePath();                                  // photoAdapter 에 저장되있는 파일경로들을 하나로 합침
                 setMoodIndex();                                     // 현재 눌린 기분버튼 종류에 따라 moodIndex 설정
                 setContents();                                      // contentsEditText 에 사용자가 입력한 내용을 contents 에 저장
                 address = locationEditText.getText().toString();    // GPS 로 받아온 위치 or 사용자가 직접 입력한 위치정보를 address(String)에 저장
 
-                if(updateItem == null) {                            // 새로 일기를 작성하는 경우
-                    if(dateText != null) {                          // 사용자가 날짜를 바꾼 경우
-                        String date = dateText + " "
-                                + Utils.INSTANCE.getTimeFormat2().format(new Date());
+                if (updateItem == null) {
+                    Object[] objs;
+
+                    if (dateText != null) {
+                        String date = dateText + " " + Utils.INSTANCE.getTimeFormat2().format(new Date());
                         objs = new Object[]{weatherIndex, address, "", "", contents, moodIndex, filePaths, curYear, curMonth, date, starIndex};
                         callback.insertDB2(objs);
-                    } else {                                        // 사용자가 날짜를 바꾸지 않은 경우
-                        if(calDate != null) {                       // 기분달력으로 넘어온 날짜로 작성하는 경우
-                            String date = Utils.INSTANCE.getDateFormat2().format(calDate) + " "
-                                    + Utils.INSTANCE.getTimeFormat2().format(new Date());
+                    } else {
+                        if (calDate != null) {
+                            String date = Utils.INSTANCE.getDateFormat2().format(calDate) + " " + Utils.INSTANCE.getTimeFormat2().format(new Date());
                             objs = new Object[]{weatherIndex, address, "", "", contents, moodIndex, filePaths, curYear, curMonth, date, starIndex};
                             callback.insertDB2(objs);
                         } else {
@@ -847,19 +887,12 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
                             callback.insertDB(objs);
                         }
                     }
-
-                } else {                                            // 일기를 수정하는 경우
-                    if(filePaths != null && !filePaths.equals("")) {
+                } else {
+                    if (filePaths != null && !filePaths.equals("")) {
                         updateItem.setPicture(filePaths);
-                        recentFilePaths = filePaths;
                     } else {
                         updateItem.setPicture("");
                     }
-
-//                    for(String path : deletePath) {
-//                        File file = new File(path);
-//                        file.delete();
-//                    }
 
                     updateItem.setWeather(weatherIndex);
                     updateItem.setAddress(locationEditText.getText().toString());
@@ -867,9 +900,8 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
                     updateItem.setMood(moodIndex);
                     updateItem.setStarIndex(starIndex);
 
-                    if(dateText != null) {
-                        String date = dateText + " "
-                                + Utils.INSTANCE.getTimeFormat2().format(new Date());
+                    if (dateText != null) {
+                        String date = dateText + " " + Utils.INSTANCE.getTimeFormat2().format(new Date());
                         updateItem.setYear(curYear);
                         updateItem.setDay(curMonth);
                         updateItem.setCreateDateStr2(date);
@@ -879,7 +911,8 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
                     }
                 }
 
-                filePaths = null;                        // filePath 를 null 로 지정함으로써 detach()호출에도 삭제되지않음
+                deleteFilesCache(false);
+
                 tabListener.setIsSelected(true);
                 tabListener.onTabSelected(0);    // 일기목록 프래그먼트로 이동
             }
@@ -889,13 +922,11 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     class DeleteButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            if(tabListener != null) {
-                if(updateItem == null) {                    // 일기 작성을 멈출 때
-                    if(requestListener != null) {
-                        requestListener.onRequest("showStopWriteDialog");
-                    }
-                } else {                                    // 수정 중일때 삭제
-                    setDeleteNoteDialog();
+            if (tabListener != null) {
+                if (updateItem == null && requestListener != null) {
+                    requestListener.onRequest("showStopWriteDialog");
+                } else {
+                    showDeleteNoteDialog();
                 }
             }
         }
@@ -904,46 +935,50 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     class MoodButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            Button selectButton = (Button)getSelectedMoodButton(v);
+            Button selectButton = (Button) getSelectedMoodButton(v);
 
-            if(curButton == null) {
-                setButtonAnim(selectButton);
-            } else if(curButton == selectButton){
-                selectButton.setScaleX(1.0f);
-                selectButton.setScaleY(1.0f);
-                selectButton.clearAnimation();
-                curButton = null;
-            }
-            else {
-                curButton.setScaleX(1.0f);
-                curButton.setScaleY(1.0f);
-                curButton.clearAnimation();
-                setButtonAnim(selectButton);
+            if (selectButton != null) {
+                if (curButton == null) {
+                    setButtonAnim(selectButton);
+                } else if (curButton == selectButton) {
+                    selectButton.setScaleX(1.0f);
+                    selectButton.setScaleY(1.0f);
+                    selectButton.clearAnimation();
+                    curButton = null;
+                } else {
+                    curButton.setScaleX(1.0f);
+                    curButton.setScaleY(1.0f);
+                    curButton.clearAnimation();
+                    setButtonAnim(selectButton);
+                }
             }
         }
     }
 
     class MyAnimationListener implements Animation.AnimationListener {
         @Override
-        public void onAnimationStart(Animation animation) { }
+        public void onAnimationStart(Animation animation) {
+        }
 
         @Override
         public void onAnimationEnd(Animation animation) {
-            if(isWeatherViewOpen) {
+            if (isWeatherViewOpen) {
                 weatherAddImageView.setImageResource(R.drawable.navigate_down);
                 weatherView.setVisibility(View.GONE);
             }
+
             isWeatherViewOpen = !isWeatherViewOpen;
         }
 
         @Override
-        public void onAnimationRepeat(Animation animation) { }
+        public void onAnimationRepeat(Animation animation) {
+        }
     }
 
     class OpenWeatherClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            if(isWeatherViewOpen) {
+            if (isWeatherViewOpen) {
                 weatherView.startAnimation(translateLeftAnim);
             } else {
                 weatherView.setVisibility(View.VISIBLE);
@@ -954,7 +989,8 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     }
 
     class WeatherButtonClickListener implements View.OnClickListener {
-        private int _weatherIndex = -1;
+
+        private final int _weatherIndex;
 
         public WeatherButtonClickListener(int _weatherIndex) {
             this._weatherIndex = _weatherIndex;
@@ -964,7 +1000,8 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         public void onClick(View v) {
             weatherIndex = _weatherIndex;
             setWeatherImageView2(weatherIndex);
-            if(isWeatherViewOpen) {
+
+            if (isWeatherViewOpen) {
                 weatherView.startAnimation(translateLeftAnim);
             } else {
                 weatherView.setVisibility(View.VISIBLE);
@@ -976,13 +1013,13 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     class SwipeRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
         @Override
         public void onRefresh() {
-            if(requestListener != null) {
-                if(PermissionUtils.INSTANCE.checkLocationPermission(requireContext())) {
+            if (requestListener != null) {
+                if (PermissionUtils.INSTANCE.checkLocationPermission(requireContext())) {
                     requestListener.onRequest("checkGPS");
 
-                    if(Utils.INSTANCE.checkGPS(requireContext())) {
-                        if(calDate == null)requestListener.onRequest("getCurrentLocation"); // 메인 액티비티로부터 현재위치정보 가져오기
-                        else requestListener.onRequest("getCurrentLocation", calDate);  // 메인 액티비티로부터 현재위치정보 가져오기(달력에서 넘어온 Date 사용)
+                    if (Utils.INSTANCE.checkGPS(requireContext())) {
+                        if (calDate == null) requestListener.onRequest("getCurrentLocation");
+                        else requestListener.onRequest("getCurrentLocation", calDate);
                     } else {
                         setSwipeRefresh(false);
                     }
@@ -999,5 +1036,4 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
             }
         }
     }
-
 }

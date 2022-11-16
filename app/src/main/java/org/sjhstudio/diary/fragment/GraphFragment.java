@@ -497,9 +497,6 @@ public class GraphFragment extends Fragment {
             case 100:
                 typeface = Typeface.SANS_SERIF;
                 break;
-            case -1:
-                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font.ttf");
-                break;
             case 0:
                 typeface = Typeface.createFromAsset(requireContext().getAssets(), "font1.ttf");
                 break;
@@ -537,7 +534,7 @@ public class GraphFragment extends Fragment {
                 typeface = Typeface.createFromAsset(requireContext().getAssets(), "font12.ttf");
                 break;
             default:
-                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font1.ttf");
+                typeface = Typeface.createFromAsset(requireContext().getAssets(), "main_font.otf");
                 break;
         }
 

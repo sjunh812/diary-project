@@ -173,9 +173,6 @@ public class OptionFragment extends Fragment {
             case 100:
                 curFontTextView.setText("시스템 서체");
                 break;
-            case -1:
-                curFontTextView.setText("THE얌전해진언니체");
-                break;
             case 0:
                 curFontTextView.setText("교보 손글씨체");
                 break;
@@ -213,7 +210,7 @@ public class OptionFragment extends Fragment {
                 curFontTextView.setText("ACC 어린이 마음고운체");
                 break;
             default:
-                curFontTextView.setText("THE얌전해진언니체");
+                curFontTextView.setText("국립공원 꼬미체");
                 break;
         }
     }
