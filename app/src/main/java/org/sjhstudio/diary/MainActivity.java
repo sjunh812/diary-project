@@ -141,17 +141,22 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         lowVersionGPSListener = new LowVersionGPSListener();
 
         // bottom navigation
-        bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottomNavigation);
+        bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
 
-            if(!isSelected2 && selectedTabIndex == 2 &&
-                    writeFragment != null && !(writeFragment.isEmptyContent())
+            if(!isSelected2 && selectedTabIndex == 2
+                    && writeFragment != null
+                    && !(writeFragment.isEmptyContent())
             ) {
                 DialogUtils.INSTANCE.showStopWriteDialog(this, () -> {
-                    if (writeFragment != null) writeFragment.deleteFilesCache(true);
+                    if (writeFragment != null) {
+                        writeFragment.deleteFilesCache(true);
+                    }
+
                     writeFragment = new WriteFragment();
+
                     int position;
 
                     if(item.getItemId() == R.id.tab1) position = 0;
@@ -166,6 +171,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
                     return Unit.INSTANCE;
                 });
             } else {
+                if (selectedTabIndex == 2) writeFragment = new WriteFragment();
                 isSelected2 = false;
                 return setSelectedTabItem(item.getItemId(), transaction);
             }
@@ -507,7 +513,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
                 }
 
                 if(updateItem != null) {                // 일기수정시
-                    writeFragment.setItem(updateItem);  // updateItem 을 WriteFragment 로 전달
+                    writeFragment.setUpdateItem(updateItem);  // updateItem 을 WriteFragment 로 전달
                     updateItem = null;                  // updateItem 초기화
                 }
 

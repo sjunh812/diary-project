@@ -42,10 +42,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteViewHolder>
 
     // 즐겨찾기 일기목록
     public void setStar() {
-        for(int i = 0; i < items.size(); i++) {
+        for (int i = 0; i < items.size(); i++) {
             Note item = items.get(i);
 
-            if(item.getStarIndex() == 0) {
+            if (item.getStarIndex() == 0) {
                 items.remove(i);
                 i--;
             }
@@ -55,7 +55,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteViewHolder>
     @NonNull
     @Override
     public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = inflater.inflate(R.layout.list_item, parent, false);
 
         return new NoteViewHolder(itemView, layoutType, mContext);
@@ -99,23 +99,16 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteViewHolder>
 
     @Override
     public void onItemClick(NoteViewHolder holder, View view, int position) {
-        if(clickListener != null) {
-            clickListener.onItemClick(holder, view, position);
-        }
+        if (clickListener != null) clickListener.onItemClick(holder, view, position);
     }
 
     @Override
     public void onItemTouch(NoteViewHolder holder, View view, int position, MotionEvent event) {
-        if(touchListener != null) {
-            touchListener.onItemTouch(holder, view, position, event);
-        }
+        if (touchListener != null) touchListener.onItemTouch(holder, view, position, event);
     }
 
     @Override
     public void onLongClick(NoteViewHolder holder, View view, int position) {
-        if(longClickListener != null) {
-            longClickListener.onLongClick(holder, view, position);
-        }
+        if (longClickListener != null) longClickListener.onLongClick(holder, view, position);
     }
-
 }

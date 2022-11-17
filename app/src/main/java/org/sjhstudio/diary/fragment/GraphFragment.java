@@ -85,7 +85,7 @@ public class GraphFragment extends Fragment {
             R.drawable.icon_mood_ill_color_small, R.drawable.icon_mood_laugh_color_small, R.drawable.icon_mood_meh_color_small,
             R.drawable.icon_mood_sad_color_small, R.drawable.icon_mood_smile_color_small, R.drawable.icon_mood_yawn_color_small
     };
-    private ArrayList<Integer> colors = new ArrayList<>();      // 색깔 정보를 담은 배열
+    private final ArrayList<Integer> colors = new ArrayList<>();      // 색깔 정보를 담은 배열
     private int curFontIndex = -1;                              // 현재 사용중인 폰트 종류
     private int selectRadioIndex = 0;                           // 전체: 0, 올해: 1, 이번달: 2 (default: 전체)
     private int maxMoodIndex = -1;                              // 제일 많은 기분 종류
@@ -98,8 +98,8 @@ public class GraphFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if(context instanceof NoteDatabaseCallback) {
-            callback = (NoteDatabaseCallback)context;
+        if (context instanceof NoteDatabaseCallback) {
+            callback = (NoteDatabaseCallback) context;
         }
     }
 
@@ -110,7 +110,7 @@ public class GraphFragment extends Fragment {
     }
 
     private void clearResource() {
-        if(callback != null) callback = null;
+        if (callback != null) callback = null;
         clearAnimation();
     }
 
@@ -145,10 +145,10 @@ public class GraphFragment extends Fragment {
         );
 
         curFontIndex = Pref.getPFontKey(requireContext());  // 폰트 정보
-        initAnimation();    // 애니메이션 초기화
-        initChartUI(rootView);  // 차트 초기화
-        initUI(rootView);   // UI 초기화
-        initRadioButton(rootView);  // 라디오 버튼 초기화
+        initAnimation();                                    // 애니메이션 초기화
+        initChartUI(rootView);                              // 차트 초기화
+        initUI(rootView);                                   // UI 초기화
+        initRadioButton(rootView);                          // 라디오 버튼 초기화
 
         return rootView;
     }
@@ -161,11 +161,11 @@ public class GraphFragment extends Fragment {
     }
 
     private void initChartUI(View rootView) {
-        chart1 = (PieChart)rootView.findViewById(R.id.chart1);
+        chart1 = rootView.findViewById(R.id.chart1);
         chart1.setUsePercentValues(true);
         chart1.getDescription().setEnabled(false);  // 추가 설명 x
         chart1.setDrawHoleEnabled(false);   // 중간 원 x
-        chart1.setExtraOffsets(5,10,5,10);
+        chart1.setExtraOffsets(5, 10, 5, 10);
         chart1.setHighlightPerTapEnabled(false);    // 선택 시, 확대효과 x
 
 //        chart1.setTransparentCircleColor(getResources().getColor(R.color.white)); // 중간원과 바깥원 사이의 얇은 투명원의 색상 결정
@@ -183,65 +183,65 @@ public class GraphFragment extends Fragment {
     }
 
     private void initUI(View rootView) {
-        TextView titleTextView = (TextView) rootView.findViewById(R.id.titleTextView);
+        TextView titleTextView = rootView.findViewById(R.id.titleTextView);
         titleTextView.startAnimation(translateRightAnim);
 
-        moodTotalCountTextView = (TextView)rootView.findViewById(R.id.moodTotalCountTextView);
-        moodTitleTextView = (TextView)rootView.findViewById(R.id.moodTitleTextView);
-        angryCount = (TextView)rootView.findViewById(R.id.angryCount);
-        coolCount = (TextView)rootView.findViewById(R.id.coolCount);
-        cryingCount = (TextView)rootView.findViewById(R.id.cryingCount);
-        illCount = (TextView)rootView.findViewById(R.id.illCount);
-        laughCount = (TextView)rootView.findViewById(R.id.laughCount);
-        mehCount = (TextView)rootView.findViewById(R.id.mehCount);
-        sadCount = (TextView)rootView.findViewById(R.id.sadCount);
-        smileCount = (TextView)rootView.findViewById(R.id.smileCount);
-        yawnCount = (TextView)rootView.findViewById(R.id.yawnCount);
-        crown = (ImageView)rootView.findViewById(R.id.crown);
-        crown2 = (ImageView)rootView.findViewById(R.id.crown2);
-        crown3 = (ImageView)rootView.findViewById(R.id.crown3);
-        crown4 = (ImageView)rootView.findViewById(R.id.crown4);
-        crown5 = (ImageView)rootView.findViewById(R.id.crown5);
-        crown6 = (ImageView)rootView.findViewById(R.id.crown6);
-        crown7 = (ImageView)rootView.findViewById(R.id.crown7);
-        crown8 = (ImageView)rootView.findViewById(R.id.crown8);
-        crown9 = (ImageView)rootView.findViewById(R.id.crown9);
-        angryImageView = (ImageView)rootView.findViewById(R.id.angryImageView);
-        coolImageView = (ImageView)rootView.findViewById(R.id.coolImageView);
-        cryingImageView = (ImageView)rootView.findViewById(R.id.cryingImageView);
-        illImageView = (ImageView)rootView.findViewById(R.id.illImageView);
-        laughImageView = (ImageView)rootView.findViewById(R.id.laughImageView);
-        mehImageView = (ImageView)rootView.findViewById(R.id.mehImageView);
-        sadImageView = (ImageView)rootView.findViewById(R.id.sadImageView);
-        smileImageView = (ImageView)rootView.findViewById(R.id.smileImageView);
-        yawnImageView = (ImageView)rootView.findViewById(R.id.yawnImageView);
-        textView = (LinearLayout)rootView.findViewById(R.id.textView);
-        describeTextView = (TextView)rootView.findViewById(R.id.describeTextView);
-        moodTextView = (TextView)rootView.findViewById(R.id.moodTextView);
-        backgroundGraphLayout = (FrameLayout)rootView.findViewById(R.id.background_graph);
+        moodTotalCountTextView = rootView.findViewById(R.id.moodTotalCountTextView);
+        moodTitleTextView = rootView.findViewById(R.id.moodTitleTextView);
+        angryCount = rootView.findViewById(R.id.angryCount);
+        coolCount = rootView.findViewById(R.id.coolCount);
+        cryingCount = rootView.findViewById(R.id.cryingCount);
+        illCount = rootView.findViewById(R.id.illCount);
+        laughCount = rootView.findViewById(R.id.laughCount);
+        mehCount = rootView.findViewById(R.id.mehCount);
+        sadCount = rootView.findViewById(R.id.sadCount);
+        smileCount = rootView.findViewById(R.id.smileCount);
+        yawnCount = rootView.findViewById(R.id.yawnCount);
+        crown = rootView.findViewById(R.id.crown);
+        crown2 = rootView.findViewById(R.id.crown2);
+        crown3 = rootView.findViewById(R.id.crown3);
+        crown4 = rootView.findViewById(R.id.crown4);
+        crown5 = rootView.findViewById(R.id.crown5);
+        crown6 = rootView.findViewById(R.id.crown6);
+        crown7 = rootView.findViewById(R.id.crown7);
+        crown8 = rootView.findViewById(R.id.crown8);
+        crown9 = rootView.findViewById(R.id.crown9);
+        angryImageView = rootView.findViewById(R.id.angryImageView);
+        coolImageView = rootView.findViewById(R.id.coolImageView);
+        cryingImageView = rootView.findViewById(R.id.cryingImageView);
+        illImageView = rootView.findViewById(R.id.illImageView);
+        laughImageView = rootView.findViewById(R.id.laughImageView);
+        mehImageView = rootView.findViewById(R.id.mehImageView);
+        sadImageView = rootView.findViewById(R.id.sadImageView);
+        smileImageView = rootView.findViewById(R.id.smileImageView);
+        yawnImageView = rootView.findViewById(R.id.yawnImageView);
+        textView = rootView.findViewById(R.id.textView);
+        describeTextView = rootView.findViewById(R.id.describeTextView);
+        moodTextView = rootView.findViewById(R.id.moodTextView);
+        backgroundGraphLayout = rootView.findViewById(R.id.background_graph);
     }
 
     @SuppressLint("SetTextI18n")
     private void initRadioButton(View rootView) {
-        allButton = (MyRadioButton)rootView.findViewById(R.id.allButton);
-        yearButton = (MyRadioButton)rootView.findViewById(R.id.yearButton);
-        monthButton = (MyRadioButton)rootView.findViewById(R.id.monthButton);
-        RadioGroup radioGroup = (RadioGroup) rootView.findViewById(R.id.radioGroup);
+        allButton = rootView.findViewById(R.id.allButton);
+        yearButton = rootView.findViewById(R.id.yearButton);
+        monthButton = rootView.findViewById(R.id.monthButton);
+        RadioGroup radioGroup = rootView.findViewById(R.id.radioGroup);
 
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             HashMap<Integer, Integer> hashMap = null;
 
-            if(checkedId == R.id.allButton) {
+            if (checkedId == R.id.allButton) {
                 moodTitleTextView.setText("전체");
                 selectRadioIndex = 0;
                 hashMap = callback.selectMoodCount(true, false, false);
                 describeTextView.setText("전체 통계 중 제일 많은 기분은 ");
-            } else if(checkedId == R.id.yearButton) {
+            } else if (checkedId == R.id.yearButton) {
                 moodTitleTextView.setText(Utils.INSTANCE.getCurrentYear() + "년");
                 selectRadioIndex = 1;
                 hashMap = callback.selectMoodCount(false, true, false);
                 describeTextView.setText("올해 통계 중 제일 많은 기분은 ");
-            } else if(checkedId == R.id.monthButton) {
+            } else if (checkedId == R.id.monthButton) {
                 moodTitleTextView.setText(Utils.INSTANCE.getCurrentMonth() + "월");
                 selectRadioIndex = 2;
                 hashMap = callback.selectMoodCount(false, false, true);
@@ -257,7 +257,7 @@ public class GraphFragment extends Fragment {
     }
 
     private void setSelectedRadioButton() {
-        switch(selectRadioIndex) {
+        switch (selectRadioIndex) {
             case 0:
                 allButton.setChecked(true);
                 break;
@@ -279,10 +279,10 @@ public class GraphFragment extends Fragment {
         maxCount = -1;      // 제일 많은 기분의 개수
         colors.clear();     // 파이차트를 구성할 색깔배열 clear (전체, 올해, 이번달마다 달라지는 값이므로 clear 필요)
 
-        for(int i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++) {
             int count = 0;
 
-            if(hashMap.containsKey(i)) {
+            if (hashMap.containsKey(i)) {
                 count = hashMap.get(i);
                 setMoodCount(i, count);
                 totalCount += count;
@@ -321,19 +321,19 @@ public class GraphFragment extends Fragment {
         chart1.setData(data);
         chart1.invalidate();
 
-        if(totalCount == 0) backgroundGraphLayout.setVisibility(View.GONE);
+        if (totalCount == 0) backgroundGraphLayout.setVisibility(View.GONE);
         else backgroundGraphLayout.setVisibility(View.VISIBLE);
     }
 
     private void setMoodCount(int moodIndex, int count) {
-        if(maxCount < count) {
+        if (maxCount < count) {
             maxCount = count;
             maxMoodIndex = moodIndex;
-        } else if(maxCount == count) {      // 중복 값이 있는 max 라면 예외처리
+        } else if (maxCount == count) {      // 중복 값이 있는 max 라면 예외처리
             maxMoodIndex = -1;
         }
 
-        switch(moodIndex) {
+        switch (moodIndex) {
             case 0:
                 angryCount.setText(String.valueOf(count));
                 break;
@@ -376,19 +376,19 @@ public class GraphFragment extends Fragment {
         crown8.setVisibility(View.GONE);
         crown9.setVisibility(View.GONE);
 
-        if(maxMoodIndex == -1) {
+        if (maxMoodIndex == -1) {
             textView.setVisibility(View.GONE);
         } else {
             textView.setVisibility(View.VISIBLE);
 
-            switch(maxMoodIndex) {
+            switch (maxMoodIndex) {
                 case 0:
                     crown.setVisibility(View.VISIBLE);
                     angryImageView.startAnimation(moodAnimation);
                     crown.startAnimation(crownAnimation);
 
                     moodTextView.setText("'화남'");
-                    moodTextView.setTextColor(getResources().getColor(R.color.red));
+                    moodTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.red));
                     break;
                 case 1:
                     crown2.setVisibility(View.VISIBLE);
@@ -396,7 +396,7 @@ public class GraphFragment extends Fragment {
                     crown2.startAnimation(crownAnimation);
 
                     moodTextView.setText("'쿨'");
-                    moodTextView.setTextColor(getResources().getColor(R.color.blue));
+                    moodTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.blue));
                     break;
                 case 2:
                     crown3.setVisibility(View.VISIBLE);
@@ -404,7 +404,7 @@ public class GraphFragment extends Fragment {
                     crown3.startAnimation(crownAnimation);
 
                     moodTextView.setText("'슬픔'");
-                    moodTextView.setTextColor(getResources().getColor(R.color.skyblue));
+                    moodTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.skyblue));
                     break;
                 case 3:
                     crown4.setVisibility(View.VISIBLE);
@@ -412,7 +412,7 @@ public class GraphFragment extends Fragment {
                     crown4.startAnimation(crownAnimation);
 
                     moodTextView.setText("'아픔'");
-                    moodTextView.setTextColor(getResources().getColor(R.color.lightgreen));
+                    moodTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.lightgreen));
                     break;
                 case 4:
                     crown5.setVisibility(View.VISIBLE);
@@ -420,7 +420,7 @@ public class GraphFragment extends Fragment {
                     crown5.startAnimation(crownAnimation);
 
                     moodTextView.setText("'웃음'");
-                    moodTextView.setTextColor(getResources().getColor(R.color.yellow));
+                    moodTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.yellow));
                     break;
                 case 5:
                     crown6.setVisibility(View.VISIBLE);
@@ -428,7 +428,7 @@ public class GraphFragment extends Fragment {
                     crown6.startAnimation(crownAnimation);
 
                     moodTextView.setText("'보통'");
-                    moodTextView.setTextColor(getResources().getColor(R.color.gray));
+                    moodTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray));
                     break;
                 case 6:
                     crown7.setVisibility(View.VISIBLE);
@@ -436,7 +436,7 @@ public class GraphFragment extends Fragment {
                     crown7.startAnimation(crownAnimation);
 
                     moodTextView.setText("'나쁨'");
-                    moodTextView.setTextColor(getResources().getColor(R.color.black));
+                    moodTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
                     break;
                 case 7:
                     crown8.setVisibility(View.VISIBLE);
@@ -444,7 +444,7 @@ public class GraphFragment extends Fragment {
                     crown8.startAnimation(crownAnimation);
 
                     moodTextView.setText("'좋음'");
-                    moodTextView.setTextColor(getResources().getColor(R.color.orange));
+                    moodTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange));
                     break;
                 case 8:
                     crown9.setVisibility(View.VISIBLE);
@@ -452,40 +452,40 @@ public class GraphFragment extends Fragment {
                     crown9.startAnimation(crownAnimation);
 
                     moodTextView.setText("'피곤'");
-                    moodTextView.setTextColor(getResources().getColor(R.color.pink));
+                    moodTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.pink));
                     break;
             }
         }
     }
 
     private void addColor(int moodIndex) {
-        switch(moodIndex) {
+        switch (moodIndex) {
             case 0:
-                colors.add(getResources().getColor(R.color.pastel_red));
+                colors.add(ContextCompat.getColor(requireContext(), R.color.pastel_red));
                 break;
             case 1:
-                colors.add(getResources().getColor(R.color.pastel_blue));
+                colors.add(ContextCompat.getColor(requireContext(), R.color.pastel_blue));
                 break;
             case 2:
-                colors.add(getResources().getColor(R.color.pastel_skyblue));
+                colors.add(ContextCompat.getColor(requireContext(), R.color.pastel_skyblue));
                 break;
             case 3:
-                colors.add(getResources().getColor(R.color.pastel_green));
+                colors.add(ContextCompat.getColor(requireContext(), R.color.pastel_green));
                 break;
             case 4:
-                colors.add(getResources().getColor(R.color.pastel_yellow));
+                colors.add(ContextCompat.getColor(requireContext(), R.color.pastel_yellow));
                 break;
             case 5:
-                colors.add(getResources().getColor(R.color.pastel_gray));
+                colors.add(ContextCompat.getColor(requireContext(), R.color.pastel_gray));
                 break;
             case 6:
-                colors.add(getResources().getColor(R.color.pastel_black));
+                colors.add(ContextCompat.getColor(requireContext(), R.color.pastel_black));
                 break;
             case 7:
-                colors.add(getResources().getColor(R.color.pastel_orange));
+                colors.add(ContextCompat.getColor(requireContext(), R.color.pastel_orange));
                 break;
             case 8:
-                colors.add(getResources().getColor(R.color.pastel_pink));
+                colors.add(ContextCompat.getColor(requireContext(), R.color.pastel_pink));
                 break;
         }
     }
@@ -493,7 +493,7 @@ public class GraphFragment extends Fragment {
     private Typeface getCurTypeFace() {
         Typeface typeface;
 
-        switch(curFontIndex) {
+        switch (curFontIndex) {
             case 100:
                 typeface = Typeface.SANS_SERIF;
                 break;
@@ -549,5 +549,4 @@ public class GraphFragment extends Fragment {
 //
 //        return newDrawable;
 //    }
-
 }

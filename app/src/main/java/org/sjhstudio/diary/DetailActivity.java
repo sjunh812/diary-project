@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
@@ -67,7 +68,6 @@ public class DetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-
         init();
         processIntent();
     }
@@ -97,7 +97,6 @@ public class DetailActivity extends BaseActivity {
         photoContainer = findViewById(R.id.photo_container);
         currentBanner = findViewById(R.id.current_banner);
         totalBanner = findViewById(R.id.total_banner);
-
         photoAdapter = new PhotoAdapter(this, null);
         ViewPager2 photoViewPager = findViewById(R.id.photo_view_pager);
         photoViewPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
@@ -147,6 +146,7 @@ public class DetailActivity extends BaseActivity {
     private void exportToTXTFile() {
         try {
             Date date = Utils.INSTANCE.getDateFormat().parse(item.getCreateDateStr());
+
             if(date == null) {
                 Snackbar.make(
                         dateTextView,
@@ -182,7 +182,7 @@ public class DetailActivity extends BaseActivity {
                 fos.close();
                 Snackbar.make(
                         dateTextView,
-                        "성공적으로 txt 파일을 생성했습니다!, Download 폴더를 확인해주세요.",
+                        "성공적으로 txt 파일을 생성했습니다! 다운로드 폴더를 확인해주세요.",
                         2000
                 ).show();
             } else {
@@ -204,7 +204,7 @@ public class DetailActivity extends BaseActivity {
                 osw.close();
                 Snackbar.make(
                         dateTextView,
-                        "성공적으로 txt 파일을 생성했습니다!, Download 폴더를 확인해주세요.",
+                        "성공적으로 txt 파일을 생성했습니다! 다운로드 폴더를 확인해주세요.",
                         1000
                 ).show();
             }
@@ -265,7 +265,7 @@ public class DetailActivity extends BaseActivity {
                 moodImageView.setImageResource(R.drawable.mood_yawn_color);
                 break;
             default:    // default(미소)
-                Log.d(LOG, "xxx 기분 이미지 에러: index(" + index + ")");
+                Log.d(LOG, "xxx Error mood image: index(" + index + ")");
                 moodImageView.setImageResource(R.drawable.mood_smile_color);
                 break;
         }
@@ -295,7 +295,7 @@ public class DetailActivity extends BaseActivity {
                 weatherImageView.setImageResource(R.drawable.weather_icon_7);
                 break;
             default:
-                Log.d(LOG, "xxx 날씨 이미지 에러: index(" + index + ")");
+                Log.d(LOG, "xxx Error weather image: index(" + index + ")");
                 break;
         }
     }
@@ -337,6 +337,7 @@ public class DetailActivity extends BaseActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -357,5 +358,4 @@ public class DetailActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 }

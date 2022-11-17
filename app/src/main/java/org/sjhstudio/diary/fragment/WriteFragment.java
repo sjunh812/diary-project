@@ -60,8 +60,10 @@ import kotlin.Unit;
 
 public class WriteFragment extends Fragment implements WriteFragmentListener {
 
-    private static final String LOG = "log";  // log
+    private static final String LOG = "log";
     private static final String LOCAL_NOTE = "local_note";
+    private static final String ADD_PHOTO_PATHS = "add_photo_paths";
+    private static final String DELETE_PHOTO_PATHS = "delete_photo_paths";
 
     private TextView titleTextView;
     private ImageView weatherImageView;
@@ -92,38 +94,34 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     private ViewPager2 photoViewPager;
     private PhotoAdapter photoAdapter;
     private LinearLayout photoIndicator;
-    private TextView currentBanner;                     // 현재 view pager item 위치
-    private TextView totalBanner;                       // view pager 총 개수
+    private TextView currentBanner;                         // 현재 view pager item 위치
+    private TextView totalBanner;                           // view pager 총 개수
 
     // Listener
-    private OnTabItemSelectedListener tabListener;      // 메인 액티비티에서 관리하는 하단 탭 선택 리스터
-    private OnRequestListener requestListener;          // 메인 액티비티에서 현재 위치 정보를 가져오게 해주는 리스너
+    private OnTabItemSelectedListener tabListener;          // 메인 액티비티에서 관리하는 하단 탭 선택 리스터
+    private OnRequestListener requestListener;              // 메인 액티비티에서 현재 위치 정보를 가져오게 해주는 리스너
 
     // DB
-    private NoteDatabaseCallback callback;              // db 쿼리문 실행을 위한 콜백 인터페이스
+    private NoteDatabaseCallback callback;                  // db 쿼리문 실행을 위한 콜백 인터페이스
 
     private final Calendar calendar = Calendar.getInstance();
 
     private Note updateItem = null;
     private Date calDate = null;
-    private String address = "";                        // 위치 정보
-    private String contents = "";                       // 일기 내용
-    private String filePaths = "";                      // 사진 경로 (여러개일 경우 ','로 구분!!)
-//    private String defaultPaths = "";                   // 일기 수정 시, 기존 사진 경로
-    private String dateText = null;                     // yyyy-MM-dd HH:mm (사용자가 직접 일기 날짜를 지정한 경우 이용됨)
-    private Uri fileUri;                                // 카메라로 찍고 난 후 저장되는 파일의 Uri
-    private int weatherIndex = -1;                      // 날씨 정보(0:맑음, 1:구름 조금, 2:구름 많음, 3:흐림, 4:비, 5:눈/비, 6:눈)
-    private int moodIndex = -1;                         // 0~8 총 9개의 기분을 index 로 표현(-1은 사용자가 아무런 기분도 선택하지 않은 경우)
+    private String filePaths = "";                          // 사진 경로 (여러개일 경우 ','로 구분!!)
+    private String dateText = null;                         // yyyy-MM-dd HH:mm (사용자가 직접 일기 날짜를 지정한 경우 이용됨)
+    private Uri fileUri;                                    // 카메라로 찍고 난 후 저장되는 파일의 Uri
+    private int weatherIndex = -1;                          // 날씨 정보(0:맑음, 1:구름 조금, 2:구름 많음, 3:흐림, 4:비, 5:눈/비, 6:눈)
+    private int moodIndex = -1;                             // 0~8 총 9개의 기분을 index 로 표현(-1은 사용자가 아무런 기분도 선택하지 않은 경우)
     private int curYear;
     private int curMonth;
     private int curDay;
-    private int starIndex = 0;                          // 0: 즐겨찾기無,  1: 즐겨찾기有
+    private int starIndex = 0;                              // 0: 즐겨찾기無,  1: 즐겨찾기有
     private boolean isWeatherViewOpen = false;
 
     private String existPaths = "";
-    private final ArrayList<String> addPaths = new ArrayList<>();
-    private final ArrayList<String> deletePaths = new ArrayList<>();
-    public Boolean cancelWriting = false;
+    private ArrayList<String> addPaths = new ArrayList<>();
+    private ArrayList<String> deletePaths = new ArrayList<>();
 
     private Animation moodAnim;
     private Animation translateLeftAnim;
@@ -133,23 +131,27 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-//        combineFilePath();                                  // photoAdapter 에 저장되있는 파일경로들을 하나로 합침
-        deleteFilesCache(true);
+        combineFilePath();                                  // photoAdapter 에 저장되있는 파일경로들을 하나로 합침
         setMoodIndex();                                     // 현재 눌린 기분버튼 종류에 따라 moodIndex 설정
-        setContents();                                      // contentsEditText 에 사용자가 입력한 내용을 contents 에 저장
+
         LocalNote localNote = new LocalNote(
                 weatherIndex,
                 dateText,
                 locationEditText.getText().toString(),
                 moodIndex,
                 contentsEditText.getText().toString(),
-                existPaths,
+                filePaths,
                 starIndex,
                 updateItem
         );
 
         outState.putSerializable(LOCAL_NOTE, localNote);
-        System.out.println("xxx local note: " + localNote);
+        outState.putStringArrayList(ADD_PHOTO_PATHS, addPaths);
+        outState.putStringArrayList(DELETE_PHOTO_PATHS, deletePaths);
+
+        System.out.println("xxx [SavedInstanceState] local note: " + localNote);
+        System.out.println("xxx [SavedInstanceState] add photo paths: " + addPaths);
+        System.out.println("xxx [SavedInstanceState] delete photo paths: " + deletePaths);
     }
 
     @Override
@@ -165,7 +167,6 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     public void onDetach() {
         super.onDetach();
         requestListener.stopLocationService();  // 위치탐색종료
-//        deleteFilesCache(); // 남아있는 파일캐시 삭제
 
         if (tabListener != null) tabListener = null;
         if (requestListener != null) requestListener = null;
@@ -175,16 +176,16 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     public void deleteFilesCache(Boolean cancelWriting) {
         System.out.println("xxx =================== 사진경로 삭제 ===================");
         System.out.println("xxx 기존 경로: " + existPaths);
-        System.out.println("xxx 저장 경로: " + photoAdapter.getItems());
-        System.out.println("xxx 삭제 경로: " + deletePaths);
-        System.out.println("xxx 추가 경로: " + addPaths);
-        System.out.println("xxx 작성 취소 여부: " + cancelWriting);
+        System.out.println("xxx 저장할 경로: " + photoAdapter.getItems());
+        System.out.println("xxx 삭제할 경로: " + deletePaths);
+        System.out.println("xxx 추가된 경로: " + addPaths);
+        System.out.println("xxx 일기작성 취소: " + cancelWriting);
 
-        if (!cancelWriting) {
+        if (!cancelWriting) {   // 일반적인 경우
             for (String path : deletePaths) {
                 new File(path).delete();
             }
-        } else {
+        } else {    // 일기 작성 취소시!!
             for (String path : deletePaths) {
                 if (addPaths.contains(path)) new File(path).delete();
             }
@@ -193,27 +194,6 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
                 new File(path).delete();
             }
         }
-
-//        if (!defaultPaths.isEmpty() && photoAdapter.getItemCount() != 0) {
-//            String[] paths = defaultPaths.split(",");
-//
-//            for (String path : paths) {
-//                if (!photoAdapter.getItems().contains(path)) {
-//                    System.out.println("xxx 현 경로에 없는 기존 경로 = 삭제필요..");
-//                    new File(path).delete();
-//                }
-//            }
-////            for (String filePath : photoAdapter.getItems()) {
-////                if (!recentFilePaths.contains(filePath)) {
-////                    System.out.println("xxx filePath ")
-////                    new File(filePath).delete();
-////                }
-////            }
-//        }
-    }
-
-    public void deleteFileCache(String filePath) {
-        if (filePath != null && !filePath.equals("")) new File(filePath).delete();
     }
 
     @Override
@@ -254,7 +234,7 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
             }
         }
 
-        if (updateItem != null) setUpdateItem();
+        if (updateItem != null) syncWithUpdateItem(true);
 
         initSaveInstanceState(savedInstanceState);
     }
@@ -379,16 +359,55 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
 
     private void initSaveInstanceState(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState != null) {
+            addPaths = savedInstanceState.getStringArrayList(ADD_PHOTO_PATHS);
+            deletePaths = savedInstanceState.getStringArrayList(DELETE_PHOTO_PATHS);
+
             LocalNote localNote = (LocalNote) savedInstanceState.getSerializable(LOCAL_NOTE);
-            Note updateNote = (Note) localNote.getUpdateNote();
+            Note updateNote = localNote.getUpdateNote();
 
             if (updateNote != null) {
                 updateItem = updateNote;
-//                setUpdateItem(!localNote.getFilePaths().isEmpty());
-                setUpdateItem();
+                syncWithUpdateItem(!localNote.getFilePaths().isEmpty());
             }
 
-            setLocalItem(localNote);
+            syncWithLocalItem(localNote);
+        }
+    }
+
+    public void addPhoto(String path) {
+        addPaths.add(path);
+        photoAdapter.addItem(path);
+        photoAdapter.notifyDataSetChanged();
+        photoViewPager.setCurrentItem(photoAdapter.getItemCount() - 1);
+
+        if (photoAdapter.getItemCount() > 0) addPhotoBtn.setVisibility(View.VISIBLE);
+
+        addPictureImageView.setVisibility(View.GONE);
+        photoViewPager.setVisibility(View.VISIBLE);
+        photoIndicator.setVisibility(View.VISIBLE);
+        totalBanner.setText(String.valueOf(photoAdapter.getItemCount()));
+    }
+
+    public void setPhoto(String paths) {
+        if (paths != null && !paths.equals("")) {
+            String[] picturePaths = paths.split(",");
+
+            if (picturePaths.length > 0) {
+                photoAdapter.setItems(new ArrayList<>(Arrays.asList(picturePaths)));
+                photoAdapter.notifyDataSetChanged();
+                photoViewPager.setVisibility(View.VISIBLE);
+                photoIndicator.setVisibility(View.VISIBLE);
+                addPictureImageView.setVisibility(View.GONE);
+                totalBanner.setText(String.valueOf(photoAdapter.getItemCount()));
+            } else {
+                photoViewPager.setVisibility(View.GONE);
+                photoIndicator.setVisibility(View.GONE);
+                addPictureImageView.setVisibility(View.VISIBLE);
+            }
+        } else {
+            photoViewPager.setVisibility(View.GONE);
+            photoIndicator.setVisibility(View.GONE);
+            addPictureImageView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -440,40 +459,8 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         else Log.d(LOG, "Unknown weather index: " + weatherIndex);
     }
 
-    public void setLocationTextView(String location) {
-        address = location;
-        if (locationEditText != null) locationEditText.setText(location);
-    }
-
     public void setDateTextView(String date) {
         if (dateTextView != null) dateTextView.setText(date);
-    }
-
-//    public void setPhotoAdapter(String filePath) {
-//        photoAdapter.addItem(filePath);
-//        photoAdapter.notifyDataSetChanged();
-//        photoViewPager.setCurrentItem(photoAdapter.getItemCount() - 1);
-//
-//        if (photoAdapter.getItemCount() > 0) addPhotoBtn.setVisibility(View.VISIBLE);
-//
-//        addPictureImageView.setVisibility(View.GONE);
-//        photoViewPager.setVisibility(View.VISIBLE);
-//        photoIndicator.setVisibility(View.VISIBLE);
-//        totalBanner.setText(String.valueOf(photoAdapter.getItemCount()));
-//    }
-
-    public void addPhoto(String path) {
-        addPaths.add(path);
-        photoAdapter.addItem(path);
-        photoAdapter.notifyDataSetChanged();
-        photoViewPager.setCurrentItem(photoAdapter.getItemCount() - 1);
-
-        if (photoAdapter.getItemCount() > 0) addPhotoBtn.setVisibility(View.VISIBLE);
-
-        addPictureImageView.setVisibility(View.GONE);
-        photoViewPager.setVisibility(View.VISIBLE);
-        photoIndicator.setVisibility(View.VISIBLE);
-        totalBanner.setText(String.valueOf(photoAdapter.getItemCount()));
     }
 
     public void setCurDate(int year, int month, int day) {
@@ -482,8 +469,12 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         curDay = day;
     }
 
-    public void setContents() {
-        contents = contentsEditText.getText().toString();
+    public void setCalDate(Date calDate) {
+        this.calDate = calDate;
+    }
+
+    public void setLocationTextView(String location) {
+        if (locationEditText != null) locationEditText.setText(location);
     }
 
     public void setMoodIndex() {
@@ -506,26 +497,22 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
             curButton.clearAnimation();
         }
 
-        if (moodIndex == 0) setButtonAnim(button1);
-        else if (moodIndex == 1) setButtonAnim(button2);
-        else if (moodIndex == 2) setButtonAnim(button3);
-        else if (moodIndex == 3) setButtonAnim(button4);
-        else if (moodIndex == 4) setButtonAnim(button5);
-        else if (moodIndex == 5) setButtonAnim(button6);
-        else if (moodIndex == 6) setButtonAnim(button7);
-        else if (moodIndex == 7) setButtonAnim(button8);
-        else setButtonAnim(button9);
+        if (moodIndex == 0) setMoodButtonAnim(button1);
+        else if (moodIndex == 1) setMoodButtonAnim(button2);
+        else if (moodIndex == 2) setMoodButtonAnim(button3);
+        else if (moodIndex == 3) setMoodButtonAnim(button4);
+        else if (moodIndex == 4) setMoodButtonAnim(button5);
+        else if (moodIndex == 5) setMoodButtonAnim(button6);
+        else if (moodIndex == 6) setMoodButtonAnim(button7);
+        else if (moodIndex == 7) setMoodButtonAnim(button8);
+        else setMoodButtonAnim(button9);
     }
 
-    private void setButtonAnim(Button button) {
+    private void setMoodButtonAnim(Button button) {
         button.setScaleX(1.4f);
         button.setScaleY(1.4f);
         button.startAnimation(moodAnim);
         curButton = button;
-    }
-
-    public void setCalDate(Date calDate) {
-        this.calDate = calDate;
     }
 
     private void setStarButton(int index) {
@@ -546,11 +533,39 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         if (swipeRefreshLayout != null) swipeRefreshLayout.setRefreshing(isRefresh);
     }
 
-    public void setItem(Note item) {
+    public void setUpdateItem(Note item) {
         updateItem = item;
     }
 
-    private void setLocalItem(LocalNote item) {
+    @SuppressLint("NonConstantResourceId")
+    private View getSelectedMoodButton(View v) {
+        int id = v.getId();
+
+        switch (id) {
+            case R.id.angryView:
+                return button1;
+            case R.id.coolView:
+                return button2;
+            case R.id.cryingView:
+                return button3;
+            case R.id.illView:
+                return button4;
+            case R.id.laughView:
+                return button5;
+            case R.id.mehView:
+                return button6;
+            case R.id.sadView:
+                return button7;
+            case R.id.smileView:
+                return button8;
+            case R.id.yawnView:
+                return button9;
+        }
+
+        return null;
+    }
+
+    private void syncWithLocalItem(LocalNote item) {
         weatherIndex = item.getWeatherIndex();
         contentsEditText.setText(item.getContents());
 
@@ -571,13 +586,13 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
 
         setLocationTextView(item.getAddress());
         setStarButton(item.getStarIndex());
-        setUpdatePhoto(item.getFilePaths());
+        setPhoto(item.getFilePaths());
 
         if (item.getWeatherIndex() != -1) setWeatherImageView2(item.getWeatherIndex());
         if (item.getMoodIndex() != -1) setMoodButton(item.getMoodIndex());
     }
 
-    private void setUpdateItem() {
+    private void syncWithUpdateItem(Boolean updatePhoto) {
         titleTextView.setText("일기수정");
 
         String date = updateItem.getCreateDateStr();
@@ -610,67 +625,19 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         setWeatherImageView2(weatherIndex);
         setStarButton(starIndex);
         setMoodButton(moodIndex);
-        setUpdatePhoto(paths);
-    }
 
-    public void setUpdatePhoto(String paths) {
-        if (paths != null && !paths.equals("")) {
-            String[] picturePaths = paths.split(",");
-
-            if (picturePaths.length > 0) {
-                photoAdapter.setItems(new ArrayList<>(Arrays.asList(picturePaths)));
-                photoAdapter.notifyDataSetChanged();
-
-                photoViewPager.setVisibility(View.VISIBLE);
-                photoIndicator.setVisibility(View.VISIBLE);
-                addPictureImageView.setVisibility(View.GONE);
-                totalBanner.setText(String.valueOf(photoAdapter.getItemCount()));
-            } else {
-                photoViewPager.setVisibility(View.GONE);
-                photoIndicator.setVisibility(View.GONE);
-                addPictureImageView.setVisibility(View.VISIBLE);
-            }
-        } else {
-            photoViewPager.setVisibility(View.GONE);
-            photoIndicator.setVisibility(View.GONE);
-            addPictureImageView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @SuppressLint("NonConstantResourceId")
-    private View getSelectedMoodButton(View v) {
-        int id = v.getId();
-
-        switch (id) {
-            case R.id.angryView:
-                return button1;
-            case R.id.coolView:
-                return button2;
-            case R.id.cryingView:
-                return button3;
-            case R.id.illView:
-                return button4;
-            case R.id.laughView:
-                return button5;
-            case R.id.mehView:
-                return button6;
-            case R.id.sadView:
-                return button7;
-            case R.id.smileView:
-                return button8;
-            case R.id.yawnView:
-                return button9;
-        }
-
-        return null;
+        if (updatePhoto) setPhoto(paths);
     }
 
     public Boolean isEmptyContent() {
-        return curButton == null && (contentsEditText == null || contentsEditText.getText() == null || contentsEditText.getText().toString().equals(""));
+        return curButton == null
+                && (contentsEditText == null || contentsEditText.getText() == null || contentsEditText.getText().toString().equals(""))
+                && (photoAdapter.getItemCount() < 1 && deletePaths.isEmpty());
     }
 
     public void combineFilePath() {
         filePaths = "";
+
         for (int i = 0; i < photoAdapter.getItemCount(); i++) {
             String filePath = photoAdapter.getItems().get(i);
 
@@ -687,24 +654,13 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         deleteNoteDialog.setDeleteTextView("일기를 삭제하시겠습니까?");
         deleteNoteDialog.setDeleteButtonOnClickListener(v -> {
             deleteNoteDialog.dismiss();
-
-            int id = updateItem.get_id();
-            String paths = updateItem.getPicture();
-
             deleteFilesCache(false);
 
-            for(String path : photoAdapter.getItems()) {
+            for (String path : photoAdapter.getItems()) {
                 new File(path).delete();
             }
 
-//            if (paths != null && !paths.equals("")) {
-//                String[] picturePaths = paths.split(",");
-//
-//                for (String picturePath : picturePaths) {
-//                    File file = new File(picturePath);
-//                    file.delete();
-//                }
-//            }
+            int id = updateItem.get_id();
 
             callback.deleteDB(id);  // 해당 db 삭제
             tabListener.setIsSelected(true);
@@ -719,7 +675,6 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         pickerDialog.setCancelButtonOnClickListener(v -> pickerDialog.dismiss());
         pickerDialog.setOkButtonOnClickListener(v -> {
             pickerDialog.dismiss();
-
             curYear = pickerDialog.getCurYear();
             curMonth = pickerDialog.getCurMonth() + 1;
             curDay = pickerDialog.getCurDay();
@@ -839,23 +794,6 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         return fileUri;
     }
 
-    class StarButtonClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            if (starIndex == 0) {
-                starIndex = 1;
-                Glide.with(WriteFragment.this)
-                        .load(ContextCompat.getDrawable(requireContext(), R.drawable.star_icon_color))
-                        .into(starButton);
-            } else {
-                starIndex = 0;
-                Glide.with(WriteFragment.this)
-                        .load(ContextCompat.getDrawable(requireContext(), R.drawable.star_icon))
-                        .into(starButton);
-            }
-        }
-    }
-
     class SaveButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -867,8 +805,9 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
 
                 combineFilePath();                                  // photoAdapter 에 저장되있는 파일경로들을 하나로 합침
                 setMoodIndex();                                     // 현재 눌린 기분버튼 종류에 따라 moodIndex 설정
-                setContents();                                      // contentsEditText 에 사용자가 입력한 내용을 contents 에 저장
-                address = locationEditText.getText().toString();    // GPS 로 받아온 위치 or 사용자가 직접 입력한 위치정보를 address(String)에 저장
+
+                String contents = contentsEditText.getText().toString();
+                String address = locationEditText.getText().toString();
 
                 if (updateItem == null) {
                     Object[] objs;
@@ -932,6 +871,23 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         }
     }
 
+    class StarButtonClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            if (starIndex == 0) {
+                starIndex = 1;
+                Glide.with(WriteFragment.this)
+                        .load(ContextCompat.getDrawable(requireContext(), R.drawable.star_icon_color))
+                        .into(starButton);
+            } else {
+                starIndex = 0;
+                Glide.with(WriteFragment.this)
+                        .load(ContextCompat.getDrawable(requireContext(), R.drawable.star_icon))
+                        .into(starButton);
+            }
+        }
+    }
+
     class MoodButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -939,7 +895,7 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
 
             if (selectButton != null) {
                 if (curButton == null) {
-                    setButtonAnim(selectButton);
+                    setMoodButtonAnim(selectButton);
                 } else if (curButton == selectButton) {
                     selectButton.setScaleX(1.0f);
                     selectButton.setScaleY(1.0f);
@@ -949,7 +905,7 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
                     curButton.setScaleX(1.0f);
                     curButton.setScaleY(1.0f);
                     curButton.clearAnimation();
-                    setButtonAnim(selectButton);
+                    setMoodButtonAnim(selectButton);
                 }
             }
         }

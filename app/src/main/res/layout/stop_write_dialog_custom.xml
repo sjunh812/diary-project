@@ -31,36 +31,35 @@
             android:padding="7dp"
             android:scaleType="centerInside"
             android:src="@drawable/x_icon" />
-
     </RelativeLayout>
 
     <TextView
         android:id="@+id/deleteTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginTop="25dp"
         android:layout_marginBottom="10dp"
-        android:text="일기 작성을 그만두시겠습니까?"
-        android:textSize="18sp"
+        android:gravity="center"
         android:lineSpacingExtra="5dp"
-        android:textColor="@color/font" />
+        android:text="일기 작성을 그만두시겠습니까?"
+        android:textColor="@color/font"
+        android:textSize="18sp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginBottom="20dp"
-        android:text="(작성한 일기는 저장되지 않습니다.)"
-        android:textSize="15sp"
+        android:gravity="center"
         android:lineSpacingExtra="5dp"
-        android:textColor="@color/pastel_700" />
+        android:text="(작성한 일기는 저장되지 않습니다.)"
+        android:textColor="@color/pastel_700"
+        android:textSize="15sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:orientation="horizontal"
         android:gravity="center"
+        android:orientation="horizontal"
         android:paddingTop="5dp"
         android:paddingBottom="5dp">
 
@@ -69,9 +68,9 @@
             android:layout_width="80dp"
             android:layout_height="37dp"
             android:layout_gravity="center"
-            android:layout_marginEnd="30dp"
+            android:layout_marginEnd="15dp"
             android:background="@drawable/button"
-            android:text="작성 취소"
+            android:text="네"
             android:textColor="@color/white"
             android:textSize="15sp"
             android:textStyle="bold"
@@ -80,17 +79,15 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/continueButton"
-            android:layout_width="80dp"
+            android:layout_width="160dp"
             android:layout_height="37dp"
             android:layout_gravity="center"
             android:background="@drawable/button"
-            android:text="계속 작성"
+            android:text="아니오"
             android:textColor="@color/white"
             android:textSize="15sp"
             android:textStyle="bold"
             app:backgroundTint="@color/cardview_shadow_end_color"
             app:backgroundTintMode="add" />
-
     </LinearLayout>
-
 </LinearLayout>
