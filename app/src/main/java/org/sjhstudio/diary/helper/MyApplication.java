@@ -27,7 +27,7 @@ public class MyApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        if(requestQueue == null) {
+        if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(getApplicationContext(), new HurlStack() {
                 @Override
                 protected HttpURLConnection createConnection(URL url) throws IOException {
@@ -59,7 +59,7 @@ public class MyApplication extends MultiDexApplication {
                 error -> listener.onResponse(requestCode, Constants.VOLLEY_RESPONSE_ERROR, error.getMessage())
         ) {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 return params;
             }
         };
@@ -83,7 +83,7 @@ public class MyApplication extends MultiDexApplication {
                 error -> listener.onResponse(requestCode, Constants.VOLLEY_RESPONSE_ERROR, error.getMessage())
         ) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 return headers;
             }
         };
@@ -92,6 +92,5 @@ public class MyApplication extends MultiDexApplication {
         request.setRetryPolicy(new DefaultRetryPolicy(10 * 1000, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         MyApplication.requestQueue.add(request);    // requestQueue 에 해당 request 추가
     }
-
 }
 

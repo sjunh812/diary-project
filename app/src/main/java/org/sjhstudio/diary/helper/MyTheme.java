@@ -6,15 +6,15 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 
-import org.sjhstudio.diary.utils.Pref;
 import org.sjhstudio.diary.R;
+import org.sjhstudio.diary.utils.Pref;
 
 public class MyTheme {
 
     public static void applyTheme(@NonNull Context context) {
-        int font;  // THE얌전해진언니체
-        int fontSize;   // 보통
-        int mode;   // 시스템
+        int font;
+        int fontSize;
+        int mode;
 
         font = Pref.getPFontKey(context);
         mode = Pref.getPModeKey(context);
@@ -26,15 +26,15 @@ public class MyTheme {
     public static void applyDarkMode(Context context, int modeIndex) {
         Pref.setPModeKey(context, modeIndex);
 
-        if(modeIndex == 0) {        // 시스템 설정에 따른 테마모드
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (modeIndex == 0) {   // 시스템 설정에 따른 테마모드
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY);
             }
-        } else if(modeIndex == 1){  // 라이트 모드
+        } else if (modeIndex == 1) {    // 라이트 모드
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        } else if(modeIndex == 2) { // 다크 모드
+        } else if (modeIndex == 2) {    // 다크 모드
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
     }
@@ -43,20 +43,7 @@ public class MyTheme {
         Pref.setPFontKey(context, font);
         Pref.setPFontSize(context, fontSize);
 
-        switch(fontSize) {
-            case 0:
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-        }
-
-        switch(font) {
+        switch (font) {
             case 100:
                 context.setTheme(R.style.Theme_BasicDiaryProject);
                 break;
@@ -101,5 +88,4 @@ public class MyTheme {
                 break;
         }
     }
-
 }
