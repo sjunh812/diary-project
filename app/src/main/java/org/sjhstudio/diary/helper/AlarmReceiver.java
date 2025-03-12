@@ -29,17 +29,17 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         alarmHelper = new AlarmHelper(context);
 
-        if("android.intent.action.BOOT_COMPLETED".equals(intent.getAction())) {
+        if ("android.intent.action.BOOT_COMPLETED".equals(intent.getAction())) {
             // 부팅 : 알람매니저 재등록(SharedPreference 활용)
             Log.e(TAG, "기기 재부팅 : 알람매니저 재등록");
             setBootData(context);
-        } else if(Intent.ACTION_MY_PACKAGE_REPLACED.equals(intent.getAction())
+        } else if (Intent.ACTION_MY_PACKAGE_REPLACED.equals(intent.getAction())
                 || Intent.ACTION_PACKAGE_REPLACED.equals(intent.getAction())
         ) {
             // 앱 업데이트 이후 : 알람매니저 재등록
             Log.e(TAG, "앱 업데이트 실행 : 알람매니저 재등록");
             setBootData(context);
-        } else if(Intent.ACTION_PACKAGE_REMOVED.equals(intent.getAction())) {
+        } else if (Intent.ACTION_PACKAGE_REMOVED.equals(intent.getAction())) {
             // 앱 삭제 : 비밀번호 초기화
             Log.e(TAG, "앱 삭제 : 비밀번호 삭제");
             Pref.removePPassword(context);
@@ -51,11 +51,11 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     private void startNotification(Context context) {
-        NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder builder;
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if(notificationManager.getNotificationChannel(Constants.CHANNEL_ID) == null) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (notificationManager.getNotificationChannel(Constants.CHANNEL_ID) == null) {
                 NotificationChannel notificationChannel = new NotificationChannel(
                         Constants.CHANNEL_ID,
                         Constants.CHANNEL_NAME,
@@ -103,10 +103,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         alarmHelper.startAlarm(true);
     }
 
-    private void setBootData(Context context){
+    private void setBootData(Context context) {
         Boolean useAlarm = Pref.getPUseAlarm(context);
 
-        if(useAlarm) {
+        if (useAlarm) {
             Calendar cal = Calendar.getInstance();
             int hour = Pref.getPAlarmHour(context);
             int minute = Pref.getPAlarmMinute(context);
@@ -115,11 +115,11 @@ public class AlarmReceiver extends BroadcastReceiver {
             cal.set(Calendar.MINUTE, minute);
             cal.set(Calendar.SECOND, 0);
 
-            if(Calendar.getInstance().getTimeInMillis() > cal.getTimeInMillis()) {
+            if (Calendar.getInstance().getTimeInMillis() > cal.getTimeInMillis()) {
                 cal.add(Calendar.DATE, 1);
             }
 
-            AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             Intent rIntent = new Intent(context, AlarmReceiver.class);
             PendingIntent pendingIntent;
 
@@ -142,5 +142,4 @@ public class AlarmReceiver extends BroadcastReceiver {
             alarmManager.setAlarmClock(new AlarmManager.AlarmClockInfo(cal.getTimeInMillis(), pendingIntent), pendingIntent);
         }
     }
-
 }
