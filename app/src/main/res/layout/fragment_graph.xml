@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -13,10 +12,10 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="5dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp">
 
             <TextView
                 android:id="@+id/titleTextView"
@@ -41,9 +40,9 @@
 
             <RadioGroup
                 android:id="@+id/radioGroup"
-                android:layout_alignParentRight="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
                 android:gravity="center"
@@ -57,9 +56,9 @@
                     android:background="@drawable/radio_button"
                     android:gravity="center"
                     android:text="전체"
-                    android:textStyle="bold"
                     android:textColor="@drawable/radio_button_text"
-                    android:textSize="11sp" />
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
 
                 <org.sjhstudio.diary.custom.MyRadioButton
                     android:id="@+id/yearButton"
@@ -69,9 +68,9 @@
                     android:background="@drawable/radio_button"
                     android:gravity="center"
                     android:text="올해"
-                    android:textStyle="bold"
                     android:textColor="@drawable/radio_button_text"
-                    android:textSize="11sp" />
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
 
                 <org.sjhstudio.diary.custom.MyRadioButton
                     android:id="@+id/monthButton"
@@ -80,9 +79,9 @@
                     android:background="@drawable/radio_button"
                     android:gravity="center"
                     android:text="이번달"
-                    android:textStyle="bold"
                     android:textColor="@drawable/radio_button_text"
-                    android:textSize="11sp" />
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
 
             </RadioGroup>
 
@@ -91,9 +90,9 @@
     </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
@@ -112,10 +111,10 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:background="@color/background"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:background="@color/background"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -208,7 +207,7 @@
                                 android:id="@+id/angryImageView"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                android:src="@drawable/mood_angry_color" />
+                                android:src="@drawable/ic_mood_angry" />
 
                             <TextView
                                 android:id="@+id/angryCount"
@@ -241,7 +240,7 @@
                                 android:id="@+id/coolImageView"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                android:src="@drawable/mood_cool_color" />
+                                android:src="@drawable/ic_mood_cool" />
 
                             <TextView
                                 android:id="@+id/coolCount"
@@ -273,7 +272,7 @@
                                 android:id="@+id/cryingImageView"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                android:src="@drawable/mood_crying_color" />
+                                android:src="@drawable/ic_mood_crying" />
 
                             <TextView
                                 android:id="@+id/cryingCount"
@@ -314,7 +313,7 @@
                                 android:id="@+id/illImageView"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                android:src="@drawable/mood_ill_color" />
+                                android:src="@drawable/ic_mood_ill" />
 
                             <TextView
                                 android:id="@+id/illCount"
@@ -347,7 +346,7 @@
                                 android:id="@+id/laughImageView"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                android:src="@drawable/mood_laugh_color" />
+                                android:src="@drawable/ic_mood_laugh" />
 
                             <TextView
                                 android:id="@+id/laughCount"
@@ -379,7 +378,7 @@
                                 android:id="@+id/mehImageView"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                android:src="@drawable/mood_meh_color" />
+                                android:src="@drawable/ic_mood_meh" />
 
                             <TextView
                                 android:id="@+id/mehCount"
@@ -421,7 +420,7 @@
                                 android:id="@+id/sadImageView"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                android:src="@drawable/mood_sad" />
+                                android:src="@drawable/ic_mood_sad" />
 
                             <TextView
                                 android:id="@+id/sadCount"
@@ -454,7 +453,7 @@
                                 android:id="@+id/smileImageView"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                android:src="@drawable/mood_smile_color" />
+                                android:src="@drawable/ic_mood_smile" />
 
                             <TextView
                                 android:id="@+id/smileCount"
@@ -486,7 +485,7 @@
                                 android:id="@+id/yawnImageView"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                android:src="@drawable/mood_yawn_color" />
+                                android:src="@drawable/ic_mood_yawn" />
 
                             <TextView
                                 android:id="@+id/yawnCount"
@@ -505,11 +504,11 @@
                 <!-- android:background="@drawable/backgroud_graph" -->
                 <FrameLayout
                     android:id="@+id/background_graph"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
                     android:layout_marginTop="15dp"
                     android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp">
+                    android:paddingBottom="10dp">
 
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/chart1"

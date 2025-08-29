@@ -6,28 +6,28 @@
     android:background="@drawable/border_view_calendar"
     android:orientation="vertical"
     android:paddingLeft="25dp"
-    android:paddingRight="25dp"
     android:paddingTop="10dp"
+    android:paddingRight="25dp"
     android:paddingBottom="10dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        
+
         <ImageView
             android:id="@+id/moodImageView"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:layout_alignParentLeft="true"
-            android:src="@drawable/mood_angry_color" />
+            android:src="@drawable/ic_mood_angry" />
 
         <ImageView
             android:id="@+id/weatherImageView"
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/moodImageView"
             android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/moodImageView"
             android:src="@drawable/weather_icon_1" />
 
         <TextView
@@ -47,9 +47,9 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/timeTextView"
+            android:ellipsize="marquee"
             android:gravity="right"
             android:singleLine="true"
-            android:ellipsize="marquee"
             android:text="고양시 일산서구"
             android:textColor="@color/pastel_700"
             android:textSize="12sp" />
@@ -62,11 +62,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="4dp"
-        android:maxLines="3"
         android:ellipsize="end"
+        android:maxLines="3"
         android:text="내용입니다\n띄어쓰기"
-        android:textSize="13sp"
-        android:textColor="@color/font_contents" />
+        android:textColor="@color/font_contents"
+        android:textSize="13sp" />
 
     <ImageView
         android:id="@+id/starImageView"

@@ -2,10 +2,6 @@ package org.sjhstudio.diary;
 
 import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -24,6 +20,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -124,7 +124,7 @@ public class DetailActivity extends BaseActivity {
         Intent intent = getIntent();
 
         if (intent != null) {
-            item = (Note)intent.getSerializableExtra("item");
+            item = (Note) intent.getSerializableExtra("item");
             setMoodImage(item.getMood());
             setWeatherImage(item.getWeather());
             setStarImage(item.getStarIndex());
@@ -147,7 +147,7 @@ public class DetailActivity extends BaseActivity {
         try {
             Date date = Utils.INSTANCE.getDateFormat().parse(item.getCreateDateStr());
 
-            if(date == null) {
+            if (date == null) {
                 Snackbar.make(
                         dateTextView,
                         "예상치 못한 오류가 발생했습니다. 피드백 해주시면 감사하겠습니다.",
@@ -167,7 +167,7 @@ public class DetailActivity extends BaseActivity {
                     + "\n\n" + item.getContents()
             );
 
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 System.out.println("xxx Android 30이상 : ContentValues 이용");
                 ContentValues values = new ContentValues();
                 values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
@@ -189,9 +189,9 @@ public class DetailActivity extends BaseActivity {
                 System.out.println("xxx Android 29이하 : File 이용");
                 File storage = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS);
 
-                if(!storage.exists()) {
+                if (!storage.exists()) {
                     boolean success = storage.mkdirs();
-                    if(!success) {
+                    if (!success) {
                         storage = null;
                     }
                 }
@@ -219,10 +219,10 @@ public class DetailActivity extends BaseActivity {
     }
 
     public void setPhoto(String paths) {
-        if(paths != null && !paths.equals("")) {
+        if (paths != null && !paths.equals("")) {
             String[] picturePaths = paths.split(",");
 
-            if(picturePaths.length > 0) {
+            if (picturePaths.length > 0) {
                 photoAdapter.setItems(new ArrayList<>(Arrays.asList(picturePaths)));
                 photoAdapter.notifyDataSetChanged();
                 totalBanner.setText(String.valueOf(photoAdapter.getItemCount()));
@@ -236,43 +236,43 @@ public class DetailActivity extends BaseActivity {
     }
 
     private void setMoodImage(int index) {
-        switch(index) {
+        switch (index) {
             case 0:     // 화남
-                moodImageView.setImageResource(R.drawable.mood_angry_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_angry);
                 break;
             case 1:     // 쿨
-                moodImageView.setImageResource(R.drawable.mood_cool_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_cool);
                 break;
             case 2:     // 슬픔
-                moodImageView.setImageResource(R.drawable.mood_crying_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_crying);
                 break;
             case 3:     // 아픔
-                moodImageView.setImageResource(R.drawable.mood_ill_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_ill);
                 break;
             case 4:     // 웃음
-                moodImageView.setImageResource(R.drawable.mood_laugh_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_laugh);
                 break;
             case 5:     // 보통
-                moodImageView.setImageResource(R.drawable.mood_meh_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_meh);
                 break;
             case 6:     // 나쁨
-                moodImageView.setImageResource(R.drawable.mood_sad);
+                moodImageView.setImageResource(R.drawable.ic_mood_sad);
                 break;
             case 7:     // 좋음
-                moodImageView.setImageResource(R.drawable.mood_smile_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_smile);
                 break;
             case 8:     // 피곤
-                moodImageView.setImageResource(R.drawable.mood_yawn_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_yawn);
                 break;
             default:    // default(미소)
                 Log.d(LOG, "xxx Error mood image: index(" + index + ")");
-                moodImageView.setImageResource(R.drawable.mood_smile_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_smile);
                 break;
         }
     }
 
     private void setWeatherImage(int index) {
-        switch(index) {
+        switch (index) {
             case 0:
                 weatherImageView.setImageResource(R.drawable.weather_icon_1);
                 break;
@@ -301,7 +301,7 @@ public class DetailActivity extends BaseActivity {
     }
 
     private void setStarImage(int index) {
-        if(index == 0)  starImageView.setVisibility(View.GONE);
+        if (index == 0) starImageView.setVisibility(View.GONE);
         else starImageView.setVisibility(View.VISIBLE);
     }
 
@@ -312,11 +312,11 @@ public class DetailActivity extends BaseActivity {
         deleteDialog.setDeleteTextView("일기를 삭제하시겠습니까?\n삭제한 일기는 복구가 불가능합니다.");
         deleteDialog.setDeleteButtonText("삭제");
         deleteDialog.setCancelButton2Text("취소");
-        deleteDialog.setDeleteButtonOnClickListener( v -> {
+        deleteDialog.setDeleteButtonOnClickListener(v -> {
             int id = item.get_id();
             String path = item.getPicture();
 
-            if(path != null && !path.equals("")) {
+            if (path != null && !path.equals("")) {
                 File file = new File(path);
                 file.delete();
             }
@@ -342,7 +342,7 @@ public class DetailActivity extends BaseActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        switch(id) {
+        switch (id) {
             case android.R.id.home: // 뒤로가기
                 finish();
                 return true;

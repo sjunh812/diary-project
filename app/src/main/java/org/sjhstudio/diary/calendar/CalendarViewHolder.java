@@ -26,19 +26,19 @@ public class CalendarViewHolder extends RecyclerView.ViewHolder {
     public CalendarViewHolder(@NonNull View itemView) {
         super(itemView);
 
-        _itemView = (LinearLayout)itemView.findViewById(R.id.itemView);
-        moodImageView = (ImageView)itemView.findViewById(R.id.moodImageView);
-        weatherImageView = (ImageView)itemView.findViewById(R.id.weatherImageView);
-        starImageView = (ImageView)itemView.findViewById(R.id.starImageView);
-        locationTextView = (TextView)itemView.findViewById(R.id.locationTextView);
-        timeTextView = (TextView)itemView.findViewById(R.id.timeTextView);
-        contentsTextView = (TextView)itemView.findViewById(R.id.contentsTextView);
+        _itemView = (LinearLayout) itemView.findViewById(R.id.itemView);
+        moodImageView = (ImageView) itemView.findViewById(R.id.moodImageView);
+        weatherImageView = (ImageView) itemView.findViewById(R.id.weatherImageView);
+        starImageView = (ImageView) itemView.findViewById(R.id.starImageView);
+        locationTextView = (TextView) itemView.findViewById(R.id.locationTextView);
+        timeTextView = (TextView) itemView.findViewById(R.id.timeTextView);
+        contentsTextView = (TextView) itemView.findViewById(R.id.contentsTextView);
 
         _itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = getAdapterPosition();
-                if(clickListener != null) {
+                if (clickListener != null) {
                     clickListener.onItemClick(CalendarViewHolder.this, v, position);
                 }
             }
@@ -54,7 +54,7 @@ public class CalendarViewHolder extends RecyclerView.ViewHolder {
         timeTextView.setText(item.getTime());           // 시간 설정
         contentsTextView.setText(item.getContents());   // 내용 설정
 
-        if(item.getContents() == null || item.getContents().equals("")) {
+        if (item.getContents() == null || item.getContents().equals("")) {
             contentsTextView.setVisibility(View.GONE);
         } else {
             contentsTextView.setVisibility(View.VISIBLE);
@@ -62,42 +62,42 @@ public class CalendarViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setMoodImage(int index) {
-        switch(index) {
+        switch (index) {
             case 0:     // 화남
-                moodImageView.setImageResource(R.drawable.mood_angry_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_angry);
                 break;
             case 1:     // 쿨
-                moodImageView.setImageResource(R.drawable.mood_cool_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_cool);
                 break;
             case 2:     // 슬픔
-                moodImageView.setImageResource(R.drawable.mood_crying_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_crying);
                 break;
             case 3:     // 아픔
-                moodImageView.setImageResource(R.drawable.mood_ill_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_ill);
                 break;
             case 4:     // 웃음
-                moodImageView.setImageResource(R.drawable.mood_laugh_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_laugh);
                 break;
             case 5:     // 보통
-                moodImageView.setImageResource(R.drawable.mood_meh_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_meh);
                 break;
             case 6:     // 나쁨
-                moodImageView.setImageResource(R.drawable.mood_sad);
+                moodImageView.setImageResource(R.drawable.ic_mood_sad);
                 break;
             case 7:     // 좋음
-                moodImageView.setImageResource(R.drawable.mood_smile_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_smile);
                 break;
             case 8:     // 졸림
-                moodImageView.setImageResource(R.drawable.mood_yawn_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_yawn);
                 break;
             default:    // default(미소)
-                moodImageView.setImageResource(R.drawable.mood_smile_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_smile);
                 break;
         }
     }
 
     private void setWeatherImage(int index) {
-        switch(index) {
+        switch (index) {
             case 0:
                 weatherImageView.setImageResource(R.drawable.weather_icon_1);
                 break;
@@ -126,7 +126,7 @@ public class CalendarViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setStarImage(int index) {
-        if(index == 0) {
+        if (index == 0) {
             starImageView.setVisibility(View.GONE);
         } else {
             starImageView.setVisibility(View.VISIBLE);

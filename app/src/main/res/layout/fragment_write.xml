@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp">
 
         <TextView
             android:id="@+id/titleTextView"
@@ -74,10 +74,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:elevation="1dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp">
+                android:paddingTop="5dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="5dp">
 
                 <ImageView
                     android:id="@+id/weatherImageView"
@@ -297,7 +297,7 @@
                                             android:id="@+id/button1"
                                             android:layout_width="35dp"
                                             android:layout_height="35dp"
-                                            android:background="@drawable/mood_angry_color"
+                                            android:background="@drawable/ic_mood_angry"
                                             android:clickable="false"
                                             app:backgroundTint="@color/transparent"
                                             app:backgroundTintMode="add" />
@@ -324,7 +324,7 @@
                                             android:id="@+id/button2"
                                             android:layout_width="35dp"
                                             android:layout_height="35dp"
-                                            android:background="@drawable/mood_cool_color"
+                                            android:background="@drawable/ic_mood_cool"
                                             android:clickable="false"
                                             app:backgroundTint="@color/transparent"
                                             app:backgroundTintMode="add" />
@@ -350,7 +350,7 @@
                                             android:id="@+id/button3"
                                             android:layout_width="35dp"
                                             android:layout_height="35dp"
-                                            android:background="@drawable/mood_crying_color"
+                                            android:background="@drawable/ic_mood_crying"
                                             android:clickable="false"
                                             app:backgroundTint="@color/transparent"
                                             app:backgroundTintMode="add" />
@@ -384,7 +384,7 @@
                                             android:id="@+id/button4"
                                             android:layout_width="35dp"
                                             android:layout_height="35dp"
-                                            android:background="@drawable/mood_ill_color"
+                                            android:background="@drawable/ic_mood_ill"
                                             android:clickable="false"
                                             app:backgroundTint="@color/transparent"
                                             app:backgroundTintMode="add" />
@@ -411,7 +411,7 @@
                                             android:id="@+id/button5"
                                             android:layout_width="35dp"
                                             android:layout_height="35dp"
-                                            android:background="@drawable/mood_laugh_color"
+                                            android:background="@drawable/ic_mood_laugh"
                                             android:clickable="false"
                                             app:backgroundTint="@color/transparent"
                                             app:backgroundTintMode="add" />
@@ -437,7 +437,7 @@
                                             android:id="@+id/button6"
                                             android:layout_width="35dp"
                                             android:layout_height="35dp"
-                                            android:background="@drawable/mood_meh_color"
+                                            android:background="@drawable/ic_mood_meh"
                                             android:clickable="false"
                                             app:backgroundTint="@color/transparent"
                                             app:backgroundTintMode="add" />
@@ -472,7 +472,7 @@
                                             android:id="@+id/button7"
                                             android:layout_width="35dp"
                                             android:layout_height="35dp"
-                                            android:background="@drawable/mood_sad"
+                                            android:background="@drawable/ic_mood_sad"
                                             android:clickable="false"
                                             app:backgroundTint="@color/transparent"
                                             app:backgroundTintMode="add" />
@@ -499,7 +499,7 @@
                                             android:id="@+id/button8"
                                             android:layout_width="35dp"
                                             android:layout_height="35dp"
-                                            android:background="@drawable/mood_smile_color"
+                                            android:background="@drawable/ic_mood_smile"
                                             android:clickable="false"
                                             app:backgroundTint="@color/transparent"
                                             app:backgroundTintMode="add" />
@@ -525,7 +525,7 @@
                                             android:id="@+id/button9"
                                             android:layout_width="35dp"
                                             android:layout_height="35dp"
-                                            android:background="@drawable/mood_yawn_color"
+                                            android:background="@drawable/ic_mood_yawn"
                                             android:clickable="false"
                                             app:backgroundTint="@color/transparent"
                                             app:backgroundTintMode="add" />
@@ -581,8 +581,8 @@
                                     android:gravity="top"
                                     android:hint="이곳을 터치해주세요."
                                     android:lineSpacingExtra="5dp"
-                                    android:paddingVertical="5dp"
                                     android:paddingHorizontal="10dp"
+                                    android:paddingVertical="5dp"
                                     android:textColor="@color/font"
                                     android:textColorHint="@color/pastel_700"
                                     android:textSize="14sp" />
@@ -639,12 +639,12 @@
                                     android:layout_height="30dp"
                                     android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
-                                    android:visibility="gone"
                                     android:background="@drawable/ripple_radius_5"
                                     android:text="사진추가"
                                     android:textColor="@color/pastel_700"
                                     android:textSize="10dp"
-                                    android:textStyle="bold" />
+                                    android:textStyle="bold"
+                                    android:visibility="gone" />
 
                             </RelativeLayout>
 
