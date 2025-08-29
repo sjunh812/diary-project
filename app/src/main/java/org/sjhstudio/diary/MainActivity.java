@@ -35,6 +35,7 @@ import com.stanfy.gsonxml.GsonXml;
 import com.stanfy.gsonxml.GsonXmlBuilder;
 import com.stanfy.gsonxml.XmlParserCreator;
 
+import org.sjhstudio.diary.extensions.ViewExtensionKt;
 import org.sjhstudio.diary.fragment.CalendarFragment;
 import org.sjhstudio.diary.fragment.GraphFragment;
 import org.sjhstudio.diary.fragment.ListFragment;
@@ -108,6 +109,9 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ViewExtensionKt.enableSystemBarPadding(findViewById(R.id.root));
+
         if (!Pref.getPPermissionGuide(this)) {
             DialogUtils.INSTANCE.showPermissionGuideDialog(this, () -> {
                 AutoPermissions.Companion.loadAllPermissions(this, Constants.REQUEST_ALL_PERMISSIONS);
