@@ -3,8 +3,6 @@ package org.sjhstudio.diary;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
-import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -55,43 +53,43 @@ public class FontActivity extends BaseActivity {
                 case R.id.systemFontButton:
                     selectedFontIndex = 100;
                     break;
-                case R.id.basicFontButton:
+                case R.id.btn_font_1:
                     selectedFontIndex = -1;
                     break;
-                case R.id.fontButton:
+                case R.id.btn_font_2:
                     selectedFontIndex = 0;
                     break;
-                case R.id.fontButton2:
+                case R.id.btn_font_3:
                     selectedFontIndex = 1;
                     break;
-                case R.id.fontButton3:
+                case R.id.btn_font_4:
                     selectedFontIndex = 2;
                     break;
-                case R.id.fontButton4:
+                case R.id.btn_font_5:
                     selectedFontIndex = 3;
                     break;
-                case R.id.fontButton5:
+                case R.id.btn_font_6:
                     selectedFontIndex = 4;
                     break;
-                case R.id.fontButton6:
+                case R.id.btn_font_7:
                     selectedFontIndex = 5;
                     break;
-                case R.id.fontButton7:
+                case R.id.btn_font_8:
                     selectedFontIndex = 6;
                     break;
-                case R.id.fontButton8:
+                case R.id.btn_font_9:
                     selectedFontIndex = 7;
                     break;
-                case R.id.fontButton9:
+                case R.id.btn_font_10:
                     selectedFontIndex = 8;
                     break;
-                case R.id.fontButton10:
+                case R.id.btn_font_11:
                     selectedFontIndex = 9;
                     break;
-                case R.id.fontButton11:
+                case R.id.btn_font_12:
                     selectedFontIndex = 10;
                     break;
-                case R.id.fontButton12:
+                case R.id.btn_font_13:
                     selectedFontIndex = 11;
                     break;
             }
@@ -138,43 +136,43 @@ public class FontActivity extends BaseActivity {
                 ((RadioButton)findViewById(R.id.systemFontButton)).setChecked(true);
                 break;
             case -1:
-                ((RadioButton)findViewById(R.id.basicFontButton)).setChecked(true);
+                ((RadioButton)findViewById(R.id.btn_font_1)).setChecked(true);
                 break;
             case 0:
-                ((RadioButton)findViewById(R.id.fontButton)).setChecked(true);
+                ((RadioButton)findViewById(R.id.btn_font_2)).setChecked(true);
                 break;
             case 1:
-                ((RadioButton)findViewById(R.id.fontButton2)).setChecked(true);
+                ((RadioButton)findViewById(R.id.btn_font_3)).setChecked(true);
                 break;
             case 2:
-                ((RadioButton)findViewById(R.id.fontButton3)).setChecked(true);
+                ((RadioButton)findViewById(R.id.btn_font_4)).setChecked(true);
                 break;
             case 3:
-                ((RadioButton)findViewById(R.id.fontButton4)).setChecked(true);
+                ((RadioButton)findViewById(R.id.btn_font_5)).setChecked(true);
                 break;
             case 4:
-                ((RadioButton)findViewById(R.id.fontButton5)).setChecked(true);
+                ((RadioButton)findViewById(R.id.btn_font_6)).setChecked(true);
                 break;
             case 5:
-                ((RadioButton)findViewById(R.id.fontButton6)).setChecked(true);
+                ((RadioButton)findViewById(R.id.btn_font_7)).setChecked(true);
                 break;
             case 6:
-                ((RadioButton)findViewById(R.id.fontButton7)).setChecked(true);
+                ((RadioButton)findViewById(R.id.btn_font_8)).setChecked(true);
                 break;
             case 7:
-                ((RadioButton)findViewById(R.id.fontButton8)).setChecked(true);
+                ((RadioButton)findViewById(R.id.btn_font_9)).setChecked(true);
                 break;
             case 8:
-                ((RadioButton)findViewById(R.id.fontButton9)).setChecked(true);
+                ((RadioButton)findViewById(R.id.btn_font_10)).setChecked(true);
                 break;
             case 9:
-                ((RadioButton)findViewById(R.id.fontButton10)).setChecked(true);
+                ((RadioButton)findViewById(R.id.btn_font_11)).setChecked(true);
                 break;
             case 10:
-                ((RadioButton)findViewById(R.id.fontButton11)).setChecked(true);
+                ((RadioButton)findViewById(R.id.btn_font_12)).setChecked(true);
                 break;
             case 11:
-                ((RadioButton)findViewById(R.id.fontButton12)).setChecked(true);
+                ((RadioButton)findViewById(R.id.btn_font_13)).setChecked(true);
                 break;
         }
 

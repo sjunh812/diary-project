@@ -26,9 +26,9 @@
 
     <!-- data picker dialog  -->
     <style name="DatePickerDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
-        <item name="colorAccent">@font/font1</item>
-        <item name="android:fontFamily">@font/font1</item>
-        <item name="android:datePickerStyle">@font/font1</item>
+        <item name="colorAccent">@font/font2</item>
+        <item name="android:fontFamily">@font/font2</item>
+        <item name="android:datePickerStyle">@font/font2</item>
     </style>
 
     <!-- bottom navigation -->
@@ -108,35 +108,35 @@
     </style>
 
     <style name="Widget.BottomNavigationView" parent="Widget.Design.BottomNavigationView">
-        <item name="fontFamily">@font/main_font</item>
+        <item name="fontFamily">@font/font</item>
     </style>
 
     <style name="customCalenderHeaderFontStyle">
-        <item name="android:fontFamily">@font/main_font</item>
+        <item name="android:fontFamily">@font/font</item>
     </style>
 
     <style name="customTextViewFontStyle" parent="@android:style/Widget.DeviceDefault.TextView">
-        <item name="android:fontFamily">@font/main_font</item>
+        <item name="android:fontFamily">@font/font</item>
     </style>
 
     <style name="customButtonFontStyle" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
-        <item name="android:fontFamily">@font/main_font</item>
+        <item name="android:fontFamily">@font/font</item>
     </style>
 
     <style name="customEditTextFontStyle" parent="@android:style/Widget.DeviceDefault.EditText">
-        <item name="android:fontFamily">@font/main_font</item>
+        <item name="android:fontFamily">@font/font</item>
     </style>
 
     <style name="customRadioButtonFontStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
-        <item name="android:fontFamily">@font/main_font</item>
+        <item name="android:fontFamily">@font/font</item>
     </style>
 
     <style name="customCheckboxFontStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
-        <item name="android:fontFamily">@font/main_font</item>
+        <item name="android:fontFamily">@font/font</item>
     </style>
 
     <style name="customSpinnerFontStyle" parent="Widget.AppCompat.Spinner">
-        <item name="android:fontFamily">@font/main_font</item>
+        <item name="android:fontFamily">@font/font</item>
     </style>
 
     <!-- 교보손글씨체 -->
@@ -169,35 +169,35 @@
     </style>
 
     <style name="Widget.BottomNavigationView1" parent="Widget.Design.BottomNavigationView">
-        <item name="fontFamily">@font/font1</item>
+        <item name="fontFamily">@font/font2</item>
     </style>
 
     <style name="customCalenderHeaderFontStyle1">
-        <item name="android:fontFamily">@font/font1</item>
+        <item name="android:fontFamily">@font/font2</item>
     </style>
 
     <style name="customTextViewFontStyle1" parent="@android:style/Widget.DeviceDefault.TextView">
-        <item name="android:fontFamily">@font/font1</item>
+        <item name="android:fontFamily">@font/font2</item>
     </style>
 
     <style name="customButtonFontStyle1" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
-        <item name="android:fontFamily">@font/font1</item>
+        <item name="android:fontFamily">@font/font2</item>
     </style>
 
     <style name="customEditTextFontStyle1" parent="@android:style/Widget.DeviceDefault.EditText">
-        <item name="android:fontFamily">@font/font1</item>
+        <item name="android:fontFamily">@font/font2</item>
     </style>
 
     <style name="customRadioButtonFontStyle1" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
-        <item name="android:fontFamily">@font/font1</item>
+        <item name="android:fontFamily">@font/font2</item>
     </style>
 
     <style name="customCheckboxFontStyle1" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
-        <item name="android:fontFamily">@font/font1</item>
+        <item name="android:fontFamily">@font/font2</item>
     </style>
 
     <style name="customSpinnerFontStyle1" parent="Widget.AppCompat.Spinner">
-        <item name="android:fontFamily">@font/font1</item>
+        <item name="android:fontFamily">@font/font2</item>
     </style>
 
     <!-- 점꼴체 -->
@@ -229,35 +229,35 @@
     </style>
 
     <style name="Widget.BottomNavigationView2" parent="Widget.Design.BottomNavigationView">
-        <item name="android:fontFamily">@font/font2</item>
+        <item name="android:fontFamily">@font/font3</item>
     </style>
 
     <style name="customCalenderHeaderFontStyle2">
-        <item name="android:fontFamily">@font/font2</item>
+        <item name="android:fontFamily">@font/font3</item>
     </style>
 
     <style name="customTextViewFontStyle2" parent="@android:style/Widget.DeviceDefault.TextView">
-        <item name="android:fontFamily">@font/font2</item>
+        <item name="android:fontFamily">@font/font3</item>
     </style>
 
     <style name="customButtonFontStyle2" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
-        <item name="android:fontFamily">@font/font2</item>
+        <item name="android:fontFamily">@font/font3</item>
     </style>
 
     <style name="customEditTextFontStyle2" parent="@android:style/Widget.DeviceDefault.EditText">
-        <item name="android:fontFamily">@font/font2</item>
+        <item name="android:fontFamily">@font/font3</item>
     </style>
 
     <style name="customRadioButtonFontStyle2" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
-        <item name="android:fontFamily">@font/font2</item>
+        <item name="android:fontFamily">@font/font3</item>
     </style>
 
     <style name="customCheckboxFontStyle2" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
-        <item name="android:fontFamily">@font/font2</item>
+        <item name="android:fontFamily">@font/font3</item>
     </style>
 
     <style name="customSpinnerFontStyle2" parent="Widget.AppCompat.Spinner">
-        <item name="android:fontFamily">@font/font2</item>
+        <item name="android:fontFamily">@font/font3</item>
     </style>
 
     <!-- 넥슨배찌체 -->
@@ -289,35 +289,35 @@
     </style>
 
     <style name="Widget.BottomNavigationView3" parent="Widget.Design.BottomNavigationView">
-        <item name="fontFamily">@font/font2</item>
+        <item name="fontFamily">@font/font3</item>
     </style>
 
     <style name="customCalenderHeaderFontStyle3">
-        <item name="android:fontFamily">@font/font3</item>
+        <item name="android:fontFamily">@font/font4</item>
     </style>
 
     <style name="customTextViewFontStyle3" parent="@android:style/Widget.DeviceDefault.TextView">
-        <item name="android:fontFamily">@font/font3</item>
+        <item name="android:fontFamily">@font/font4</item>
     </style>
 
     <style name="customButtonFontStyle3" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
-        <item name="android:fontFamily">@font/font3</item>
+        <item name="android:fontFamily">@font/font4</item>
     </style>
 
     <style name="customEditTextFontStyle3" parent="@android:style/Widget.DeviceDefault.EditText">
-        <item name="android:fontFamily">@font/font3</item>
+        <item name="android:fontFamily">@font/font4</item>
     </style>
 
     <style name="customRadioButtonFontStyle3" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
-        <item name="android:fontFamily">@font/font3</item>
+        <item name="android:fontFamily">@font/font4</item>
     </style>
 
     <style name="customCheckboxFontStyle3" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
-        <item name="android:fontFamily">@font/font3</item>
+        <item name="android:fontFamily">@font/font4</item>
     </style>
 
     <style name="customSpinnerFontStyle3" parent="Widget.AppCompat.Spinner">
-        <item name="android:fontFamily">@font/font3</item>
+        <item name="android:fontFamily">@font/font4</item>
     </style>
 
     <!-- 미니콩다방체 -->
@@ -349,35 +349,35 @@
     </style>
 
     <style name="Widget.BottomNavigationView4" parent="Widget.Design.BottomNavigationView">
-        <item name="fontFamily">@font/font4</item>
+        <item name="fontFamily">@font/font5</item>
     </style>
 
     <style name="customCalenderHeaderFontStyle4">
-        <item name="android:fontFamily">@font/font4</item>
+        <item name="android:fontFamily">@font/font5</item>
     </style>
 
     <style name="customTextViewFontStyle4" parent="@android:style/Widget.DeviceDefault.TextView">
-        <item name="android:fontFamily">@font/font4</item>
+        <item name="android:fontFamily">@font/font5</item>
     </style>
 
     <style name="customButtonFontStyle4" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
-        <item name="android:fontFamily">@font/font4</item>
+        <item name="android:fontFamily">@font/font5</item>
     </style>
 
     <style name="customEditTextFontStyle4" parent="@android:style/Widget.DeviceDefault.EditText">
-        <item name="android:fontFamily">@font/font4</item>
+        <item name="android:fontFamily">@font/font5</item>
     </style>
 
     <style name="customRadioButtonFontStyle4" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
-        <item name="android:fontFamily">@font/font4</item>
+        <item name="android:fontFamily">@font/font5</item>
     </style>
 
     <style name="customCheckboxFontStyle4" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
-        <item name="android:fontFamily">@font/font4</item>
+        <item name="android:fontFamily">@font/font5</item>
     </style>
 
     <style name="customSpinnerFontStyle4" parent="Widget.AppCompat.Spinner">
-        <item name="android:fontFamily">@font/font4</item>
+        <item name="android:fontFamily">@font/font5</item>
     </style>
 
     <!-- 꼬마나비체 -->
@@ -408,35 +408,35 @@
     </style>
 
     <style name="Widget.BottomNavigationView5" parent="Widget.Design.BottomNavigationView">
-        <item name="fontFamily">@font/font5</item>
+        <item name="fontFamily">@font/font6</item>
     </style>
 
     <style name="customCalenderHeaderFontStyle5">
-        <item name="android:fontFamily">@font/font5</item>
+        <item name="android:fontFamily">@font/font6</item>
     </style>
 
     <style name="customTextViewFontStyle5" parent="@android:style/Widget.DeviceDefault.TextView">
-        <item name="android:fontFamily">@font/font5</item>
+        <item name="android:fontFamily">@font/font6</item>
     </style>
 
     <style name="customButtonFontStyle5" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
-        <item name="android:fontFamily">@font/font5</item>
+        <item name="android:fontFamily">@font/font6</item>
     </style>
 
     <style name="customEditTextFontStyle5" parent="@android:style/Widget.DeviceDefault.EditText">
-        <item name="android:fontFamily">@font/font5</item>
+        <item name="android:fontFamily">@font/font6</item>
     </style>
 
     <style name="customRadioButtonFontStyle5" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
-        <item name="android:fontFamily">@font/font5</item>
+        <item name="android:fontFamily">@font/font6</item>
     </style>
 
     <style name="customCheckboxFontStyle5" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
-        <item name="android:fontFamily">@font/font5</item>
+        <item name="android:fontFamily">@font/font6</item>
     </style>
 
     <style name="customSpinnerFontStyle5" parent="Widget.AppCompat.Spinner">
-        <item name="android:fontFamily">@font/font5</item>
+        <item name="android:fontFamily">@font/font6</item>
     </style>
 
     <!-- 심경하체 -->
@@ -467,35 +467,35 @@
     </style>
 
     <style name="Widget.BottomNavigationView6" parent="Widget.Design.BottomNavigationView">
-        <item name="fontFamily">@font/font6</item>
+        <item name="fontFamily">@font/font7</item>
     </style>
 
     <style name="customCalenderHeaderFontStyle6">
-        <item name="android:fontFamily">@font/font6</item>
+        <item name="android:fontFamily">@font/font7</item>
     </style>
 
     <style name="customTextViewFontStyle6" parent="@android:style/Widget.DeviceDefault.TextView">
-        <item name="android:fontFamily">@font/font6</item>
+        <item name="android:fontFamily">@font/font7</item>
     </style>
 
     <style name="customButtonFontStyle6" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
-        <item name="android:fontFamily">@font/font6</item>
+        <item name="android:fontFamily">@font/font7</item>
     </style>
 
     <style name="customEditTextFontStyle6" parent="@android:style/Widget.DeviceDefault.EditText">
-        <item name="android:fontFamily">@font/font6</item>
+        <item name="android:fontFamily">@font/font7</item>
     </style>
 
     <style name="customRadioButtonFontStyle6" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
-        <item name="android:fontFamily">@font/font6</item>
+        <item name="android:fontFamily">@font/font7</item>
     </style>
 
     <style name="customCheckboxFontStyle6" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
-        <item name="android:fontFamily">@font/font6</item>
+        <item name="android:fontFamily">@font/font7</item>
     </style>
 
     <style name="customSpinnerFontStyle6" parent="Widget.AppCompat.Spinner">
-        <item name="android:fontFamily">@font/font6</item>
+        <item name="android:fontFamily">@font/font7</item>
     </style>
 
     <!-- 강원교육모두체 -->
@@ -526,35 +526,35 @@
     </style>
 
     <style name="Widget.BottomNavigationView7" parent="Widget.Design.BottomNavigationView">
-        <item name="fontFamily">@font/font7</item>
+        <item name="fontFamily">@font/font8</item>
     </style>
 
     <style name="customCalenderHeaderFontStyle7">
-        <item name="android:fontFamily">@font/font7</item>
+        <item name="android:fontFamily">@font/font8</item>
     </style>
 
     <style name="customTextViewFontStyle7" parent="@android:style/Widget.DeviceDefault.TextView">
-        <item name="android:fontFamily">@font/font7</item>
+        <item name="android:fontFamily">@font/font8</item>
     </style>
 
     <style name="customButtonFontStyle7" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
-        <item name="android:fontFamily">@font/font7</item>
+        <item name="android:fontFamily">@font/font8</item>
     </style>
 
     <style name="customEditTextFontStyle7" parent="@android:style/Widget.DeviceDefault.EditText">
-        <item name="android:fontFamily">@font/font7</item>
+        <item name="android:fontFamily">@font/font8</item>
     </style>
 
     <style name="customRadioButtonFontStyle7" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
-        <item name="android:fontFamily">@font/font7</item>
+        <item name="android:fontFamily">@font/font8</item>
     </style>
 
     <style name="customCheckboxFontStyle7" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
-        <item name="android:fontFamily">@font/font7</item>
+        <item name="android:fontFamily">@font/font8</item>
     </style>
 
     <style name="customSpinnerFontStyle7" parent="Widget.AppCompat.Spinner">
-        <item name="android:fontFamily">@font/font7</item>
+        <item name="android:fontFamily">@font/font8</item>
     </style>
 
     <!-- 쿠키런체 -->
@@ -585,35 +585,35 @@
     </style>
 
     <style name="Widget.BottomNavigationView8" parent="Widget.Design.BottomNavigationView">
-        <item name="fontFamily">@font/font8</item>
+        <item name="fontFamily">@font/font9</item>
     </style>
 
     <style name="customCalenderHeaderFontStyle8">
-        <item name="android:fontFamily">@font/font8</item>
+        <item name="android:fontFamily">@font/font9</item>
     </style>
 
     <style name="customTextViewFontStyle8" parent="@android:style/Widget.DeviceDefault.TextView">
-        <item name="android:fontFamily">@font/font8</item>
+        <item name="android:fontFamily">@font/font9</item>
     </style>
 
     <style name="customButtonFontStyle8" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
-        <item name="android:fontFamily">@font/font8</item>
+        <item name="android:fontFamily">@font/font9</item>
     </style>
 
     <style name="customEditTextFontStyle8" parent="@android:style/Widget.DeviceDefault.EditText">
-        <item name="android:fontFamily">@font/font8</item>
+        <item name="android:fontFamily">@font/font9</item>
     </style>
 
     <style name="customRadioButtonFontStyle8" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
-        <item name="android:fontFamily">@font/font8</item>
+        <item name="android:fontFamily">@font/font9</item>
     </style>
 
     <style name="customCheckboxFontStyle8" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
-        <item name="android:fontFamily">@font/font8</item>
+        <item name="android:fontFamily">@font/font9</item>
     </style>
 
     <style name="customSpinnerFontStyle8" parent="Widget.AppCompat.Spinner">
-        <item name="android:fontFamily">@font/font8</item>
+        <item name="android:fontFamily">@font/font9</item>
     </style>
 
     <!-- 온글잎 만두몽키체 -->
@@ -644,35 +644,35 @@
     </style>
 
     <style name="Widget.BottomNavigationView9" parent="Widget.Design.BottomNavigationView">
-        <item name="fontFamily">@font/font9</item>
+        <item name="fontFamily">@font/font10</item>
     </style>
 
     <style name="customCalenderHeaderFontStyle9">
-        <item name="android:fontFamily">@font/font9</item>
+        <item name="android:fontFamily">@font/font10</item>
     </style>
 
     <style name="customTextViewFontStyle9" parent="@android:style/Widget.DeviceDefault.TextView">
-        <item name="android:fontFamily">@font/font9</item>
+        <item name="android:fontFamily">@font/font10</item>
     </style>
 
     <style name="customButtonFontStyle9" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
-        <item name="android:fontFamily">@font/font9</item>
+        <item name="android:fontFamily">@font/font10</item>
     </style>
 
     <style name="customEditTextFontStyle9" parent="@android:style/Widget.DeviceDefault.EditText">
-        <item name="android:fontFamily">@font/font9</item>
+        <item name="android:fontFamily">@font/font10</item>
     </style>
 
     <style name="customRadioButtonFontStyle9" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
-        <item name="android:fontFamily">@font/font9</item>
+        <item name="android:fontFamily">@font/font10</item>
     </style>
 
     <style name="customCheckboxFontStyle9" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
-        <item name="android:fontFamily">@font/font9</item>
+        <item name="android:fontFamily">@font/font10</item>
     </style>
 
     <style name="customSpinnerFontStyle9" parent="Widget.AppCompat.Spinner">
-        <item name="android:fontFamily">@font/font9</item>
+        <item name="android:fontFamily">@font/font10</item>
     </style>
 
     <!-- 온글잎 윤우체 -->
@@ -703,35 +703,35 @@
     </style>
 
     <style name="Widget.BottomNavigationView10" parent="Widget.Design.BottomNavigationView">
-        <item name="fontFamily">@font/font10</item>
+        <item name="fontFamily">@font/font11</item>
     </style>
 
     <style name="customCalenderHeaderFontStyle10">
-        <item name="android:fontFamily">@font/font10</item>
+        <item name="android:fontFamily">@font/font11</item>
     </style>
 
     <style name="customTextViewFontStyle10" parent="@android:style/Widget.DeviceDefault.TextView">
-        <item name="android:fontFamily">@font/font10</item>
+        <item name="android:fontFamily">@font/font11</item>
     </style>
 
     <style name="customButtonFontStyle10" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
-        <item name="android:fontFamily">@font/font10</item>
+        <item name="android:fontFamily">@font/font11</item>
     </style>
 
     <style name="customEditTextFontStyle10" parent="@android:style/Widget.DeviceDefault.EditText">
-        <item name="android:fontFamily">@font/font10</item>
+        <item name="android:fontFamily">@font/font11</item>
     </style>
 
     <style name="customRadioButtonFontStyle10" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
-        <item name="android:fontFamily">@font/font10</item>
+        <item name="android:fontFamily">@font/font11</item>
     </style>
 
     <style name="customCheckboxFontStyle10" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
-        <item name="android:fontFamily">@font/font10</item>
+        <item name="android:fontFamily">@font/font11</item>
     </style>
 
     <style name="customSpinnerFontStyle10" parent="Widget.AppCompat.Spinner">
-        <item name="android:fontFamily">@font/font10</item>
+        <item name="android:fontFamily">@font/font11</item>
     </style>
 
     <!-- 코트라 희망체 -->
@@ -762,35 +762,35 @@
     </style>
 
     <style name="Widget.BottomNavigationView11" parent="Widget.Design.BottomNavigationView">
-        <item name="fontFamily">@font/font11</item>
+        <item name="fontFamily">@font/font12</item>
     </style>
 
     <style name="customCalenderHeaderFontStyle11">
-        <item name="android:fontFamily">@font/font11</item>
+        <item name="android:fontFamily">@font/font12</item>
     </style>
 
     <style name="customTextViewFontStyle11" parent="@android:style/Widget.DeviceDefault.TextView">
-        <item name="android:fontFamily">@font/font11</item>
+        <item name="android:fontFamily">@font/font12</item>
     </style>
 
     <style name="customButtonFontStyle11" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
-        <item name="android:fontFamily">@font/font11</item>
+        <item name="android:fontFamily">@font/font12</item>
     </style>
 
     <style name="customEditTextFontStyle11" parent="@android:style/Widget.DeviceDefault.EditText">
-        <item name="android:fontFamily">@font/font11</item>
+        <item name="android:fontFamily">@font/font12</item>
     </style>
 
     <style name="customRadioButtonFontStyle11" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
-        <item name="android:fontFamily">@font/font11</item>
+        <item name="android:fontFamily">@font/font12</item>
     </style>
 
     <style name="customCheckboxFontStyle11" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
-        <item name="android:fontFamily">@font/font11</item>
+        <item name="android:fontFamily">@font/font12</item>
     </style>
 
     <style name="customSpinnerFontStyle11" parent="Widget.AppCompat.Spinner">
-        <item name="android:fontFamily">@font/font11</item>
+        <item name="android:fontFamily">@font/font12</item>
     </style>
 
     <!-- ACC 어린이 마음고운체 -->
@@ -821,34 +821,34 @@
     </style>
 
     <style name="Widget.BottomNavigationView12" parent="Widget.Design.BottomNavigationView">
-        <item name="fontFamily">@font/font12</item>
+        <item name="fontFamily">@font/font13</item>
     </style>
 
     <style name="customCalenderHeaderFontStyle12">
-        <item name="android:fontFamily">@font/font12</item>
+        <item name="android:fontFamily">@font/font13</item>
     </style>
 
     <style name="customTextViewFontStyle12" parent="@android:style/Widget.DeviceDefault.TextView">
-        <item name="android:fontFamily">@font/font12</item>
+        <item name="android:fontFamily">@font/font13</item>
     </style>
 
     <style name="customButtonFontStyle12" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
-        <item name="android:fontFamily">@font/font12</item>
+        <item name="android:fontFamily">@font/font13</item>
     </style>
 
     <style name="customEditTextFontStyle12" parent="@android:style/Widget.DeviceDefault.EditText">
-        <item name="android:fontFamily">@font/font12</item>
+        <item name="android:fontFamily">@font/font13</item>
     </style>
 
     <style name="customRadioButtonFontStyle12" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
-        <item name="android:fontFamily">@font/font12</item>
+        <item name="android:fontFamily">@font/font13</item>
     </style>
 
     <style name="customCheckboxFontStyle12" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
-        <item name="android:fontFamily">@font/font12</item>
+        <item name="android:fontFamily">@font/font13</item>
     </style>
 
     <style name="customSpinnerFontStyle12" parent="Widget.AppCompat.Spinner">
-        <item name="android:fontFamily">@font/font12</item>
+        <item name="android:fontFamily">@font/font13</item>
     </style>
 </resources>
