@@ -36,7 +36,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
     private TextView timeTextView;
     private TextView weekTextView;
     private LinearLayout bookmarkView;
-    private RelativeLayout weatherAndLocationLayout;
+    private RelativeLayout locationLayout;
 
     // Photo view
     private LinearLayout photoLayout;
@@ -47,6 +47,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
     private TextView dateTextView2;
     private TextView timeTextView2;
     private TextView weekTextView2;
+    private ImageView starImageView2;
     private LinearLayout showPhotoStateView;
 
     private ViewPager2 photoViewPager;
@@ -75,7 +76,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         timeTextView = itemView.findViewById(R.id.timeTextView);
         weekTextView = itemView.findViewById(R.id.weekTextView);
         bookmarkView = itemView.findViewById(R.id.bookmark_view);
-        weatherAndLocationLayout = itemView.findViewById(R.id.weatherAndLocationLayout);
+        locationLayout = itemView.findViewById(R.id.rl_location);
         photoLayout = itemView.findViewById(R.id.photoLayout);
         moodImageView2 = itemView.findViewById(R.id.moodImageView2);
         weatherImageView2 = itemView.findViewById(R.id.weatherImageView2);
@@ -84,6 +85,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         dateTextView2 = itemView.findViewById(R.id.dateTextView2);
         timeTextView2 = itemView.findViewById(R.id.timeTextView2);
         weekTextView2 = itemView.findViewById(R.id.weekTextView2);
+        starImageView2 = itemView.findViewById(R.id.starImageView2);
         showPhotoStateView = itemView.findViewById(R.id.showPhotoStateView);
 
         contentsLayout.setOnClickListener(v -> {
@@ -232,10 +234,10 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
             contentsTextView2.setVisibility(View.VISIBLE);
         }
 
-        if ((location == null || location.equals("")) && (weatherIndex == -1)) {
-            weatherAndLocationLayout.setVisibility(View.GONE);
+        if ((location == null || location.isBlank())) {
+            locationLayout.setVisibility(View.GONE);
         } else {
-            weatherAndLocationLayout.setVisibility(View.VISIBLE);
+            locationLayout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -322,8 +324,13 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setStarImage(int index) {
-        if (index == 0) bookmarkView.setVisibility(View.GONE);
-        else bookmarkView.setVisibility(View.VISIBLE);
+        if (index == 0) {
+            bookmarkView.setVisibility(View.GONE);
+            starImageView2.setVisibility(View.GONE);
+        } else {
+            bookmarkView.setVisibility(View.VISIBLE);
+            starImageView2.setVisibility(View.VISIBLE);
+        }
     }
 
     public void setLayoutType(int type) {

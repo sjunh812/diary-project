@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -11,7 +12,9 @@
         android:background="@drawable/border_view"
         android:longClickable="true"
         android:orientation="vertical"
-        android:padding="12dp"
+        android:paddingHorizontal="12dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="13dp"
         android:visibility="visible">
 
         <RelativeLayout
@@ -22,18 +25,18 @@
 
             <ImageView
                 android:id="@+id/moodImageView"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentLeft="true"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:padding="8dp"
-                app:srcCompat="@drawable/ic_mood_angry" />
+                tools:srcCompat="@drawable/ic_mood_angry" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/moodImageView"
+                android:layout_toEndOf="@id/moodImageView"
                 android:orientation="vertical">
 
                 <RelativeLayout
@@ -44,28 +47,33 @@
                         android:id="@+id/dateTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="3dp"
-                        android:paddingLeft="5dp"
-                        android:paddingRight="2dp"
-                        android:text="2021년 04월 20일"
+                        android:layout_marginHorizontal="5dp"
                         android:textColor="@color/font"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:text="2021년 04월 20일" />
 
                     <TextView
                         android:id="@+id/weekTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="1dp"
-                        android:layout_toRightOf="@id/dateTextView"
-                        android:text="화"
+                        android:layout_marginEnd="10dp"
+                        android:layout_toEndOf="@id/dateTextView"
                         android:textColor="@color/pastel_700"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:text="화" />
 
+                    <ImageView
+                        android:id="@+id/weatherImageView"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="10dp"
+                        android:layout_toEndOf="@id/weekTextView" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -78,7 +86,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:paddingLeft="5dp"
+                        android:paddingStart="5dp"
                         android:text="AM 5:00"
                         android:textColor="@color/gray"
                         android:textSize="12sp" />
@@ -88,7 +96,7 @@
                         android:layout_width="10dp"
                         android:layout_height="10dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="7dp"
+                        android:layout_marginStart="7dp"
                         android:src="@drawable/exist_picture" />
 
                 </LinearLayout>
@@ -116,13 +124,10 @@
                     android:layout_height="wrap_content"
                     android:text="즐겨찾기"
                     android:textColor="@color/yellow"
-                    android:textSize="6sp" />
-
+                    android:textSize="10sp" />
             </LinearLayout>
-
         </RelativeLayout>
 
-        <!-- android:maxLines="3" -->
         <TextView
             android:id="@+id/contentsTextView"
             android:layout_width="wrap_content"
@@ -133,40 +138,28 @@
             android:layout_marginBottom="8dp"
             android:ellipsize="end"
             android:lineSpacingExtra="1.5dp"
-            android:text="내용"
             android:textColor="@color/font_contents"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:text="동해물과 백두산이 마르고 닳도록\n하느님이 보우하사 우리나라 만세" />
 
         <RelativeLayout
-            android:id="@+id/weatherAndLocationLayout"
+            android:id="@+id/rl_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="3dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
-
-            <ImageView
-                android:id="@+id/weatherImageView"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="5dp" />
 
             <TextView
                 android:id="@+id/locationTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toEndOf="@id/weatherImageView"
                 android:ellipsize="marquee"
                 android:singleLine="true"
                 android:textColor="@color/pastel_700"
-                android:textSize="11sp" />
-
+                android:textSize="12sp" />
         </RelativeLayout>
-
     </LinearLayout>
 
     <LinearLayout
@@ -177,24 +170,33 @@
         android:longClickable="true"
         android:orientation="vertical"
         android:padding="10dp"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp">
 
+            <ImageView
+                android:id="@+id/moodImageView2"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                tools:srcCompat="@drawable/ic_mood_angry" />
+
             <TextView
                 android:id="@+id/dateTextView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:text="2021년 04월 10일"
+                android:layout_marginEnd="5dp"
+                android:layout_toEndOf="@id/moodImageView2"
                 android:textColor="@color/font"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="2021년 04월 10일" />
 
             <TextView
                 android:id="@+id/weekTextView2"
@@ -203,10 +205,10 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="10dp"
                 android:layout_toEndOf="@id/dateTextView2"
-                android:text="화"
                 android:textColor="@color/pastel_700"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="화" />
 
             <ImageView
                 android:id="@+id/starImageView2"
@@ -215,12 +217,11 @@
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@id/weekTextView2"
                 app:srcCompat="@drawable/star" />
-
         </RelativeLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="250dp">
+            android:layout_height="200dp">
 
             <LinearLayout
                 android:id="@+id/showPhotoStateView"
@@ -233,9 +234,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="사진이 없습니다.."
+                    android:text="사진이 없어요"
                     android:textColor="@color/gray"
-                    android:textSize="15sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -264,7 +265,7 @@
                     android:id="@+id/current_banner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1"
+                    android:text="0"
                     android:textColor="@color/white"
                     android:textSize="13sp" />
 
@@ -279,12 +280,11 @@
                     android:id="@+id/total_banner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2"
+                    android:text="0"
                     android:textColor="@color/white"
                     android:textSize="13sp" />
 
             </LinearLayout>
-
         </FrameLayout>
 
         <LinearLayout
@@ -301,39 +301,34 @@
                 android:ellipsize="end"
                 android:lineSpacingExtra="1.5dp"
                 android:maxLines="3"
-                android:text="내용"
                 android:textColor="@color/font_contents"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                tools:text="안녕하세요 감사해요 잘있어요\n다시 만나요." />
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/moodImageView2"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_alignParentStart="true"
-                    app:srcCompat="@drawable/ic_mood_angry" />
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
 
                 <ImageView
                     android:id="@+id/weatherImageView2"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_toEndOf="@id/moodImageView2" />
+                    android:layout_alignParentStart="true"
+                    android:layout_marginEnd="10dp" />
 
                 <TextView
                     android:id="@+id/locationTextView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
+                    android:layout_toStartOf="@id/timeTextView2"
+                    android:layout_toEndOf="@id/weatherImageView2"
                     android:ellipsize="marquee"
-                    android:gravity="center"
+                    android:gravity="start"
                     android:singleLine="true"
-                    android:text="위치"
                     android:textColor="@color/pastel_700"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    tools:text="서울특별시 영등포구" />
 
                 <TextView
                     android:id="@+id/timeTextView2"
@@ -342,14 +337,10 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
-                    android:text="시간"
                     android:textColor="@color/gray"
-                    android:textSize="12sp" />
-
+                    android:textSize="12sp"
+                    tools:text="오후 00:00" />
             </RelativeLayout>
-
         </LinearLayout>
-
     </LinearLayout>
-
 </FrameLayout>
