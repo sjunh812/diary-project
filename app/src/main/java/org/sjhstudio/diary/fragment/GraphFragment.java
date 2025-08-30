@@ -491,54 +491,24 @@ public class GraphFragment extends Fragment {
     }
 
     private Typeface getCurTypeFace() {
-        Typeface typeface;
-
-        switch (curFontIndex) {
-            case 100:
-                typeface = Typeface.SANS_SERIF;
-                break;
-            case 0:
-                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font3.ttf");
-                break;
-            case 1:
-                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font4.ttf");
-                break;
-            case 2:
-                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font5.ttf");
-                break;
-            case 3:
-                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font6.ttf");
-                break;
-            case 4:
-                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font7.ttf");
-                break;
-            case 5:
-                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font8.ttf");
-                break;
-            case 6:
-                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font9.ttf");
-                break;
-            case 7:
-                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font10.ttf");
-                break;
-            case 8:
-                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font11.ttf");
-                break;
-            case 9:
-                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font12.ttf");
-                break;
-            case 10:
-                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font13.ttf");
-                break;
-            case 11:
-                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font13.ttf");
-                break;
-            default:
-                typeface = Typeface.createFromAsset(requireContext().getAssets(), "font1.otf");
-                break;
-        }
-
-        return typeface;
+        return switch (curFontIndex) {
+            case 100 -> Typeface.SANS_SERIF;
+            case 0 -> Typeface.createFromAsset(requireContext().getAssets(), "main_font.ttf");
+            case 1 -> Typeface.createFromAsset(requireContext().getAssets(), "font.otf");
+            case 2 -> Typeface.createFromAsset(requireContext().getAssets(), "font2.ttf");
+            case 3 -> Typeface.createFromAsset(requireContext().getAssets(), "font3.ttf");
+            case 4 -> Typeface.createFromAsset(requireContext().getAssets(), "font4.ttf");
+            case 5 -> Typeface.createFromAsset(requireContext().getAssets(), "font5.ttf");
+            case 6 -> Typeface.createFromAsset(requireContext().getAssets(), "font6.ttf");
+            case 7 -> Typeface.createFromAsset(requireContext().getAssets(), "font7.ttf");
+            case 8 -> Typeface.createFromAsset(requireContext().getAssets(), "font8.ttf");
+            case 9 -> Typeface.createFromAsset(requireContext().getAssets(), "font9.ttf");
+            case 10 -> Typeface.createFromAsset(requireContext().getAssets(), "font10.ttf");
+            case 11 -> Typeface.createFromAsset(requireContext().getAssets(), "font11.ttf");
+            case 12 -> Typeface.createFromAsset(requireContext().getAssets(), "font12.ttf");
+            case 13 -> Typeface.createFromAsset(requireContext().getAssets(), "font13.ttf");
+            default -> Typeface.createFromAsset(requireContext().getAssets(), "main_font.ttf");
+        };
     }
 
 //    private Drawable resizeDrawable(int res) {

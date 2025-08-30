@@ -48,43 +48,49 @@ public class MyTheme {
                 context.setTheme(R.style.Theme_BasicDiaryProject);
                 break;
             case -1:
-                context.setTheme(R.style.Theme_DiaryProject);
-                break;
-            case 0:
-                context.setTheme(R.style.Theme_DiaryProject1);
+                context.setTheme(R.style.Theme_MainDiaryProject);
                 break;
             case 1:
-                context.setTheme(R.style.Theme_DiaryProject2);
+                context.setTheme(R.style.Theme_DiaryProject);
                 break;
             case 2:
-                context.setTheme(R.style.Theme_DiaryProject3);
+                context.setTheme(R.style.Theme_DiaryProject_2);
                 break;
             case 3:
-                context.setTheme(R.style.Theme_DiaryProject4);
+                context.setTheme(R.style.Theme_DiaryProject_3);
                 break;
             case 4:
-                context.setTheme(R.style.Theme_DiaryProject5);
+                context.setTheme(R.style.Theme_DiaryProject_4);
                 break;
             case 5:
-                context.setTheme(R.style.Theme_DiaryProject6);
+                context.setTheme(R.style.Theme_DiaryProject_5);
                 break;
             case 6:
-                context.setTheme(R.style.Theme_DiaryProject7);
+                context.setTheme(R.style.Theme_DiaryProject_6);
                 break;
             case 7:
-                context.setTheme(R.style.Theme_DiaryProject8);
+                context.setTheme(R.style.Theme_DiaryProject_7);
                 break;
             case 8:
-                context.setTheme(R.style.Theme_DiaryProject9);
+                context.setTheme(R.style.Theme_DiaryProject_8);
                 break;
             case 9:
-                context.setTheme(R.style.Theme_DiaryProject10);
+                context.setTheme(R.style.Theme_DiaryProject_9);
                 break;
             case 10:
-                context.setTheme(R.style.Theme_DiaryProject11);
+                context.setTheme(R.style.Theme_DiaryProject_10);
                 break;
             case 11:
-                context.setTheme(R.style.Theme_DiaryProject12);
+                context.setTheme(R.style.Theme_DiaryProject_11);
+                break;
+            case 12:
+                context.setTheme(R.style.Theme_DiaryProject_12);
+                break;
+            case 13:
+                context.setTheme(R.style.Theme_DiaryProject_13);
+                break;
+            default:
+                context.setTheme(R.style.Theme_MainDiaryProject);
                 break;
         }
     }
