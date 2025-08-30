@@ -23,15 +23,14 @@
 
         <ImageButton
             android:id="@+id/cancelButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:background="@drawable/circle_view"
-            android:padding="7dp"
+            android:padding="5dp"
             android:scaleType="centerInside"
             android:src="@drawable/x_icon" />
-
     </RelativeLayout>
 
     <TimePicker
@@ -48,10 +47,9 @@
         android:layout_margin="10dp"
         android:background="@drawable/button"
         android:text="확인"
+        android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold"
-        android:textColor="@color/white"
         app:backgroundTint="@color/cardview_shadow_end_color"
         app:backgroundTintMode="add" />
-
 </LinearLayout>

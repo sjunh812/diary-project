@@ -16,22 +16,19 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:text="사진 가져오기"
+            android:text="사진 첨부"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/cancelButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:background="@drawable/circle_view"
-            android:paddingLeft="7dp"
-            android:paddingTop="5dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="7dp"
+            android:padding="5dp"
             android:scaleType="centerInside"
             android:src="@drawable/x_icon" />
 
@@ -64,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="사진 촬영"
+                android:text="카메라"
                 android:textColor="@color/font"
                 android:textSize="15sp" />
 
@@ -92,7 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="앨범에서 선택"
+                android:text="앨범"
                 android:textColor="@color/font"
                 android:textSize="15sp" />
 

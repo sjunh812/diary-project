@@ -27,7 +27,7 @@ public class CustomUpdateDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.update_dialog_custom);
+        setContentView(R.layout.dialog_update);
         setCancelable(true);
 
         cancelButton = (ImageButton)findViewById(R.id.cancelButton);

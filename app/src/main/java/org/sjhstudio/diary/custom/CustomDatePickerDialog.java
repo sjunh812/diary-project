@@ -36,7 +36,7 @@ public class CustomDatePickerDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.date_picker_dialog);
+        setContentView(R.layout.dialog_date_picker);
 
         cancelButton = (ImageButton)findViewById(R.id.cancelButton);
         datePicker = (DatePicker)findViewById(R.id.datePicker);

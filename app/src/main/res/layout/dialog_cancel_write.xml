@@ -12,88 +12,81 @@
         android:padding="10dp">
 
         <TextView
-            android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:text="위치 설정"
+            android:text="작성 취소"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/cancelButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:background="@drawable/circle_view"
-            android:paddingLeft="7dp"
-            android:paddingTop="5dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="7dp"
+            android:padding="5dp"
             android:scaleType="centerInside"
             android:src="@drawable/x_icon" />
-
     </RelativeLayout>
 
     <TextView
         android:id="@+id/deleteTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginTop="25dp"
         android:layout_marginBottom="10dp"
-        android:text="위치설정을 허용하시겠습니까?"
-        android:textSize="18sp"
-        android:textColor="@color/font" />
+        android:gravity="center"
+        android:lineSpacingExtra="5dp"
+        android:text="일기 작성을 그만두시겠습니까?"
+        android:textColor="@color/font"
+        android:textSize="18sp" />
 
-    <CheckBox
-        android:id="@+id/do_not_ask_again_check_box"
-        android:layout_width="wrap_content"
+    <TextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:scaleX="0.7"
-        android:scaleY="0.7"
-        android:text="다시 묻지않기 (옵션에서 수정가능)"
-        android:textColor="@color/font_sub"
-        android:textSize="15sp"/>
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:lineSpacingExtra="5dp"
+        android:text="(작성한 일기는 저장되지 않습니다.)"
+        android:textColor="@color/pastel_700"
+        android:textSize="15sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp">
+        android:orientation="horizontal"
+        android:paddingVertical="15dp">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/cancel_button_2"
-            android:layout_width="70dp"
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
             android:layout_height="37dp"
             android:layout_gravity="center"
-            android:layout_marginRight="30dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/button"
+            android:text="네"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/cardview_shadow_end_color"
+            app:backgroundTintMode="add" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/continueButton"
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:layout_gravity="center"
             android:background="@drawable/button"
             android:text="아니오"
-            android:textStyle="bold"
             android:textColor="@color/white"
             android:textSize="15sp"
-            app:backgroundTint="@color/cardview_shadow_end_color"
-            app:backgroundTintMode="add" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/yes_button"
-            android:layout_width="70dp"
-            android:layout_height="37dp"
-            android:layout_gravity="center"
-            android:background="@drawable/button"
-            android:text="예"
             android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="15sp"
             app:backgroundTint="@color/cardview_shadow_end_color"
             app:backgroundTintMode="add" />
-
     </LinearLayout>
 </LinearLayout>

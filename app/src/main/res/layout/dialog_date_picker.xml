@@ -23,18 +23,14 @@
 
         <ImageButton
             android:id="@+id/cancelButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:background="@drawable/circle_view"
-            android:paddingLeft="7dp"
-            android:paddingTop="5dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="7dp"
+            android:padding="5dp"
             android:scaleType="centerInside"
             android:src="@drawable/x_icon" />
-
     </RelativeLayout>
 
     <DatePicker
@@ -46,16 +42,15 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/okButton"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:layout_gravity="center"
         android:layout_margin="10dp"
         android:background="@drawable/button"
-        app:backgroundTint="@color/cardview_shadow_end_color"
-        app:backgroundTintMode="add"
+        android:text="확인"
         android:textColor="@color/white"
-        android:textStyle="bold"
         android:textSize="15sp"
-        android:text="확인" />
-
+        android:textStyle="bold"
+        app:backgroundTint="@color/cardview_shadow_end_color"
+        app:backgroundTintMode="add" />
 </LinearLayout>

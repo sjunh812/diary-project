@@ -14,7 +14,11 @@ import androidx.annotation.NonNull;
 
 import org.sjhstudio.diary.R;
 
-public class CustomAlignDialog extends Dialog {
+/**
+ * 일기 기간 설정 팝업
+ */
+public class PeriodDialog extends Dialog {
+
     ImageButton cancelButton;
     Button yesButton;
     Button allButton;
@@ -22,33 +26,28 @@ public class CustomAlignDialog extends Dialog {
     Spinner yearSpinner;
     Spinner monthSpinner;
 
-    public CustomAlignDialog(@NonNull Context context) {
+    public PeriodDialog(@NonNull Context context) {
         super(context);
     }
 
-    public CustomAlignDialog(@NonNull Context context, int themeResId) {
+    public PeriodDialog(@NonNull Context context, int themeResId) {
         super(context, themeResId);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.align_dialog_custom);
+        setContentView(R.layout.dialog_period);
         setCancelable(true);
 
-        cancelButton = (ImageButton)findViewById(R.id.cancelButton);
-        yesButton = (Button)findViewById(R.id.yesButton);
-        allButton = (Button)findViewById(R.id.allButton);
+        cancelButton = findViewById(R.id.cancelButton);
+        yesButton = findViewById(R.id.yesButton);
+        allButton = findViewById(R.id.allButton);
 
-        yearSpinner = (Spinner)findViewById(R.id.yearSpinner);
-        monthSpinner = (Spinner)findViewById(R.id.monthSpinner);
+        yearSpinner = findViewById(R.id.yearSpinner);
+        monthSpinner = findViewById(R.id.monthSpinner);
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        cancelButton.setOnClickListener(v -> dismiss());
     }
 
     public void setYesButtonOnClickListener(View.OnClickListener listener) {

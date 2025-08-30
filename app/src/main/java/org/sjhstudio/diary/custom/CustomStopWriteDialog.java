@@ -4,8 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 
@@ -24,7 +22,7 @@ public class CustomStopWriteDialog extends Dialog implements View.OnClickListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.stop_write_dialog_custom);
+        setContentView(R.layout.dialog_cancel_write);
 
         findViewById(R.id.cancelButton).setOnClickListener(this);
         findViewById(R.id.backButton).setOnClickListener(this);

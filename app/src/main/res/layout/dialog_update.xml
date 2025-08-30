@@ -16,21 +16,22 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:text="작성 취소"
+            android:text="일기 수정"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/cancelButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:background="@drawable/circle_view"
-            android:padding="7dp"
+            android:padding="5dp"
             android:scaleType="centerInside"
             android:src="@drawable/x_icon" />
+
     </RelativeLayout>
 
     <TextView
@@ -38,39 +39,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="20dp"
         android:gravity="center"
-        android:lineSpacingExtra="5dp"
-        android:text="일기 작성을 그만두시겠습니까?"
+        android:text="일기를 삭제 또는 수정하시겠습니까?"
         android:textColor="@color/font"
         android:textSize="18sp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:gravity="center"
-        android:lineSpacingExtra="5dp"
-        android:text="(작성한 일기는 저장되지 않습니다.)"
-        android:textColor="@color/pastel_700"
-        android:textSize="15sp" />
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp">
+        android:paddingVertical="15dp">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/backButton"
-            android:layout_width="80dp"
+            android:id="@+id/deleteButton"
+            android:layout_width="wrap_content"
             android:layout_height="37dp"
             android:layout_gravity="center"
-            android:layout_marginEnd="15dp"
+            android:layout_marginEnd="30dp"
             android:background="@drawable/button"
-            android:text="네"
+            android:text="삭제"
             android:textColor="@color/white"
             android:textSize="15sp"
             android:textStyle="bold"
@@ -78,12 +67,12 @@
             app:backgroundTintMode="add" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/continueButton"
-            android:layout_width="160dp"
+            android:id="@+id/updateButton"
+            android:layout_width="wrap_content"
             android:layout_height="37dp"
             android:layout_gravity="center"
             android:background="@drawable/button"
-            android:text="아니오"
+            android:text="수정"
             android:textColor="@color/white"
             android:textSize="15sp"
             android:textStyle="bold"
