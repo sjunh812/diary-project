@@ -297,7 +297,7 @@ public class GraphFragment extends Fragment {
             }
         }
 
-        moodTotalCountTextView.setText("(총 " + totalCount + "건 중)");        // 총 기분 개수
+        moodTotalCountTextView.setText("(총 " + totalCount + "건)");        // 총 기분 개수
         setCrownImage();                                        // 제일 많은 개수를 가진 기분에 왕관이미지를 추가
 
         PieDataSet dataSet = new PieDataSet(entries, "기분별 비율");

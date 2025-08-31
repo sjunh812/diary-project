@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
@@ -12,9 +13,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginHorizontal="16dp"
             android:layout_marginTop="20dp"
-            android:layout_marginRight="10dp"
             android:layout_marginBottom="5dp">
 
             <TextView
@@ -23,11 +23,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:text="기분통계"
+
+                android:text="@string/mood_graph"
                 android:textColor="@color/font"
-                android:textSize="22sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
             <View
@@ -44,57 +43,55 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
                 <org.sjhstudio.diary.custom.MyRadioButton
                     android:id="@+id/allButton"
                     android:layout_width="45dp"
-                    android:layout_height="20dp"
+                    android:layout_height="25dp"
                     android:layout_marginRight="12dp"
                     android:background="@drawable/radio_button"
                     android:gravity="center"
                     android:text="전체"
                     android:textColor="@drawable/radio_button_text"
-                    android:textSize="11sp"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
                 <org.sjhstudio.diary.custom.MyRadioButton
                     android:id="@+id/yearButton"
                     android:layout_width="45dp"
-                    android:layout_height="20dp"
+                    android:layout_height="25dp"
                     android:layout_marginRight="12dp"
                     android:background="@drawable/radio_button"
                     android:gravity="center"
                     android:text="올해"
                     android:textColor="@drawable/radio_button_text"
-                    android:textSize="11sp"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
                 <org.sjhstudio.diary.custom.MyRadioButton
                     android:id="@+id/monthButton"
                     android:layout_width="45dp"
-                    android:layout_height="20dp"
+                    android:layout_height="25dp"
                     android:background="@drawable/radio_button"
                     android:gravity="center"
                     android:text="이번달"
                     android:textColor="@drawable/radio_button_text"
-                    android:textSize="11sp"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
-
             </RadioGroup>
-
         </RelativeLayout>
-
     </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:clipToPadding="false"
         android:orientation="vertical"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp">
+        android:paddingHorizontal="10dp"
+        android:paddingBottom="72dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -122,7 +119,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="10dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginBottom="5dp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -130,7 +127,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginRight="3dp"
                             android:text="전체"
                             android:textColor="@color/font"
                             android:textSize="18sp" />
@@ -140,10 +137,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="(총 24개 중)"
                             android:textColor="@color/pastel_700"
-                            android:textSize="15sp" />
-
+                            android:textSize="15sp"
+                            tools:text="(총 24개)" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -159,26 +155,25 @@
                             android:id="@+id/describeTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="전체 기분통계 중 제일 많은 기분은 "
                             android:textColor="@color/gray"
-                            android:textSize="13sp" />
+                            android:textSize="13sp"
+                            tools:text="전체 기분통계 중 제일 많은 기분은 " />
 
                         <TextView
                             android:id="@+id/moodTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="'화남'"
                             android:textColor="@color/red"
                             android:textSize="13sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            tools:text="'화남'" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text=" 입니다"
+                            android:text=" 입니다."
                             android:textColor="@color/gray"
                             android:textSize="13sp" />
-
                     </LinearLayout>
 
                     <LinearLayout
@@ -197,16 +192,17 @@
 
                             <ImageView
                                 android:id="@+id/crown"
-                                android:layout_width="17dp"
-                                android:layout_height="17dp"
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
                                 android:layout_gravity="center_horizontal"
                                 android:src="@drawable/crown"
-                                android:visibility="gone" />
+                                android:visibility="gone"
+                                tools:visibility="visible" />
 
                             <ImageView
                                 android:id="@+id/angryImageView"
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
                                 android:src="@drawable/ic_mood_angry" />
 
                             <TextView
@@ -218,7 +214,6 @@
                                 android:textColor="@color/red"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
-
                         </LinearLayout>
 
                         <LinearLayout
@@ -230,16 +225,16 @@
 
                             <ImageView
                                 android:id="@+id/crown2"
-                                android:layout_width="17dp"
-                                android:layout_height="17dp"
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
                                 android:layout_gravity="center_horizontal"
                                 android:src="@drawable/crown"
                                 android:visibility="gone" />
 
                             <ImageView
                                 android:id="@+id/coolImageView"
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
                                 android:src="@drawable/ic_mood_cool" />
 
                             <TextView
@@ -251,7 +246,6 @@
                                 android:textColor="@color/blue"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
-
                         </LinearLayout>
 
                         <LinearLayout
@@ -262,16 +256,16 @@
 
                             <ImageView
                                 android:id="@+id/crown3"
-                                android:layout_width="17dp"
-                                android:layout_height="17dp"
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
                                 android:layout_gravity="center_horizontal"
                                 android:src="@drawable/crown"
                                 android:visibility="gone" />
 
                             <ImageView
                                 android:id="@+id/cryingImageView"
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
                                 android:src="@drawable/ic_mood_crying" />
 
                             <TextView
@@ -283,7 +277,6 @@
                                 android:textColor="@color/skyblue"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
-
                         </LinearLayout>
                     </LinearLayout>
 
@@ -303,16 +296,16 @@
 
                             <ImageView
                                 android:id="@+id/crown4"
-                                android:layout_width="17dp"
-                                android:layout_height="17dp"
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
                                 android:layout_gravity="center_horizontal"
                                 android:src="@drawable/crown"
                                 android:visibility="gone" />
 
                             <ImageView
                                 android:id="@+id/illImageView"
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
                                 android:src="@drawable/ic_mood_ill" />
 
                             <TextView
@@ -324,7 +317,6 @@
                                 android:textColor="@color/lightgreen"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
-
                         </LinearLayout>
 
                         <LinearLayout
@@ -336,16 +328,16 @@
 
                             <ImageView
                                 android:id="@+id/crown5"
-                                android:layout_width="17dp"
-                                android:layout_height="17dp"
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
                                 android:layout_gravity="center_horizontal"
                                 android:src="@drawable/crown"
                                 android:visibility="gone" />
 
                             <ImageView
                                 android:id="@+id/laughImageView"
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
                                 android:src="@drawable/ic_mood_laugh" />
 
                             <TextView
@@ -357,7 +349,6 @@
                                 android:textColor="@color/yellow"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
-
                         </LinearLayout>
 
                         <LinearLayout
@@ -368,16 +359,16 @@
 
                             <ImageView
                                 android:id="@+id/crown6"
-                                android:layout_width="17dp"
-                                android:layout_height="17dp"
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
                                 android:layout_gravity="center_horizontal"
                                 android:src="@drawable/crown"
                                 android:visibility="gone" />
 
                             <ImageView
                                 android:id="@+id/mehImageView"
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
                                 android:src="@drawable/ic_mood_meh" />
 
                             <TextView
@@ -389,7 +380,6 @@
                                 android:textColor="@color/gray"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
-
                         </LinearLayout>
                     </LinearLayout>
 
@@ -410,16 +400,16 @@
 
                             <ImageView
                                 android:id="@+id/crown7"
-                                android:layout_width="17dp"
-                                android:layout_height="17dp"
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
                                 android:layout_gravity="center_horizontal"
                                 android:src="@drawable/crown"
                                 android:visibility="gone" />
 
                             <ImageView
                                 android:id="@+id/sadImageView"
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
                                 android:src="@drawable/ic_mood_sad" />
 
                             <TextView
@@ -431,7 +421,6 @@
                                 android:textColor="@color/black"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
-
                         </LinearLayout>
 
                         <LinearLayout
@@ -443,16 +432,16 @@
 
                             <ImageView
                                 android:id="@+id/crown8"
-                                android:layout_width="17dp"
-                                android:layout_height="17dp"
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
                                 android:layout_gravity="center_horizontal"
                                 android:src="@drawable/crown"
                                 android:visibility="gone" />
 
                             <ImageView
                                 android:id="@+id/smileImageView"
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
                                 android:src="@drawable/ic_mood_smile" />
 
                             <TextView
@@ -464,7 +453,6 @@
                                 android:textColor="@color/orange"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
-
                         </LinearLayout>
 
                         <LinearLayout
@@ -475,16 +463,16 @@
 
                             <ImageView
                                 android:id="@+id/crown9"
-                                android:layout_width="17dp"
-                                android:layout_height="17dp"
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
                                 android:layout_gravity="center_horizontal"
                                 android:src="@drawable/crown"
                                 android:visibility="gone" />
 
                             <ImageView
                                 android:id="@+id/yawnImageView"
-                                android:layout_width="30dp"
-                                android:layout_height="30dp"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
                                 android:src="@drawable/ic_mood_yawn" />
 
                             <TextView
@@ -496,7 +484,6 @@
                                 android:textColor="@color/pink"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
-
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -505,17 +492,15 @@
                 <FrameLayout
                     android:id="@+id/background_graph"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:layout_marginTop="15dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp">
+                    android:layout_height="280dp"
+                    android:layout_marginTop="10dp"
+                    android:paddingVertical="10dp">
 
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/chart1"
                         android:layout_width="match_parent"
                         android:layout_height="280dp"
                         android:layout_gravity="center_horizontal" />
-
                 </FrameLayout>
             </LinearLayout>
         </LinearLayout>
