@@ -48,16 +48,22 @@ public class CalendarViewHolder extends RecyclerView.ViewHolder {
     public void setItem(Note item) {
         setMoodImage(item.getMood());                   // 기분 이미지 설정
         setWeatherImage(item.getWeather());             // 날씨 이미지 설정
-        setStarImage(item.getStarIndex());              // 즐겨찾기 설정
-        locationTextView.setText(item.getAddress());    // 위치 설정
+//        setStarImage(item.getStarIndex());              // 즐겨찾기 설정
         locationTextView.setSelected(true);             // 위치 marquee 처리
         timeTextView.setText(item.getTime());           // 시간 설정
-        contentsTextView.setText(item.getContents());   // 내용 설정
-
+        // 내용 설정
         if (item.getContents() == null || item.getContents().equals("")) {
             contentsTextView.setVisibility(View.GONE);
         } else {
             contentsTextView.setVisibility(View.VISIBLE);
+            contentsTextView.setText(item.getContents());
+        }
+        // 위치 설정
+        if (item.getAddress() == null || item.getAddress().isEmpty()) {
+            locationTextView.setVisibility(View.GONE);
+        } else {
+            locationTextView.setVisibility(View.VISIBLE);
+            locationTextView.setText(item.getAddress());
         }
     }
 
@@ -125,13 +131,13 @@ public class CalendarViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private void setStarImage(int index) {
-        if (index == 0) {
-            starImageView.setVisibility(View.GONE);
-        } else {
-            starImageView.setVisibility(View.VISIBLE);
-        }
-    }
+//    private void setStarImage(int index) {
+//        if (index == 0) {
+//            starImageView.setVisibility(View.GONE);
+//        } else {
+//            starImageView.setVisibility(View.VISIBLE);
+//        }
+//    }
 
     public void setClickListener(OnCalItemClickListener listener) {
         clickListener = listener;
