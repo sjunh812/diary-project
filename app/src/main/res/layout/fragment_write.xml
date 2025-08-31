@@ -22,9 +22,9 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="일기작성"
+            android:text="@string/write_diary"
             android:textColor="@color/font"
-            android:textSize="22sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <ImageButton
@@ -229,7 +229,9 @@
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="100dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -640,7 +642,7 @@
                                     android:layout_alignParentEnd="true"
                                     android:layout_centerVertical="true"
                                     android:background="@drawable/ripple_radius_5"
-                                    android:text="사진추가"
+                                    android:text="사진 추가"
                                     android:textColor="@color/pastel_700"
                                     android:textSize="10dp"
                                     android:textStyle="bold"
@@ -698,7 +700,6 @@
                                         android:text="2"
                                         android:textColor="@color/white"
                                         android:textSize="13sp" />
-
                                 </LinearLayout>
 
                                 <ImageView
@@ -708,11 +709,8 @@
                                     android:layout_gravity="center"
                                     android:src="@drawable/add_image_64_color"
                                     android:visibility="visible" />
-
                             </FrameLayout>
-
                         </LinearLayout>
-
                     </androidx.cardview.widget.CardView>
 
                 </LinearLayout>
