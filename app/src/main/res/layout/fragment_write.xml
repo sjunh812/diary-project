@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/background"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="20dp"
-        android:layout_marginRight="10dp"
         android:layout_marginBottom="5dp">
 
         <TextView
@@ -20,8 +20,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:text="@string/write_diary"
             android:textColor="@color/font"
             android:textSize="24sp"
@@ -74,10 +72,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:elevation="1dp"
-                android:paddingLeft="20dp"
-                android:paddingTop="5dp"
-                android:paddingRight="20dp"
-                android:paddingBottom="5dp">
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="10dp">
 
                 <ImageView
                     android:id="@+id/weatherImageView"
@@ -129,7 +125,6 @@
                     android:textColor="@color/pastel_700"
                     android:textColorHint="@color/pastel_700"
                     android:textSize="12sp" />
-
             </RelativeLayout>
 
             <LinearLayout
@@ -139,7 +134,8 @@
                 android:background="@color/background_sub"
                 android:orientation="horizontal"
                 android:paddingLeft="10dp"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <ImageButton
                     android:id="@+id/weatherButton"
@@ -236,8 +232,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginHorizontal="8dp"
                     android:background="@color/background"
                     android:orientation="vertical">
 
@@ -712,13 +707,8 @@
                             </FrameLayout>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
-
                 </LinearLayout>
-
             </androidx.core.widget.NestedScrollView>
-
         </LinearLayout>
-
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 </LinearLayout>

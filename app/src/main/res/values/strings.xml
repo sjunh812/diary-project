@@ -21,4 +21,5 @@
     <string name="delete">삭제</string>
     <string name="see_all">전체</string>
     <string name="no_diary">일기가 없어요..</string>
+    <string name="label_buy_me_a_coffee">💌 개발자에게 따뜻한 마음 후원하기</string>
 </resources>

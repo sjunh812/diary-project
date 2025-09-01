@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -61,6 +62,17 @@ public class OptionFragment extends Fragment {
         setTitleTextView(rootView);
         setCountTextView(rootView);
         setCurFontText(rootView);
+
+        Button donateButton = rootView.findViewById(R.id.btn_donate);
+        donateButton.setOnClickListener(v -> {
+            try {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://qr.kakaopay.com/FciEjScDL"));
+                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                startActivity(intent);
+            } catch (Exception e) {
+
+            }
+        });
 
         /* 폰트 설정 */
         RelativeLayout fontLayout = rootView.findViewById(R.id.fontLayout);

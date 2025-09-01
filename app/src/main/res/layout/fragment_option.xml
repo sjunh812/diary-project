@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp">
 
         <TextView
             android:id="@+id/titleTextView"
@@ -23,7 +23,7 @@
             android:layout_marginRight="10dp"
             android:text="더보기"
             android:textColor="@color/font"
-            android:textSize="22sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <View
@@ -33,12 +33,13 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp" />
-
     </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="100dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,8 +49,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
+                android:layout_marginHorizontal="16dp"
                 android:background="@drawable/border_view2"
                 android:orientation="horizontal">
 
@@ -76,7 +76,6 @@
                         android:text="12개"
                         android:textColor="@color/pastel_700"
                         android:textSize="16sp" />
-
                 </LinearLayout>
 
                 <View
@@ -114,6 +113,21 @@
 
             </LinearLayout>
 
+            <Button
+                android:id="@+id/btn_donate"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginVertical="15dp"
+                android:background="@drawable/ripple_radius_5_pastel_300"
+                android:paddingHorizontal="16dp"
+                android:text="@string/label_buy_me_a_coffee"
+                android:textColor="@color/font"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -123,8 +137,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"
                     android:text="시스템 설정"
                     android:textColor="@color/gray"
@@ -168,7 +182,6 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:src="@drawable/navigate_next" />
-
                 </RelativeLayout>
 
                 <View
@@ -288,7 +301,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="5dp"
                     android:text="보안"
@@ -336,7 +349,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="5dp"
                     android:text="데이터"
@@ -377,7 +390,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="5dp"
                     android:text="피드백"
