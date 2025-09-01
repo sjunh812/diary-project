@@ -17,21 +17,20 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:text="접근 권한 안내"
+            android:text="안내"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
-
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
+        android:orientation="vertical"
         android:paddingLeft="25dp"
+        android:paddingTop="20dp"
         android:paddingRight="25dp"
-        android:orientation="vertical">
+        android:paddingBottom="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -46,9 +45,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:textColor="@color/pastel_700"
             android:text="아래 권한들을 허용하지 않아도 앱 사용에 문제는 없지만, 일부 기능 사용에 제한이 있을 수 있습니다."
-            android:textSize="13sp" />
+            android:textColor="@color/pastel_700"
+            android:textSize="15sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -72,8 +71,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="위치"
-                    android:textSize="16sp"
-                    android:textColor="@color/font" />
+                    android:textColor="@color/font"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -81,9 +80,7 @@
                     android:text="날씨 및 위치정보"
                     android:textColor="@color/pastel_700"
                     android:textSize="10sp" />
-
             </LinearLayout>
-
         </LinearLayout>
 
         <LinearLayout
@@ -108,8 +105,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="카메라"
-                    android:textSize="16sp"
-                    android:textColor="@color/font" />
+                    android:textColor="@color/font"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -117,9 +114,7 @@
                     android:text="사진 촬영"
                     android:textColor="@color/pastel_700"
                     android:textSize="10sp" />
-
             </LinearLayout>
-
         </LinearLayout>
 
         <LinearLayout
@@ -144,8 +139,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="저장공간"
-                    android:textSize="16sp"
-                    android:textColor="@color/font" />
+                    android:textColor="@color/font"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -153,9 +148,7 @@
                     android:text="앨범 접근"
                     android:textColor="@color/pastel_700"
                     android:textSize="10sp" />
-
             </LinearLayout>
-
         </LinearLayout>
 
         <LinearLayout
@@ -179,8 +172,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="주소록"
-                    android:textSize="16sp"
-                    android:textColor="@color/font" />
+                    android:textColor="@color/font"
+                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -188,26 +181,23 @@
                     android:text="구글 드라이브로 백업"
                     android:textColor="@color/pastel_700"
                     android:textSize="10sp" />
-
             </LinearLayout>
-
         </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:textColor="@color/pastel_700"
             android:text="※ 앱>1일 1일기>권한 에서 설정하실 수 있습니다."
+            android:textColor="@color/gray"
             android:textSize="13sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/pastel_700"
             android:text="※ 해당 안내는 최초 1회만 나타납니다."
+            android:textColor="@color/gray"
             android:textSize="13sp" />
-
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
@@ -218,10 +208,9 @@
         android:layout_margin="10dp"
         android:background="@drawable/button"
         android:text="확인"
+        android:textColor="@color/white"
         android:textSize="15sp"
         android:textStyle="bold"
-        android:textColor="@color/white"
         app:backgroundTint="@color/cardview_shadow_end_color"
         app:backgroundTintMode="add" />
-
 </LinearLayout>

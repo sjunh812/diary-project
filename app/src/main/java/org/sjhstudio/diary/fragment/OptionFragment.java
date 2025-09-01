@@ -10,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -35,13 +37,13 @@ public class OptionFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if(context instanceof NoteDatabaseCallback) callback = (NoteDatabaseCallback)context;
+        if (context instanceof NoteDatabaseCallback) callback = (NoteDatabaseCallback) context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        if(callback != null) callback = null;
+        if (callback != null) callback = null;
     }
 
     @Nullable
@@ -61,11 +63,22 @@ public class OptionFragment extends Fragment {
         setCountTextView(rootView);
         setCurFontText(rootView);
 
+        Button donateButton = rootView.findViewById(R.id.btn_donate);
+        donateButton.setOnClickListener(v -> {
+            try {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://qr.kakaopay.com/FciEjScDL"));
+                intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                startActivity(intent);
+            } catch (Exception e) {
+
+            }
+        });
+
         /* 폰트 설정 */
         RelativeLayout fontLayout = rootView.findViewById(R.id.fontLayout);
         fontLayout.setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), FontActivity.class);
-            ((MainActivity)requireActivity()).fontChangeResult.launch(intent);
+            ((MainActivity) requireActivity()).fontChangeResult.launch(intent);
         });
 
         /* 알림 설정 */
@@ -169,48 +182,54 @@ public class OptionFragment extends Fragment {
         int curFontIndex = Pref.getPFontKey(requireContext());
         TextView curFontTextView = rootView.findViewById(R.id.curFontTextView);
 
-        switch(curFontIndex) {
+        switch (curFontIndex) {
             case 100:
                 curFontTextView.setText("시스템 서체");
                 break;
             case 0:
-                curFontTextView.setText("교보 손글씨체");
+                curFontTextView.setText("프리텐다드");
                 break;
             case 1:
-                curFontTextView.setText("점꼴체");
+                curFontTextView.setText("국립공원 꼬미체");
                 break;
             case 2:
-                curFontTextView.setText("넥슨 배찌체");
+                curFontTextView.setText("교보 손글씨체");
                 break;
             case 3:
-                curFontTextView.setText("미니콩다방체");
+                curFontTextView.setText("점꼴체");
                 break;
             case 4:
-                curFontTextView.setText("꼬마나비체");
+                curFontTextView.setText("넥슨 배찌체");
                 break;
             case 5:
-                curFontTextView.setText("심경하체");
+                curFontTextView.setText("미니콩다방체");
                 break;
             case 6:
-                curFontTextView.setText("강원교육모두체");
+                curFontTextView.setText("꼬마나비체");
                 break;
             case 7:
-                curFontTextView.setText("쿠키런체");
+                curFontTextView.setText("심경하체");
                 break;
             case 8:
-                curFontTextView.setText("온글잎 만두몽키체");
+                curFontTextView.setText("강원교육모두체");
                 break;
             case 9:
-                curFontTextView.setText("온글잎 윤우체");
+                curFontTextView.setText("쿠키런체");
                 break;
             case 10:
-                curFontTextView.setText("코트라 희망체");
+                curFontTextView.setText("온글잎 만두몽키체");
                 break;
             case 11:
+                curFontTextView.setText("온글잎 윤우체");
+                break;
+            case 12:
+                curFontTextView.setText("코트라 희망체");
+                break;
+            case 13:
                 curFontTextView.setText("ACC 어린이 마음고운체");
                 break;
             default:
-                curFontTextView.setText("국립공원 꼬미체");
+                curFontTextView.setText("프리텐다드");
                 break;
         }
     }

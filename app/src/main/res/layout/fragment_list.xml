@@ -1,77 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:orientation="vertical">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginBottom="10dp">
 
         <TextView
             android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="@string/diary_list"
             android:textColor="@color/font"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/selectedDateTextView"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/selectedDateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginEnd="3dp"
-            android:layout_toStartOf="@+id/search_btn"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/border_button_view"
-            android:paddingLeft="9dp"
-            android:paddingTop="3dp"
-            android:paddingRight="9dp"
-            android:paddingBottom="3dp"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
             android:text="@string/see_all"
             android:textColor="@color/font"
-            android:textSize="10sp"
-            android:textStyle="bold" />
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/search_btn"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/titleTextView"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/search_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toStartOf="@id/starButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:background="@drawable/circle_view"
-            android:src="@drawable/ic_search" />
+            android:src="@drawable/ic_search"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/starButton"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/starButton"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/photoButton"
             android:background="@drawable/circle_view"
-            android:src="@drawable/star_button" />
+            android:src="@drawable/star_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/photoButton"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/photoButton"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="5dp"
             android:background="@drawable/circle_view"
-            android:src="@drawable/photo_button" />
-
-    </RelativeLayout>
+            android:src="@drawable/photo_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -81,23 +91,23 @@
             android:id="@+id/showDiaryStateView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:gravity="center"
+            android:orientation="vertical"
             android:visibility="gone">
 
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginBottom="7dp"
-                android:src="@drawable/mood_crying_color" />
+                android:src="@drawable/ic_mood_crying" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:textStyle="bold"
                 android:text="@string/no_diary"
-                android:textColor="@color/gray" />
+                android:textColor="@color/gray"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/write_btn"
@@ -110,7 +120,6 @@
                 android:textColor="@color/pastel_700"
                 android:textSize="10dp"
                 android:textStyle="bold" />
-
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -118,9 +127,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/background"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp" />
-
+            android:clipToPadding="false"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="100dp" />
     </FrameLayout>
-
 </LinearLayout>

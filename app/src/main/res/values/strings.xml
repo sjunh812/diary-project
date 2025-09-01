@@ -1,21 +1,25 @@
 <resources>
     <string name="naver_map_client_id">vekbsqse4r</string>
-
     <string name="app_name">1일 1일기</string>
     <string name="write"><u>작성하기</u></string>
     <string name="email">sjunh812@naver.com</string>
     <string name="report">피드백</string>
-
-    <string name="diary_list">일기목록</string>
-    <string name="search_diary">일기검색</string>
-    <string name="delete_diary">일기삭제</string>
+    <string name="diary_list">일기 목록</string>
+    <string name="search_diary">일기 검색</string>
+    <string name="delete_diary">일기 삭제</string>
+    <string name="mood_calendar">기분 달력</string>
+    <string name="write_diary">일기 작성</string>
+    <string name="edit_diary">일기 수정</string>
+    <string name="mood_graph">기분 통계</string>
     <string name="bookmark">즐겨찾기</string>
     <string name="delete_diary_and_cant_restore">일기를 삭제하시겠습니까?\n삭제한 일기는 복구가 불가능합니다.</string>
     <string name="enter_search_keyword">검색할 내용을 입력해주세요.</string>
     <string name="within_10_characters">(10자이내로 입력해주세요.)</string>
     <string name="cancel">취소</string>
+    <string name="confirm">확인</string>
     <string name="search">검색</string>
     <string name="delete">삭제</string>
     <string name="see_all">전체</string>
-    <string name="no_diary">일기가 없습니다..</string>
+    <string name="no_diary">일기가 없어요..</string>
+    <string name="label_buy_me_a_coffee">💌 개발자에게 따뜻한 마음 후원하기</string>
 </resources>

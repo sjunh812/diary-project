@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_marginBottom="5dp">
 
         <TextView
             android:id="@+id/titleTextView"
@@ -20,11 +19,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:text="기분달력"
+            android:text="@string/mood_calendar"
             android:textColor="@color/font"
-            android:textSize="22sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <View
@@ -40,10 +37,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginHorizontal="16dp"
         android:background="@color/background"
-        android:orientation="vertical"
-        android:paddingRight="25dp"
-        android:paddingLeft="25dp">
+        android:orientation="vertical">
 
         <com.prolificinteractive.materialcalendarview.MaterialCalendarView
             android:id="@+id/calendar"
@@ -62,50 +58,51 @@
                 android:id="@+id/dateTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text="2021년 4월 28일은, "
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="5dp"
-                android:textColor="@color/font" />
+                android:text="2021년 4월 28일은, "
+                android:textColor="@color/font"
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/moodTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="5dp"
                 android:text="화남"
                 android:textColor="@color/red"
                 android:textSize="15sp"
                 android:textStyle="bold" />
-
         </LinearLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingBottom="72dp">
 
             <LinearLayout
                 android:id="@+id/showDiaryStateView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:gravity="center"
+                android:orientation="vertical"
                 android:visibility="visible">
 
                 <ImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_marginBottom="5dp"
-                    android:src="@drawable/mood_crying_color" />
+                    android:src="@drawable/ic_mood_crying" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:textSize="14sp"
+                    android:text="@string/no_diary"
                     android:textColor="@color/gray"
-                    android:text="일기가 없습니다.." />
+                    android:textSize="14sp" />
 
                 <Button
                     android:id="@+id/writeButton"
@@ -114,18 +111,17 @@
                     android:background="@drawable/circle_view"
                     android:text="@string/write"
                     android:textColor="@color/pastel_700"
-                    android:textStyle="bold"
-                    android:textSize="17sp" />
-
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
-                android:visibility="gone"
-                android:paddingTop="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingTop="10dp"
+                android:visibility="gone" />
         </FrameLayout>
     </LinearLayout>
 </LinearLayout>

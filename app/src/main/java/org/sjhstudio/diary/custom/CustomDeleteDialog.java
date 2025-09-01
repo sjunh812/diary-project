@@ -30,7 +30,7 @@ public class CustomDeleteDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.delete_dialog_custom);
+        setContentView(R.layout.dialog_delete_photo);
 
         titleTextView = (TextView)findViewById(R.id.titleTextView);
         deleteTextView = (TextView)findViewById(R.id.deleteTextView);

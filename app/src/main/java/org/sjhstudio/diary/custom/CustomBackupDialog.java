@@ -34,7 +34,7 @@ public class CustomBackupDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.caution_dialog_custom);
+        setContentView(R.layout.dialog_caution_backup);
 
         titleTextView = (TextView)findViewById(R.id.titleTextView);
         questionTextView = (TextView)findViewById(R.id.questionTextView);

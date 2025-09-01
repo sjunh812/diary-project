@@ -32,7 +32,7 @@ public class CustomTimePickerDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.time_picker_dialog);
+        setContentView(R.layout.dialog_time_picker);
 
         cancelButton = findViewById(R.id.cancelButton);
         timePicker = findViewById(R.id.timePicker);

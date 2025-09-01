@@ -9,6 +9,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.FitCenter
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.sjhstudio.diary.PhotoActivity
 import org.sjhstudio.diary.R
 import org.sjhstudio.diary.helper.WriteFragmentListener
@@ -52,10 +55,18 @@ class PhotoAdapter(val context: Context, val fragment: Fragment?) :
 
         fun setPhoto(filePath: String) {
             val file = File(filePath)
-            val bitmap =
-                getRoundedCornerBitmap(BitmapFactory.decodeFile(file.absolutePath) ?: return)
+            val srcBitmap = BitmapFactory.decodeFile(file.absolutePath)
 
-            bitmap?.let { ivPhoto.setImageBitmap(it) }
+            Glide.with(context)
+                .asBitmap()
+                .load(file.absoluteFile)
+                .transform(FitCenter(), RoundedCorners(20))
+                .into(ivPhoto)
+
+//            srcBitmap?.let { bitmap ->
+//                val roundedBitmap = getRoundedCornerBitmap(bitmap)
+//                roundedBitmap?.let { rb -> ivPhoto.setImageBitmap(rb) }
+//            }
         }
 
         private fun getRoundedCornerBitmap(bitmap: Bitmap): Bitmap? {

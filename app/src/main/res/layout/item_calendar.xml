@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/border_view_calendar"
+    android:orientation="vertical"
+    android:paddingHorizontal="18dp"
+    android:paddingVertical="12dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/moodImageView"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_mood_angry" />
+
+        <TextView
+            android:id="@+id/timeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/moodImageView"
+            android:textColor="@color/gray"
+            android:textSize="13sp"
+            tools:text="12:00" />
+
+        <!--        <ImageView-->
+        <!--            android:id="@+id/starImageView"-->
+        <!--            android:layout_width="15dp"-->
+        <!--            android:layout_height="15dp"-->
+        <!--            android:layout_alignParentEnd="true"-->
+        <!--            android:layout_centerVertical="true"-->
+        <!--            android:layout_gravity="end"-->
+        <!--            android:src="@drawable/star" />-->
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/contentsTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:textColor="@color/font_contents"
+        android:textSize="13sp"
+        tools:text="내용입니다\n띄어쓰기" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/weatherImageView"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/weather_icon_1"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/locationTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:ellipsize="marquee"
+            android:gravity="end"
+            android:singleLine="true"
+            android:textColor="@color/pastel_700"
+            android:textSize="12sp"
+            tools:text="고양시 일산서구" />
+    </LinearLayout>
+</LinearLayout>

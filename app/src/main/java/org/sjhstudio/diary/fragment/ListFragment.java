@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import org.sjhstudio.diary.custom.CustomAlignDialog;
+import org.sjhstudio.diary.custom.PeriodDialog;
 import org.sjhstudio.diary.R;
 import org.sjhstudio.diary.custom.CustomDeleteDialog;
 import org.sjhstudio.diary.custom.CustomUpdateDialog;
@@ -361,7 +361,7 @@ public class ListFragment extends Fragment {
     // 일기정렬 dialog
     @SuppressLint("SetTextI18n")
     public void showAlignDialog() {
-        CustomAlignDialog dialog = new CustomAlignDialog(requireContext());
+        PeriodDialog dialog = new PeriodDialog(requireContext());
         dialog.show();
         dialog.setYesButtonOnClickListener(v -> {
             // 기간보기

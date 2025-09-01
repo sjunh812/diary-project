@@ -1,15 +1,13 @@
 package org.sjhstudio.diary;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
-
-import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 
 import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.utils.BaseActivity;
@@ -50,56 +48,59 @@ public class FontActivity extends BaseActivity {
     }
 
     private void initFontRadioBtn() {
-        ((RadioGroup)findViewById(R.id.font_radio_group)).setOnCheckedChangeListener((group, checkedId) -> {
-            switch(checkedId) {
+        ((RadioGroup) findViewById(R.id.font_radio_group)).setOnCheckedChangeListener((group, checkedId) -> {
+            switch (checkedId) {
                 case R.id.systemFontButton:
                     selectedFontIndex = 100;
                     break;
-                case R.id.basicFontButton:
+                case R.id.btn_font_main:
                     selectedFontIndex = -1;
                     break;
-                case R.id.fontButton:
-                    selectedFontIndex = 0;
-                    break;
-                case R.id.fontButton2:
+                case R.id.btn_font_1:
                     selectedFontIndex = 1;
                     break;
-                case R.id.fontButton3:
+                case R.id.btn_font_2:
                     selectedFontIndex = 2;
                     break;
-                case R.id.fontButton4:
+                case R.id.btn_font_3:
                     selectedFontIndex = 3;
                     break;
-                case R.id.fontButton5:
+                case R.id.btn_font_4:
                     selectedFontIndex = 4;
                     break;
-                case R.id.fontButton6:
+                case R.id.btn_font_5:
                     selectedFontIndex = 5;
                     break;
-                case R.id.fontButton7:
+                case R.id.btn_font_6:
                     selectedFontIndex = 6;
                     break;
-                case R.id.fontButton8:
+                case R.id.btn_font_7:
                     selectedFontIndex = 7;
                     break;
-                case R.id.fontButton9:
+                case R.id.btn_font_8:
                     selectedFontIndex = 8;
                     break;
-                case R.id.fontButton10:
+                case R.id.btn_font_9:
                     selectedFontIndex = 9;
                     break;
-                case R.id.fontButton11:
+                case R.id.btn_font_10:
                     selectedFontIndex = 10;
                     break;
-                case R.id.fontButton12:
+                case R.id.btn_font_11:
                     selectedFontIndex = 11;
+                    break;
+                case R.id.btn_font_12:
+                    selectedFontIndex = 12;
+                    break;
+                case R.id.btn_font_13:
+                    selectedFontIndex = 13;
                     break;
             }
         });
     }
 
     private void initFontSizeRadioBtn() {
-        ((RadioGroup)findViewById(R.id.font_size_radio_group)).setOnCheckedChangeListener((group, checkedId) -> {
+        ((RadioGroup) findViewById(R.id.font_size_radio_group)).setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
                 case R.id.ss_size_radio_btn:
                     selectedFontSizeIndex = 0;
@@ -121,78 +122,81 @@ public class FontActivity extends BaseActivity {
     }
 
     private void initBottom() {
-        ((Button)findViewById(R.id.okButton)).setOnClickListener( v -> {
+        ((Button) findViewById(R.id.okButton)).setOnClickListener(v -> {
             MyTheme.applyTheme(getApplicationContext(), selectedFontIndex, selectedFontSizeIndex);
             setResult(RESULT_OK, getIntent());
             finish();
         });
 
-        ((Button)findViewById(R.id.cancelButton)).setOnClickListener( v -> {
+        ((Button) findViewById(R.id.cancelButton)).setOnClickListener(v -> {
             finish();
         });
     }
 
     private void setPrefs() {
-        switch(curFontIndex) {
+        switch (curFontIndex) {
             case 100:
-                ((RadioButton)findViewById(R.id.systemFontButton)).setChecked(true);
+                ((RadioButton) findViewById(R.id.systemFontButton)).setChecked(true);
                 break;
             case -1:
-                ((RadioButton)findViewById(R.id.basicFontButton)).setChecked(true);
-                break;
-            case 0:
-                ((RadioButton)findViewById(R.id.fontButton)).setChecked(true);
+                ((RadioButton) findViewById(R.id.btn_font_main)).setChecked(true);
                 break;
             case 1:
-                ((RadioButton)findViewById(R.id.fontButton2)).setChecked(true);
+                ((RadioButton) findViewById(R.id.btn_font_1)).setChecked(true);
                 break;
             case 2:
-                ((RadioButton)findViewById(R.id.fontButton3)).setChecked(true);
+                ((RadioButton) findViewById(R.id.btn_font_2)).setChecked(true);
                 break;
             case 3:
-                ((RadioButton)findViewById(R.id.fontButton4)).setChecked(true);
+                ((RadioButton) findViewById(R.id.btn_font_3)).setChecked(true);
                 break;
             case 4:
-                ((RadioButton)findViewById(R.id.fontButton5)).setChecked(true);
+                ((RadioButton) findViewById(R.id.btn_font_4)).setChecked(true);
                 break;
             case 5:
-                ((RadioButton)findViewById(R.id.fontButton6)).setChecked(true);
+                ((RadioButton) findViewById(R.id.btn_font_5)).setChecked(true);
                 break;
             case 6:
-                ((RadioButton)findViewById(R.id.fontButton7)).setChecked(true);
+                ((RadioButton) findViewById(R.id.btn_font_6)).setChecked(true);
                 break;
             case 7:
-                ((RadioButton)findViewById(R.id.fontButton8)).setChecked(true);
+                ((RadioButton) findViewById(R.id.btn_font_7)).setChecked(true);
                 break;
             case 8:
-                ((RadioButton)findViewById(R.id.fontButton9)).setChecked(true);
+                ((RadioButton) findViewById(R.id.btn_font_8)).setChecked(true);
                 break;
             case 9:
-                ((RadioButton)findViewById(R.id.fontButton10)).setChecked(true);
+                ((RadioButton) findViewById(R.id.btn_font_9)).setChecked(true);
                 break;
             case 10:
-                ((RadioButton)findViewById(R.id.fontButton11)).setChecked(true);
+                ((RadioButton) findViewById(R.id.btn_font_10)).setChecked(true);
                 break;
             case 11:
-                ((RadioButton)findViewById(R.id.fontButton12)).setChecked(true);
+                ((RadioButton) findViewById(R.id.btn_font_11)).setChecked(true);
+                break;
+            case 12:
+                ((RadioButton) findViewById(R.id.btn_font_12)).setChecked(true);
+                break;
+            case 13:
+                ((RadioButton) findViewById(R.id.btn_font_13)).setChecked(true);
                 break;
         }
 
-        switch(curFontSizeIndex) {
+        switch (curFontSizeIndex) {
             case 0:
-                ((RadioButton)findViewById(R.id.ss_size_radio_btn)).setChecked(true);
+                ((RadioButton) findViewById(R.id.ss_size_radio_btn)).setChecked(true);
                 break;
             case 1:
-                ((RadioButton)findViewById(R.id.s_size_radio_btn)).setChecked(true);
+                ((RadioButton) findViewById(R.id.s_size_radio_btn)).setChecked(true);
                 break;
             case 2:
-                ((RadioButton)findViewById(R.id.m_size_radio_btn)).setChecked(true);
+                ((RadioButton) findViewById(R.id.m_size_radio_btn)).setChecked(true);
                 break;
             case 3:
-                ((RadioButton)findViewById(R.id.l_size_radio_btn)).setChecked(true);
+                ((RadioButton) findViewById(R.id.l_size_radio_btn)).setChecked(true);
                 break;
             case 4:
-                ((RadioButton)findViewById(R.id.ll_size_radio_btn)).setChecked(true);
+                ((RadioButton) findViewById(R.id.ll_size_radio_btn)).setChecked(true);
                 break;
         }
     }
@@ -201,7 +205,7 @@ public class FontActivity extends BaseActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
-        if(id == android.R.id.home) {   // 툴바 왼쪽 돌아가기 버튼 선택 시
+        if (id == android.R.id.home) {   // 툴바 왼쪽 돌아가기 버튼 선택 시
             finish();
             return true;
         }

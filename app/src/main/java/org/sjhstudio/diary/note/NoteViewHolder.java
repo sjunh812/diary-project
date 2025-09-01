@@ -2,11 +2,7 @@ package org.sjhstudio.diary.note;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,7 +18,6 @@ import org.sjhstudio.diary.adapters.PhotoAdapter;
 import org.sjhstudio.diary.helper.OnNoteItemClickListener;
 import org.sjhstudio.diary.helper.OnNoteItemLongClickListener;
 import org.sjhstudio.diary.helper.OnNoteItemTouchListener;
-import org.sjhstudio.diary.helper.OnRequestListener;
 import org.sjhstudio.diary.utils.Pref;
 
 import java.util.ArrayList;
@@ -41,7 +36,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
     private TextView timeTextView;
     private TextView weekTextView;
     private LinearLayout bookmarkView;
-    private RelativeLayout weatherAndLocationLayout;
+    private RelativeLayout locationLayout;
 
     // Photo view
     private LinearLayout photoLayout;
@@ -52,6 +47,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
     private TextView dateTextView2;
     private TextView timeTextView2;
     private TextView weekTextView2;
+    private ImageView starImageView2;
     private LinearLayout showPhotoStateView;
 
     private ViewPager2 photoViewPager;
@@ -80,7 +76,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         timeTextView = itemView.findViewById(R.id.timeTextView);
         weekTextView = itemView.findViewById(R.id.weekTextView);
         bookmarkView = itemView.findViewById(R.id.bookmark_view);
-        weatherAndLocationLayout = itemView.findViewById(R.id.weatherAndLocationLayout);
+        locationLayout = itemView.findViewById(R.id.rl_location);
         photoLayout = itemView.findViewById(R.id.photoLayout);
         moodImageView2 = itemView.findViewById(R.id.moodImageView2);
         weatherImageView2 = itemView.findViewById(R.id.weatherImageView2);
@@ -89,23 +85,24 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         dateTextView2 = itemView.findViewById(R.id.dateTextView2);
         timeTextView2 = itemView.findViewById(R.id.timeTextView2);
         weekTextView2 = itemView.findViewById(R.id.weekTextView2);
+        starImageView2 = itemView.findViewById(R.id.starImageView2);
         showPhotoStateView = itemView.findViewById(R.id.showPhotoStateView);
 
         contentsLayout.setOnClickListener(v -> {
             int position = getAdapterPosition();
-            if(clickListener != null) {
+            if (clickListener != null) {
                 clickListener.onItemClick(NoteViewHolder.this, v, position);
             }
         });
         photoLayout.setOnClickListener(v -> {
             int position = getAdapterPosition();
-            if(clickListener != null) {
+            if (clickListener != null) {
                 clickListener.onItemClick(NoteViewHolder.this, v, position);
             }
         });
         itemView.setOnTouchListener((v, event) -> {
             int position = getAdapterPosition();
-            if(touchListener != null) {
+            if (touchListener != null) {
                 touchListener.onItemTouch(NoteViewHolder.this, v, position, event);
             }
 
@@ -113,7 +110,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         });
         contentsLayout.setOnLongClickListener(v -> {
             int position = getAdapterPosition();
-            if(longClickListener != null) {
+            if (longClickListener != null) {
                 longClickListener.onLongClick(NoteViewHolder.this, v, position);
                 return true;
             }
@@ -122,7 +119,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         });
         photoLayout.setOnLongClickListener(v -> {
             int position = getAdapterPosition();
-            if(longClickListener != null) {
+            if (longClickListener != null) {
                 longClickListener.onLongClick(NoteViewHolder.this, v, position);
                 return true;
             }
@@ -169,9 +166,9 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         setMoodImage(moodIndex);
 
         // 사진 설정
-        if(item.getPicture() != null && !item.getPicture().equals("")) {
+        if (item.getPicture() != null && !item.getPicture().equals("")) {
             String[] picturePaths = item.getPicture().split(",");
-            if(picturePaths.length > 0) {
+            if (picturePaths.length > 0) {
                 photoAdapter.setItems(new ArrayList<>(Arrays.asList(picturePaths)));
                 photoAdapter.notifyDataSetChanged();
                 totalBanner.setText(String.valueOf(photoAdapter.getItemCount()));
@@ -195,7 +192,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         String contents = item.getContents();
         contentsTextView.setText(contents);
         contentsTextView2.setText(contents);
-        if(Pref.getPSkipNote(context)) {
+        if (Pref.getPSkipNote(context)) {
             contentsTextView.setMaxLines(3);
             contentsTextView2.setMaxLines(3);
         } else {
@@ -229,7 +226,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
         int starIndex = item.getStarIndex();
         setStarImage(starIndex);
 
-        if(contents == null || contents.equals("")) {
+        if (contents == null || contents.equals("")) {
             contentsTextView.setVisibility(View.GONE);
             contentsTextView2.setVisibility(View.GONE);
         } else {
@@ -237,60 +234,60 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
             contentsTextView2.setVisibility(View.VISIBLE);
         }
 
-        if((location == null || location.equals("")) && (weatherIndex == -1)) {
-            weatherAndLocationLayout.setVisibility(View.GONE);
+        if ((location == null || location.isBlank())) {
+            locationLayout.setVisibility(View.GONE);
         } else {
-            weatherAndLocationLayout.setVisibility(View.VISIBLE);
+            locationLayout.setVisibility(View.VISIBLE);
         }
     }
 
     private void setMoodImage(int index) {
-        switch(index) {
+        switch (index) {
             case 0:     // 화남
-                moodImageView.setImageResource(R.drawable.mood_angry_color);
-                moodImageView2.setImageResource(R.drawable.mood_angry_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_angry);
+                moodImageView2.setImageResource(R.drawable.ic_mood_angry);
                 break;
             case 1:     // 쿨
-                moodImageView.setImageResource(R.drawable.mood_cool_color);
-                moodImageView2.setImageResource(R.drawable.mood_cool_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_cool);
+                moodImageView2.setImageResource(R.drawable.ic_mood_cool);
                 break;
             case 2:     // 슬픔
-                moodImageView.setImageResource(R.drawable.mood_crying_color);
-                moodImageView2.setImageResource(R.drawable.mood_crying_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_crying);
+                moodImageView2.setImageResource(R.drawable.ic_mood_crying);
                 break;
             case 3:     // 아픔
-                moodImageView.setImageResource(R.drawable.mood_ill_color);
-                moodImageView2.setImageResource(R.drawable.mood_ill_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_ill);
+                moodImageView2.setImageResource(R.drawable.ic_mood_ill);
                 break;
             case 4:     // 웃음
-                moodImageView.setImageResource(R.drawable.mood_laugh_color);
-                moodImageView2.setImageResource(R.drawable.mood_laugh_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_laugh);
+                moodImageView2.setImageResource(R.drawable.ic_mood_laugh);
                 break;
             case 5:     // 보통
-                moodImageView.setImageResource(R.drawable.mood_meh_color);
-                moodImageView2.setImageResource(R.drawable.mood_meh_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_meh);
+                moodImageView2.setImageResource(R.drawable.ic_mood_meh);
                 break;
             case 6:     // 나쁨
-                moodImageView.setImageResource(R.drawable.mood_sad);
-                moodImageView2.setImageResource(R.drawable.mood_sad);
+                moodImageView.setImageResource(R.drawable.ic_mood_sad);
+                moodImageView2.setImageResource(R.drawable.ic_mood_sad);
                 break;
             case 7:     // 좋음
-                moodImageView.setImageResource(R.drawable.mood_smile_color);
-                moodImageView2.setImageResource(R.drawable.mood_smile_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_smile);
+                moodImageView2.setImageResource(R.drawable.ic_mood_smile);
                 break;
             case 8:     // 졸림
-                moodImageView.setImageResource(R.drawable.mood_yawn_color);
-                moodImageView2.setImageResource(R.drawable.mood_yawn_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_yawn);
+                moodImageView2.setImageResource(R.drawable.ic_mood_yawn);
                 break;
             default:    // default(미소)
-                moodImageView.setImageResource(R.drawable.mood_smile_color);
-                moodImageView2.setImageResource(R.drawable.mood_smile_color);
+                moodImageView.setImageResource(R.drawable.ic_mood_smile);
+                moodImageView2.setImageResource(R.drawable.ic_mood_smile);
                 break;
         }
     }
 
     private void setWeatherImage(int index) {
-        switch(index) {
+        switch (index) {
             case 0:
                 weatherImageView.setImageResource(R.drawable.weather_icon_1);
                 weatherImageView2.setImageResource(R.drawable.weather_icon_1);
@@ -327,15 +324,20 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setStarImage(int index) {
-        if(index == 0) bookmarkView.setVisibility(View.GONE);
-        else bookmarkView.setVisibility(View.VISIBLE);
+        if (index == 0) {
+            bookmarkView.setVisibility(View.GONE);
+            starImageView2.setVisibility(View.GONE);
+        } else {
+            bookmarkView.setVisibility(View.VISIBLE);
+            starImageView2.setVisibility(View.VISIBLE);
+        }
     }
 
     public void setLayoutType(int type) {
-        if(type == 0) {
+        if (type == 0) {
             contentsLayout.setVisibility(View.VISIBLE);
             photoLayout.setVisibility(View.GONE);
-        } else if(type == 1) {
+        } else if (type == 1) {
             contentsLayout.setVisibility(View.GONE);
             photoLayout.setVisibility(View.VISIBLE);
         }

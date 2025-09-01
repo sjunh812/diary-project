@@ -3,14 +3,18 @@ package org.sjhstudio.diary
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.CompoundButton
+import android.widget.RelativeLayout
+import android.widget.Switch
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import org.sjhstudio.diary.utils.BaseActivity
 import org.sjhstudio.diary.utils.Pref
 
-class PasswordSettingsActivity: BaseActivity(), CompoundButton.OnCheckedChangeListener {
+class PasswordSettingsActivity : BaseActivity(), CompoundButton.OnCheckedChangeListener {
 
     private lateinit var pwSwitch: Switch
     private lateinit var fpSwitch: Switch
@@ -40,16 +44,16 @@ class PasswordSettingsActivity: BaseActivity(), CompoundButton.OnCheckedChangeLi
     override fun onResume() {
         super.onResume()
 
-        if(setPW) {
+        if (setPW) {
             setPW = false
 
-            if(pw.isNotEmpty()) {
+            if (pw.isNotEmpty()) {
                 findViewById<Switch>(R.id.pw_switch).isChecked = true
             }
         } else {
             pwSwitch.isChecked = Pref.getPUsePw(this)
 
-            if(!isSupportFingerPrint()) {
+            if (!isSupportFingerPrint()) {
                 findViewById<TextView>(R.id.support_fp_text).visibility = View.VISIBLE
                 fpSwitch.isEnabled = false
                 Pref.setPFingerPrint(this, false)
@@ -57,7 +61,7 @@ class PasswordSettingsActivity: BaseActivity(), CompoundButton.OnCheckedChangeLi
                 findViewById<TextView>(R.id.support_fp_text).visibility = View.GONE
                 fpSwitch.isEnabled = true
 
-                if(!pwSwitch.isChecked) {
+                if (!pwSwitch.isChecked) {
                     Pref.setPFingerPrint(this, false)
                 }
             }
@@ -69,7 +73,7 @@ class PasswordSettingsActivity: BaseActivity(), CompoundButton.OnCheckedChangeLi
     override fun onPause() {
         super.onPause()
         Pref.setPUsePw(this, pwSwitch.isChecked)
-        Pref.setPFingerPrint(this,  fpSwitch.isChecked)
+        Pref.setPFingerPrint(this, fpSwitch.isChecked)
     }
 
     private fun init() {
@@ -95,23 +99,26 @@ class PasswordSettingsActivity: BaseActivity(), CompoundButton.OnCheckedChangeLi
     private fun isSupportFingerPrint(): Boolean {
         val biometricManager = BiometricManager.from(this)
 
-        when(biometricManager.canAuthenticate(BIOMETRIC_STRONG)) {
+        when (biometricManager.canAuthenticate(BIOMETRIC_STRONG)) {
             BiometricManager.BIOMETRIC_SUCCESS -> return true
             BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> return false
             BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> return false
             BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> return false
+            BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED -> return false
+            BiometricManager.BIOMETRIC_ERROR_UNSUPPORTED -> return false
+            BiometricManager.BIOMETRIC_STATUS_UNKNOWN -> return false
         }
 
         return false
     }
 
-    override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
-        when(buttonView?.id) {
+    override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
+        when (buttonView.id) {
             R.id.pw_switch -> {
-                if(!isChecked) {
+                if (!isChecked) {
                     findViewById<Switch>(R.id.finger_print_switch).isChecked = false
                 } else {
-                    if(pw.isEmpty()) {
+                    if (pw.isEmpty()) {
                         setPW = true
                         showToast("비밀번호를 먼저 생성해주세요.")
                         buttonView.isChecked = false
@@ -121,7 +128,7 @@ class PasswordSettingsActivity: BaseActivity(), CompoundButton.OnCheckedChangeLi
             }
 
             R.id.finger_print_switch -> {
-                if(findViewById<Switch>(R.id.pw_switch).isChecked && isSupportFingerPrint()) {
+                if (findViewById<Switch>(R.id.pw_switch).isChecked && isSupportFingerPrint()) {
                 } else {
                     buttonView.isChecked = false
                 }

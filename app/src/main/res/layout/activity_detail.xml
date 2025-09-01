@@ -41,7 +41,7 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
-                android:src="@drawable/mood_angry_color" />
+                android:src="@drawable/ic_mood_angry" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -175,13 +175,13 @@
 
         <RelativeLayout
             android:id="@+id/container"
-            android:background="@color/background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_marginHorizontal="30dp"
             android:layout_marginBottom="25dp"
-            android:gravity="center_vertical"
-            android:layout_alignParentBottom="true">
+            android:background="@color/background"
+            android:gravity="center_vertical">
 
             <Button
                 android:id="@+id/txt_btn"

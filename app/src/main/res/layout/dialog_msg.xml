@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -17,74 +18,56 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:text="title"
             android:textColor="@color/white"
             android:textSize="20sp"
-            android:textStyle="bold" />
-
-<!--        <ImageButton-->
-<!--            android:id="@+id/cancelButton"-->
-<!--            android:layout_width="30dp"-->
-<!--            android:layout_height="30dp"-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:background="@drawable/circle_view"-->
-<!--            android:paddingLeft="7dp"-->
-<!--            android:paddingTop="5dp"-->
-<!--            android:paddingRight="5dp"-->
-<!--            android:paddingBottom="7dp"-->
-<!--            android:scaleType="centerInside"-->
-<!--            android:src="@drawable/x_icon" />-->
-
+            android:textStyle="bold"
+            tools:text="제목" />
     </RelativeLayout>
 
     <TextView
         android:id="@+id/contents_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginBottom="10dp"
         android:layout_marginTop="25dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
         android:lineSpacingExtra="5dp"
-        android:text="contents"
+        android:textColor="@color/font"
         android:textSize="18sp"
-        android:textColor="@color/font" />
+        tools:text="내용" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp">
+        android:orientation="horizontal"
+        android:paddingVertical="15dp">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/yes_btn"
-            android:layout_width="70dp"
+            android:layout_width="wrap_content"
             android:layout_height="37dp"
             android:layout_gravity="center"
             android:background="@drawable/button"
-            android:text="yes"
-            android:textStyle="bold"
+            android:text="@string/confirm"
             android:textColor="@color/white"
             android:textSize="15sp"
+            android:textStyle="bold"
             app:backgroundTint="@color/cardview_shadow_end_color"
             app:backgroundTintMode="add" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/no_btn"
-            android:layout_width="70dp"
+            android:layout_width="wrap_content"
             android:layout_height="37dp"
             android:layout_gravity="center"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="20dp"
             android:background="@drawable/button"
-            android:text="no"
-            android:textStyle="bold"
+            android:text="@string/cancel"
             android:textColor="@color/white"
             android:textSize="15sp"
+            android:textStyle="bold"
             app:backgroundTint="@color/cardview_shadow_end_color"
             app:backgroundTintMode="add" />
-
     </LinearLayout>
-
 </LinearLayout>

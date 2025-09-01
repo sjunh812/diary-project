@@ -35,7 +35,7 @@ public class CustomGPSDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.gps_dialog_custom);
+        setContentView(R.layout.dialog_gps);
         setCancelable(false);
 
         init();

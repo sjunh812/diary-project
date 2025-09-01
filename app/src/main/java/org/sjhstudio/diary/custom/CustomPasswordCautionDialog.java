@@ -33,7 +33,7 @@ public class CustomPasswordCautionDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.password_caution_dialog_custom);
+        setContentView(R.layout.dialog_caution_password);
 
         setCancelable(false);
         cancelButton = (ImageButton)findViewById(R.id.cancelButton);

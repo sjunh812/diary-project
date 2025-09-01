@@ -1,11 +1,5 @@
 package org.sjhstudio.diary;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,6 +16,12 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.android.volley.Request;
 import com.canhub.cropper.CropImageContract;
 import com.canhub.cropper.CropImageContractOptions;
@@ -35,27 +35,28 @@ import com.stanfy.gsonxml.GsonXml;
 import com.stanfy.gsonxml.GsonXmlBuilder;
 import com.stanfy.gsonxml.XmlParserCreator;
 
+import org.sjhstudio.diary.extensions.ViewExtensionKt;
 import org.sjhstudio.diary.fragment.CalendarFragment;
 import org.sjhstudio.diary.fragment.GraphFragment;
 import org.sjhstudio.diary.fragment.ListFragment;
 import org.sjhstudio.diary.fragment.OptionFragment;
 import org.sjhstudio.diary.fragment.WriteFragment;
-import org.sjhstudio.diary.model.RGResults;
-import org.sjhstudio.diary.model.ReverseGeocoder;
-import org.sjhstudio.diary.utils.ApiKey;
-import org.sjhstudio.diary.utils.BaseActivity;
-import org.sjhstudio.diary.utils.DialogUtils;
 import org.sjhstudio.diary.helper.KMAGrid;
 import org.sjhstudio.diary.helper.MyApplication;
 import org.sjhstudio.diary.helper.OnRequestListener;
 import org.sjhstudio.diary.helper.OnTabItemSelectedListener;
+import org.sjhstudio.diary.model.RGResults;
+import org.sjhstudio.diary.model.ReverseGeocoder;
 import org.sjhstudio.diary.note.Note;
-import org.sjhstudio.diary.note.NoteDatabaseCallback;
 import org.sjhstudio.diary.note.NoteDatabase;
+import org.sjhstudio.diary.note.NoteDatabaseCallback;
+import org.sjhstudio.diary.utils.ApiKey;
+import org.sjhstudio.diary.utils.BaseActivity;
+import org.sjhstudio.diary.utils.Constants;
+import org.sjhstudio.diary.utils.DialogUtils;
 import org.sjhstudio.diary.utils.PermissionUtils;
 import org.sjhstudio.diary.utils.Pref;
 import org.sjhstudio.diary.utils.Utils;
-import org.sjhstudio.diary.utils.Constants;
 import org.sjhstudio.diary.weather.WeatherItem;
 import org.sjhstudio.diary.weather.WeatherResult;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -97,8 +98,9 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE
-                || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE
+                || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT
+        ) {
             System.out.println("xxx 화면 회전");
         }
     }
@@ -108,20 +110,20 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(!Pref.getPPermissionGuide(this)) {
-            Log.e(LOG, "권한안내 필요함.");
+        ViewExtensionKt.enableSystemBarPadding(findViewById(R.id.root));
+
+        if (!Pref.getPPermissionGuide(this)) {
             DialogUtils.INSTANCE.showPermissionGuideDialog(this, () -> {
                 AutoPermissions.Companion.loadAllPermissions(this, Constants.REQUEST_ALL_PERMISSIONS);
                 Pref.setPPermissionGuide(this, true);
                 return Unit.INSTANCE;
             });
         } else {
-            Log.e(LOG, "권한안내 완료됨.");
             AutoPermissions.Companion.loadAllPermissions(this, Constants.REQUEST_ALL_PERMISSIONS);
         }
 
         // DB
-        db = new NoteDatabase(this);         // DB 객체 생성
+        db = new NoteDatabase(this);        // DB 객체 생성
         db.dbInit(NoteDatabase.DB_NAME);            // 지정된 이름의 일기 DB 생성
         db.createTable(NoteDatabase.NOTE_TABLE);    // Note 테이블 생성 (중복 제외)
 
@@ -130,13 +132,10 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         graphFragment = new GraphFragment();
         optionFragment = new OptionFragment();
         writeFragment = (WriteFragment) getSupportFragmentManager().findFragmentByTag("write_fragment");
-        if (writeFragment == null) {
-            writeFragment = new WriteFragment();
-            System.out.println("xxx hi");
-        }
+        if (writeFragment == null) writeFragment = new WriteFragment();
 
         // location manager
-        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         gpsListener = new GPSListener();
         lowVersionGPSListener = new LowVersionGPSListener();
 
@@ -146,23 +145,20 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
 
-            if(!isSelected2 && selectedTabIndex == 2
+            if (!isSelected2 && selectedTabIndex == 2
                     && writeFragment != null
                     && !(writeFragment.isEmptyContent())
             ) {
                 DialogUtils.INSTANCE.showStopWriteDialog(this, () -> {
-                    if (writeFragment != null) {
-                        writeFragment.deleteFilesCache(true);
-                    }
-
+                    if (writeFragment != null) writeFragment.deleteFilesCache(true);
                     writeFragment = new WriteFragment();
 
                     int position;
 
-                    if(item.getItemId() == R.id.tab1) position = 0;
-                    else if(item.getItemId() == R.id.tab2) position = 1;
-                    else if(item.getItemId() == R.id.tab3) position = 2;
-                    else if(item.getItemId() == R.id.tab4) position = 3;
+                    if (item.getItemId() == R.id.tab1) position = 0;
+                    else if (item.getItemId() == R.id.tab2) position = 1;
+                    else if (item.getItemId() == R.id.tab3) position = 2;
+                    else if (item.getItemId() == R.id.tab4) position = 3;
                     else position = 4;
 
                     isSelected2 = true;
@@ -172,6 +168,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
                 });
             } else {
                 if (selectedTabIndex == 2) writeFragment = new WriteFragment();
+
                 isSelected2 = false;
                 return setSelectedTabItem(item.getItemId(), transaction);
             }
@@ -180,7 +177,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         });
 
         // savedInstanceState(테마설정, 폰트설정시 이용)
-        if(savedInstanceState == null) onTabSelected(0);
+        if (savedInstanceState == null) onTabSelected(0);
         else onTabSelected(savedInstanceState.getInt(Constants.SELECTED_TAB_INDEX));
 
         // 리시버등록(앱 제거시, 비밀번호삭제)
@@ -188,7 +185,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
     }
 
     private void registerRemovedReceiver() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
             intentFilter.addDataScheme(getPackageName());
@@ -211,33 +208,35 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
     }
 
     /**
-     * Get current location and date
-     * @param date  // null = today
+     * Current location and date
+     *
+     * @param date : date = null → today
      */
     public void getCurrentLocation(Date date) {
-        if(date == null) curDate = new Date();                  // 현재 날짜정보
+        if (date == null) curDate = new Date();                 // 현재 날짜정보
         else curDate = date;                                    // 사용자가 선택한 날짜정보
 
-        String curYear = Utils.INSTANCE.getYearFormat().format(curDate);   // yyyy
-        String curMonth = Utils.INSTANCE.getMonthFormat().format(curDate); // MM
-        String curDay = Utils.INSTANCE.getDayFormat().format(curDate); // dd
-        String _date = Utils.INSTANCE.getDateFormat().format(curDate); // yyyy년 MM월 dd일
+        String curYear = Utils.INSTANCE.getYearFormat().format(curDate);    // yyyy
+        String curMonth = Utils.INSTANCE.getMonthFormat().format(curDate);  // MM
+        String curDay = Utils.INSTANCE.getDayFormat().format(curDate);      // dd
+        String _date = Utils.INSTANCE.getDateFormat().format(curDate);      // yyyy년 MM월 dd일
 
-        if(writeFragment != null) {
+        if (writeFragment != null) {
             Log.d(LOG, _date);
             writeFragment.setDateTextView(_date);
             try {
                 writeFragment.setCurDate(Integer.parseInt(curYear), Integer.parseInt(curMonth), Integer.parseInt(curDay));
-            } catch(Exception e) { e.printStackTrace(); }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         try {
-            if(PermissionUtils.INSTANCE.checkLocationPermission(this)) {
-//                curLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);   // 최근 위치정보
+            if (PermissionUtils.INSTANCE.checkLocationPermission(this)) {
                 long minTime = 1000;    // 업데이트 주기 10초
                 float minDistance = 0;  // 업데이트 거리간격 0
 
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     locationManager.requestLocationUpdates(
                             LocationManager.GPS_PROVIDER,
                             minTime,
@@ -265,7 +264,9 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
                     );
                 }
             }
-        } catch(Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void callCurrentAddress() {
@@ -300,32 +301,46 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         url += "&gridy=" + Math.round(gridY);
 
         Map<String, String> params = new HashMap<>();
-        MyApplication.request(Constants.REQUEST_WEATHER_BY_GRID, Request.Method.GET, url, params, this);
+
+        MyApplication.request(
+                Constants.REQUEST_WEATHER_BY_GRID,
+                Request.Method.GET,
+                url,
+                params,
+                this
+        );
     }
 
     @Override
     public void stopLocationService() {
         try {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) locationManager.removeUpdates(gpsListener);
-            else locationManager.removeUpdates(lowVersionGPSListener);
-        } catch(Exception e) { e.printStackTrace(); }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                locationManager.removeUpdates(gpsListener);
+            } else {
+                locationManager.removeUpdates(lowVersionGPSListener);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void getDateOnly(Date date) {
-        if(date == null) curDate = new Date();                  // 현재 날짜정보
+        if (date == null) curDate = new Date();                             // 현재 날짜정보
         else curDate = date;
 
-        String curYear = Utils.INSTANCE.getYearFormat().format(curDate);            // yyyy
-        String curMonth = Utils.INSTANCE.getMonthFormat().format(curDate);          // MM
-        String curDay = Utils.INSTANCE.getDayFormat().format(curDate);              // dd
-        String _date = Utils.INSTANCE.getDateFormat().format(curDate);  // yyyy년 MM월 dd일
+        String curYear = Utils.INSTANCE.getYearFormat().format(curDate);    // yyyy
+        String curMonth = Utils.INSTANCE.getMonthFormat().format(curDate);  // MM
+        String curDay = Utils.INSTANCE.getDayFormat().format(curDate);      // dd
+        String _date = Utils.INSTANCE.getDateFormat().format(curDate);      // yyyy년 MM월 dd일
 
-        if(writeFragment != null && _date != null) {
-            writeFragment.setDateTextView(_date);
+        if (writeFragment != null) {
             try {
+                writeFragment.setDateTextView(_date);
                 writeFragment.setCurDate(Integer.parseInt(curYear), Integer.parseInt(curMonth), Integer.parseInt(curDay));
-            } catch(Exception e) { e.printStackTrace(); }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -365,99 +380,85 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
 
     @Override
     public void insertDB(Object[] objs) {
-        if(db != null) db.insert(NoteDatabase.NOTE_TABLE, objs);
+        if (db != null) db.insert(NoteDatabase.NOTE_TABLE, objs);
     }
 
     @Override
     public void insertDB2(Object[] objs) {
-        if(db != null) db.insert2(NoteDatabase.NOTE_TABLE, objs);
+        if (db != null) db.insert2(NoteDatabase.NOTE_TABLE, objs);
     }
 
     @Override
     public ArrayList<Note> selectAllDB() {
         ArrayList<Note> items = new ArrayList<>();
-
-        if(db != null) items = db.selectAll(NoteDatabase.NOTE_TABLE);
-
+        if (db != null) items = db.selectAll(NoteDatabase.NOTE_TABLE);
         return items;
     }
 
     @Override
     public ArrayList<Note> selectKeyword(String keyword) {
         ArrayList<Note> items = new ArrayList<>();
-
-        if(db != null) items = db.selectKeyword(NoteDatabase.NOTE_TABLE, keyword);
-
+        if (db != null) items = db.selectKeyword(NoteDatabase.NOTE_TABLE, keyword);
         return items;
     }
 
     @Override
     public ArrayList<Note> selectPart(int year, int month) {
         ArrayList<Note> items = new ArrayList<>();
-
-        if(db != null) items = db.selectPart(NoteDatabase.NOTE_TABLE, year, month);
-
-
+        if (db != null) items = db.selectPart(NoteDatabase.NOTE_TABLE, year, month);
         return items;
     }
 
     @Override
     public HashMap<Integer, Integer> selectMoodCount(boolean isAll, boolean isYear, boolean isMonth) {
         HashMap<Integer, Integer> hashMap = new HashMap<>();
-
-        if(db != null) hashMap = db.selectMoodCount(isAll, isYear, isMonth);
-
+        if (db != null) hashMap = db.selectMoodCount(isAll, isYear, isMonth);
         return hashMap;
     }
 
     @Override
     public HashMap<Integer, Integer> selectMoodCountWeek(int weekOfDay) {
         HashMap<Integer, Integer> hashMap = new HashMap<>();
-
-        if(db != null) hashMap = db.selectMoodCountWeek(weekOfDay);
-
+        if (db != null) hashMap = db.selectMoodCountWeek(weekOfDay);
         return hashMap;
     }
 
     @Override
     public int selectLastYear() {
-        if(db != null) return db.selectLastYear();
-
+        if (db != null) return db.selectLastYear();
         return 0;
     }
 
     @Override
     public int selectAllCount() {
-        if(db != null) return db.selectAllCount();
-
+        if (db != null) return db.selectAllCount();
         return 0;
     }
 
     @Override
     public int selectStarCount() {
-        if(db != null) return db.selectStarCount();
-
+        if (db != null) return db.selectStarCount();
         return 0;
     }
 
     @Override
     public void deleteDB(int id) {
-        if(db != null) db.delete(NoteDatabase.NOTE_TABLE, id);
+        if (db != null) db.delete(NoteDatabase.NOTE_TABLE, id);
     }
 
     @Override
     public void updateDB(Note item) {
-        if(db != null) db.update(NoteDatabase.NOTE_TABLE, item);
+        if (db != null) db.update(NoteDatabase.NOTE_TABLE, item);
     }
 
     @Override
     public void updateDB2(Note item) {
-        if(db != null) db.update2(NoteDatabase.NOTE_TABLE, item);
+        if (db != null) db.update2(NoteDatabase.NOTE_TABLE, item);
     }
 
     @Override
     public void onTabSelected(int position) {
-        switch(position) {
+        switch (position) {
             case 0:
                 bottomNavigationView.setSelectedItemId(R.id.tab1);
                 break;
@@ -479,58 +480,55 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     private Boolean setSelectedTabItem(int id, FragmentTransaction transaction) {
-        // WriteFragment 가 아닌경우 위치탐색종료(stopLocationService())
-        if(id != R.id.tab3) {
-            if(locationManager != null) stopLocationService();
+        // WriteFragment 가 아닌 경우 위치탐색 종료(= stopLocationService())
+        if (id != R.id.tab3) {
+            if (locationManager != null) stopLocationService();
         }
 
-        switch(id) {
+        switch (id) {
             case R.id.tab1:
                 selectedTabIndex = 0;
                 transaction.replace(R.id.container, listFragment);
                 transaction.commit();
-                return true;
 
+                return true;
             case R.id.tab2:
                 selectedTabIndex = 1;
                 calendarFragment = new CalendarFragment();
                 transaction.replace(R.id.container, calendarFragment);
                 transaction.commit();
-                return true;
 
+                return true;
             case R.id.tab3:
                 selectedTabIndex = 2;
-//                if (writeFragment == null) {
-//                    writeFragment = new WriteFragment();
-//                } else {
-//                    writeFragment = (WriteFragment) getSupportFragmentManager().findFragmentByTag("write_fragment");
-//                }
 
-                if(calDate != null) {                   // 기분달력으로부터 넘어온 경우
-                    writeFragment.setCalDate(calDate);  // 기분달력에서 가져온 Date 정보 전달
-                    calDate = null;                     // calDate 초기화
+                if (calDate != null) {                          // 기분달력으로부터 넘어온 경우
+                    writeFragment.setCalDate(calDate);          // 기분달력에서 가져온 Date 정보 전달
+                    calDate = null;                             // calDate 초기화
                 }
 
-                if(updateItem != null) {                // 일기수정시
-                    writeFragment.setUpdateItem(updateItem);  // updateItem 을 WriteFragment 로 전달
-                    updateItem = null;                  // updateItem 초기화
+                if (updateItem != null) {                       // 일기수정 시
+                    writeFragment.setUpdateItem(updateItem);    // updateItem 을 WriteFragment 로 전달
+                    updateItem = null;                          // updateItem 초기화
                 }
 
                 transaction.replace(R.id.container, writeFragment, "write_fragment");
                 transaction.commit();
-                return true;
 
+                return true;
             case R.id.tab4:
                 selectedTabIndex = 3;
                 transaction.replace(R.id.container, graphFragment);
                 transaction.commit();
-                return true;
 
+                return true;
             case R.id.tab5:
                 selectedTabIndex = 4;
                 transaction.replace(R.id.container, optionFragment);
                 transaction.commit();
+
                 return true;
         }
 
@@ -546,31 +544,32 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
      */
     @Override
     public void onRequest(String command) {
-        switch(command) {
+        switch (command) {
             case "getCurrentLocation":
                 getCurrentLocation(null);
                 break;
-
             case "checkGPS":
-                if(!Utils.INSTANCE.checkGPS(this)) {
+                if (!Utils.INSTANCE.checkGPS(this)) {
                     DialogUtils.INSTANCE.showGPSDialog(this, () -> {
                         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                         startActivity(intent);
+
                         return Unit.INSTANCE;
                     });
                 }
-                break;
 
+                break;
             case "showStopWriteDialog":
                 DialogUtils.INSTANCE.showStopWriteDialog(this, () -> {
                     if (writeFragment != null) writeFragment.deleteFilesCache(true);
                     writeFragment = new WriteFragment();
                     selectedTabIndex = 0;
                     bottomNavigationView.setSelectedItemId(R.id.tab1);
+
                     return Unit.INSTANCE;
                 });
-                break;
 
+                break;
             default:
                 Log.d(LOG, "onRequest() 예외발생..");
                 break;
@@ -579,7 +578,7 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
 
     @Override
     public void onRequest(String command, Date date) {
-        if(command.equals("getCurrentLocation")) getCurrentLocation(date);
+        if (command.equals("getCurrentLocation")) getCurrentLocation(date);
     }
 
     @Override
@@ -601,13 +600,13 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
      */
     @Override
     public void onResponse(int requestCode, int responseCode, String response) {
-        if(responseCode == Constants.VOLLEY_RESPONSE_OK) {
-            switch(requestCode) {
+        if (responseCode == Constants.VOLLEY_RESPONSE_OK) {
+            switch (requestCode) {
                 case Constants.REQUEST_WEATHER_BY_GRID: // 날씨 api
                     XmlParserCreator creator = () -> {
                         try {
                             return XmlPullParserFactory.newInstance().newPullParser();
-                        } catch(Exception e) {
+                        } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
                     };
@@ -623,32 +622,34 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
                         String curWeatherStr = item.getWfKor();
                         Log.e(LOG, "getWfKor(): " + curWeatherStr);
 
-                        if(writeFragment != null) writeFragment.setWeatherImageView(curWeatherStr);
-                    } catch(Exception e) { e.printStackTrace(); }
+                        if (writeFragment != null) writeFragment.setWeatherImageView(curWeatherStr);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-                    if(writeFragment != null) writeFragment.setSwipeRefresh(false);
+                    if (writeFragment != null) writeFragment.setSwipeRefresh(false);
 
                     break;
-
                 case Constants.REQUEST_REVERSE_GEOCODER:    // Naver reverse geocoding
                     Gson gson = new Gson();
-                    Log.d("TAG", response);
                     ReverseGeocoder data = gson.fromJson(response, ReverseGeocoder.class);
-                    if(!data.getResults().isEmpty()) {
+
+                    if (!data.getResults().isEmpty()) {
                         RGResults result = data.getResults().get(0);
                         String country = result.getRegion().getArea0().getName();  // 국가
                         String sido = result.getRegion().getArea1().getName(); // 시도
                         String gungu = result.getRegion().getArea2().getName();    // 시군구
-                        if(!gungu.isEmpty()) gungu += " ";
+                        if (!gungu.isEmpty()) gungu += " ";
                         String dong = result.getRegion().getArea3().getName(); // 읍면동
                         String lee = result.getRegion().getArea4().getName();  // 리
-                        if(!dong.isEmpty()) {
-                            if(!lee.isEmpty()) {
+
+                        if (!dong.isEmpty()) {
+                            if (!lee.isEmpty()) {
                                 dong += " ";
                             }
                         }
+
                         String address = gungu + dong;
-                        Log.d("TAG", address);
 
                         writeFragment.setLocationTextView(address);
                     }
@@ -668,20 +669,22 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
 
     @Override
     public void onBackPressed() {
-        if(bottomNavigationView.getSelectedItemId() == R.id.tab1) {
-            if(System.currentTimeMillis() > backPressTime + 2000) {
+        if (bottomNavigationView.getSelectedItemId() == R.id.tab1) {
+            if (System.currentTimeMillis() > backPressTime + 2000) {
                 backPressTime = System.currentTimeMillis();
                 Toast.makeText(this, "뒤로가기 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+
                 return;
             }
 
-            if(System.currentTimeMillis() <= backPressTime + 2000) super.onBackPressed();
-        } else if(bottomNavigationView.getSelectedItemId() == R.id.tab3) {
+            if (System.currentTimeMillis() <= backPressTime + 2000) super.onBackPressed();
+        } else if (bottomNavigationView.getSelectedItemId() == R.id.tab3) {
             DialogUtils.INSTANCE.showStopWriteDialog(this, () -> {
                 if (writeFragment != null) writeFragment.deleteFilesCache(true);
                 writeFragment = new WriteFragment();
                 selectedTabIndex = 0;
                 bottomNavigationView.setSelectedItemId(R.id.tab1);
+
                 return Unit.INSTANCE;
             });
         } else {
@@ -695,96 +698,97 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
      */
     public final ActivityResultLauncher<CropImageContractOptions> cropImageActivityResult = registerForActivityResult(
             new CropImageContract(), result -> {
-        // Crop activity 콜백
-        if(result.isSuccessful()) {
-            Log.d(LOG, "xxx cropImageActivityResult: Success");
-            Uri uriContent = result.getUriContent();
-            if(uriContent != null) {
-                String filePath = result.getUriFilePath(this, true);
-                if (writeFragment != null) writeFragment.addPhoto(filePath);
-            }
-        } else {
-            String errorMsg = Objects.requireNonNull(result.getError()).toString();
-            Log.d(LOG, "xxx cropImageActivityResult: Fail->" + errorMsg);
-        }
-    });
+                // Crop activity 콜백
+                if (result.isSuccessful()) {
+                    Log.d(LOG, "xxx cropImageActivityResult: Success");
+                    Uri uriContent = result.getUriContent();
+                    if (uriContent != null) {
+                        String filePath = result.getUriFilePath(this, true);
+                        if (writeFragment != null) writeFragment.addPhoto(filePath);
+                    }
+                } else {
+                    String errorMsg = Objects.requireNonNull(result.getError()).toString();
+                    Log.d(LOG, "xxx cropImageActivityResult: Fail->" + errorMsg);
+                }
+            });
 
     public final ActivityResultLauncher<Intent> cameraResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), result -> {
-        // 카메라 콜백
-        int resultCode = result.getResultCode();
+                // 카메라 콜백
+                int resultCode = result.getResultCode();
 
-        if (resultCode == RESULT_OK) {
-            Log.d(LOG, "xxx cameraResult: RESULT_OK");
-            if (writeFragment != null) {
-                CropImageContractOptions options = new CropImageContractOptions(writeFragment.getFileUri(), new CropImageOptions())
-                        .setGuidelines(CropImageView.Guidelines.ON);
-                cropImageActivityResult.launch(options);
-            }
-        } else {
-            Log.d(LOG, "xxx cameraResult: RESULT_NOT_OK");
-            if (writeFragment != null) {
-                Objects.requireNonNull(getContentResolver()).delete(writeFragment.getFileUri(), null, null);
-            }
-        }
-    });
+                if (resultCode == RESULT_OK) {
+                    Log.d(LOG, "xxx cameraResult: RESULT_OK");
+                    if (writeFragment != null) {
+                        CropImageContractOptions options = new CropImageContractOptions(writeFragment.getFileUri(), new CropImageOptions())
+                                .setGuidelines(CropImageView.Guidelines.ON);
+                        cropImageActivityResult.launch(options);
+                    }
+                } else {
+                    Log.d(LOG, "xxx cameraResult: RESULT_NOT_OK");
+                    if (writeFragment != null) {
+                        Objects.requireNonNull(getContentResolver()).delete(writeFragment.getFileUri(), null, null);
+                    }
+                }
+            });
 
     public final ActivityResultLauncher<Intent> albumResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), result -> {
-        // 앨범 콜백
-        int resultCode = result.getResultCode();
-        Intent data = result.getData();
+                // 앨범 콜백
+                int resultCode = result.getResultCode();
+                Intent data = result.getData();
 
-        if (resultCode == RESULT_OK) {
-            Log.d(LOG, "xxx albumResult: RESULT_OK");
-            Uri uri = Objects.requireNonNull(data).getData();
-            CropImageContractOptions options = new CropImageContractOptions(uri, new CropImageOptions())
-                    .setGuidelines(CropImageView.Guidelines.ON);
-            cropImageActivityResult.launch(options);
-        } else {
-            Log.d(LOG, "xxx albumResult: RESULT_NOT_OK");
-        }
-    });
+                if (resultCode == RESULT_OK) {
+                    Log.d(LOG, "xxx albumResult: RESULT_OK");
+                    Uri uri = Objects.requireNonNull(data).getData();
+                    CropImageContractOptions options = new CropImageContractOptions(uri, new CropImageOptions())
+                            .setGuidelines(CropImageView.Guidelines.ON);
+                    cropImageActivityResult.launch(options);
+                } else {
+                    Log.d(LOG, "xxx albumResult: RESULT_NOT_OK");
+                }
+            });
 
     public final ActivityResultLauncher<Intent> fontChangeResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), result -> {
-        int resultCode = result.getResultCode();
+                int resultCode = result.getResultCode();
 
-        if (resultCode == RESULT_OK) recreate();
-        else Log.d(LOG, "xxx fontChangeResult: RESULT_NOT_OK");
-    });
+                if (resultCode == RESULT_OK) recreate();
+                else Log.d(LOG, "xxx fontChangeResult: RESULT_NOT_OK");
+            });
 
     final ActivityResultLauncher<Intent> detailActivityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), result -> {
-        int resultCode = result.getResultCode();
-        Intent data = result.getData();
+                int resultCode = result.getResultCode();
+                Intent data = result.getData();
 
-        switch(resultCode) {
-            case Constants.DETAIL_ACTIVITY_RESULT_DELETE:
-                Log.d(LOG, "xxx detailActivityResult: 일기삭제됨");
-                int id = Objects.requireNonNull(data).getIntExtra("id", -1);
+                switch (resultCode) {
+                    case Constants.DETAIL_ACTIVITY_RESULT_DELETE:
+                        Log.d(LOG, "xxx detailActivityResult: 일기삭제됨");
+                        int id = Objects.requireNonNull(data).getIntExtra("id", -1);
 
-                if (id != -1) {
-                    deleteDB(id);
-                    if (selectedTabIndex == 0) if(listFragment != null) listFragment.update();
-                    else if (calendarFragment != null) onTabSelected(1);
+                        if (id != -1) {
+                            deleteDB(id);
+                            if (selectedTabIndex == 0)
+                                if (listFragment != null) listFragment.update();
+                                else if (calendarFragment != null) onTabSelected(1);
+                        }
+
+                        break;
+
+                    case Constants.DETAIL_ACTIVITY_RESULT_UPDATE:
+                        Log.d(LOG, "xxx detailActivityResult: 일기수정됨");
+                        Note item = (Note) (Objects.requireNonNull(data).getSerializableExtra("item"));
+                        if (item != null) showWriteFragment(item);
+                        else onTabSelected(2);
+
+                        break;
+
+                    default:
+                        Log.d(LOG, "xxx detailActivityResult: 예외 응답");
+                        break;
                 }
-
-                break;
-
-            case Constants.DETAIL_ACTIVITY_RESULT_UPDATE:
-                Log.d(LOG, "xxx detailActivityResult: 일기수정됨");
-                Note item = (Note)(Objects.requireNonNull(data).getSerializableExtra("item"));
-                if(item != null) showWriteFragment(item);
-                else onTabSelected(2);
-
-                break;
-
-            default:
-                Log.d(LOG, "xxx detailActivityResult: 예외 응답");
-                break;
-        }
-    });
+            });
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
@@ -804,10 +808,12 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
     }
 
     @Override
-    public void onDenied(int i, String[] strings) {}
+    public void onDenied(int i, String[] strings) {
+    }
 
     @Override
-    public void onGranted(int i, String[] strings) {}
+    public void onGranted(int i, String[] strings) {
+    }
 
     class GPSListener implements LocationListener {
 
@@ -820,11 +826,12 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         }
 
         @Override
-        public void onProviderEnabled(@NonNull String provider) {}
+        public void onProviderEnabled(@NonNull String provider) {
+        }
 
         @Override
-        public void onProviderDisabled(@NonNull String provider) {}
-
+        public void onProviderDisabled(@NonNull String provider) {
+        }
     }
 
     class LowVersionGPSListener implements LocationListener {
@@ -838,14 +845,15 @@ public class MainActivity extends BaseActivity implements OnTabItemSelectedListe
         }
 
         @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {}
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
 
         @Override
-        public void onProviderEnabled(@NonNull String provider) {}
+        public void onProviderEnabled(@NonNull String provider) {
+        }
 
         @Override
-        public void onProviderDisabled(@NonNull String provider) {}
-
+        public void onProviderDisabled(@NonNull String provider) {
+        }
     }
-
 }
