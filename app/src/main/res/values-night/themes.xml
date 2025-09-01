@@ -38,11 +38,12 @@
     <style name="TextAppearance.BottomNavigationView" />
 
     <style name="TextAppearance.BottomNavigationView.Inactive">
-        <item name="android:textSize">11dp</item>
+        <item name="android:textSize">12dp</item>
     </style>
 
     <style name="TextAppearance.BottomNavigationView.Active">
-        <item name="android:textSize">13dp</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <!-- 시스템서체 -->
