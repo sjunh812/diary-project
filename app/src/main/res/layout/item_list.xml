@@ -114,17 +114,17 @@
 
                 <ImageView
                     android:id="@+id/starImageView"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
                     android:layout_marginBottom="2dp"
                     app:srcCompat="@drawable/star" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="즐겨찾기"
-                    android:textColor="@color/yellow"
-                    android:textSize="10sp" />
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="즐겨찾기"-->
+<!--                    android:textColor="@color/yellow"-->
+<!--                    android:textSize="10sp" />-->
             </LinearLayout>
         </RelativeLayout>
 
@@ -170,7 +170,8 @@
         android:longClickable="true"
         android:orientation="vertical"
         android:padding="10dp"
-        android:visibility="visible">
+        android:visibility="gone"
+        tools:visibility="gone">
 
         <RelativeLayout
             android:layout_width="match_parent"
