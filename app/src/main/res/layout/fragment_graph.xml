@@ -87,7 +87,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:clipToPadding="false"
         android:orientation="vertical"
         android:paddingHorizontal="10dp"
@@ -492,7 +492,7 @@
                 <FrameLayout
                     android:id="@+id/background_graph"
                     android:layout_width="match_parent"
-                    android:layout_height="280dp"
+                    android:layout_height="300dp"
                     android:layout_marginTop="10dp"
                     android:paddingVertical="10dp">
 
