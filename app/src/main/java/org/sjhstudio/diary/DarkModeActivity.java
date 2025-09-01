@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import org.sjhstudio.diary.extensions.ViewExtensionKt;
 import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.utils.BaseActivity;
 import org.sjhstudio.diary.utils.Pref;
@@ -31,6 +32,7 @@ public class DarkModeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_darkmode);
+        ViewExtensionKt.enableSystemBarPadding(findViewById(R.id.root));
 
         // 현재 app 에 설정된 테마모드 인덱스를 SharedPreferences 를 이용해 가져옴
         curModeIndex = Pref.getPModeKey(this);

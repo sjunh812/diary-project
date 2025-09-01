@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.sjhstudio.diary.custom.CustomPasswordCautionDialog;
+import org.sjhstudio.diary.extensions.ViewExtensionKt;
 import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.utils.BaseActivity;
 import org.sjhstudio.diary.utils.Pref;
@@ -39,6 +40,8 @@ public class PasswordActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password);
+
+        ViewExtensionKt.enableSystemBarPadding(findViewById(R.id.root));
 
         init();
     }

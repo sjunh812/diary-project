@@ -33,6 +33,7 @@ import com.google.api.services.drive.model.File;
 
 import org.jetbrains.annotations.NotNull;
 import org.sjhstudio.diary.custom.CustomBackupDialog;
+import org.sjhstudio.diary.extensions.ViewExtensionKt;
 import org.sjhstudio.diary.googledrive.DriveServiceHelper;
 import org.sjhstudio.diary.utils.BaseActivity;
 import org.sjhstudio.diary.utils.DialogUtils;
@@ -75,6 +76,7 @@ public class BackupActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_backup);
+        ViewExtensionKt.enableSystemBarPadding(findViewById(R.id.root));
 
         if(!PermissionUtils.INSTANCE.checkGoogleDrivePermission(this)) {
             DialogUtils.INSTANCE.showGoogleDrivePermissionDialog(this, () -> {

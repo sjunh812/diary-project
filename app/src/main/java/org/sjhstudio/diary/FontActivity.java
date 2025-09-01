@@ -9,6 +9,7 @@ import android.widget.RadioGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
+import org.sjhstudio.diary.extensions.ViewExtensionKt;
 import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.utils.BaseActivity;
 import org.sjhstudio.diary.utils.Pref;
@@ -28,6 +29,8 @@ public class FontActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_font);
+
+        ViewExtensionKt.enableSystemBarPadding(findViewById(R.id.root));
 
         curFontIndex = Pref.getPFontKey(this);
         curFontSizeIndex = Pref.getPFontSize(this);

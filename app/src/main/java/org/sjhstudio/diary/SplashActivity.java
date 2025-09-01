@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import org.sjhstudio.diary.extensions.ViewExtensionKt;
 import org.sjhstudio.diary.utils.BaseActivity;
 import org.sjhstudio.diary.utils.Pref;
 
@@ -17,6 +18,8 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        ViewExtensionKt.enableSystemBarPadding(findViewById(R.id.root));
 
         new Handler().postDelayed(() -> {
             Intent intent;

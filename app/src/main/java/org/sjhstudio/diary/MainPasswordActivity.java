@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
+import org.sjhstudio.diary.extensions.ViewExtensionKt;
 import org.sjhstudio.diary.helper.MyTheme;
 import org.sjhstudio.diary.utils.BaseActivity;
 import org.sjhstudio.diary.utils.Pref;
@@ -40,6 +41,8 @@ public class MainPasswordActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_password);
+
+        ViewExtensionKt.enableSystemBarPadding(findViewById(R.id.root));
 
         password = Pref.getPPassword(this);
         init();

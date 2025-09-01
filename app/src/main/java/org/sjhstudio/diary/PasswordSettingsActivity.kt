@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import org.sjhstudio.diary.extensions.enableSystemBarPadding
 import org.sjhstudio.diary.utils.BaseActivity
 import org.sjhstudio.diary.utils.Pref
 
@@ -33,6 +35,9 @@ class PasswordSettingsActivity : BaseActivity(), CompoundButton.OnCheckedChangeL
         super.onCreate(savedInstanceState)
         pw = Pref.getPPassword(this)
         setContentView(R.layout.activity_password_settings)
+
+        findViewById<CoordinatorLayout>(R.id.root).enableSystemBarPadding()
+
         init()
     }
 

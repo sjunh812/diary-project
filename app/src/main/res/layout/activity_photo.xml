@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -38,45 +39,45 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right|bottom"
             android:layout_marginRight="30dp"
-            android:orientation="horizontal"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:layout_marginBottom="50dp"
-            android:background="@drawable/gray_ellipse">
+            android:background="@drawable/gray_ellipse"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingTop="3dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="3dp">
 
             <TextView
                 android:id="@+id/current_pos_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1"
-                android:textSize="13sp"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="13sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="/"
-                android:textSize="13sp"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="13sp" />
 
             <TextView
                 android:id="@+id/total_pos_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2"
-                android:textSize="13sp"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="13sp" />
 
         </LinearLayout>
 
-<!--        <com.github.chrisbanes.photoview.PhotoView-->
-<!--            android:id="@+id/photoView"-->
-<!--            android:layout_marginTop="100dp"-->
-<!--            android:layout_marginBottom="100dp"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent" />-->
+        <!--        <com.github.chrisbanes.photoview.PhotoView-->
+        <!--            android:id="@+id/photoView"-->
+        <!--            android:layout_marginTop="100dp"-->
+        <!--            android:layout_marginBottom="100dp"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent" />-->
 
     </FrameLayout>
 

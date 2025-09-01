@@ -15,6 +15,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import org.sjhstudio.diary.custom.CustomTimePickerDialog;
+import org.sjhstudio.diary.extensions.ViewExtensionKt;
 import org.sjhstudio.diary.helper.AlarmHelper;
 import org.sjhstudio.diary.utils.BaseActivity;
 import org.sjhstudio.diary.utils.Pref;
@@ -42,6 +43,8 @@ public class AlarmActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
+
+        ViewExtensionKt.enableSystemBarPadding(findViewById(R.id.root));
 
         alarmHelper = new AlarmHelper(this);
 

@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import org.sjhstudio.diary.adapters.PhotoDetailAdapter;
+import org.sjhstudio.diary.extensions.ViewExtensionKt;
 import org.sjhstudio.diary.utils.BaseActivity;
 
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ public class PhotoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
+
+        ViewExtensionKt.enableSystemBarPadding(findViewById(R.id.root));
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("사진보기");

@@ -29,6 +29,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.sjhstudio.diary.adapters.PhotoAdapter;
 import org.sjhstudio.diary.custom.CustomDeleteDialog;
+import org.sjhstudio.diary.extensions.ViewExtensionKt;
 import org.sjhstudio.diary.note.Note;
 import org.sjhstudio.diary.utils.BaseActivity;
 import org.sjhstudio.diary.utils.Constants;
@@ -68,6 +69,9 @@ public class DetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        ViewExtensionKt.enableSystemBarPadding(findViewById(R.id.root));
+
         init();
         processIntent();
     }

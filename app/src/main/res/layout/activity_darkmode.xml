@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -35,38 +36,38 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:background="@color/background_sub"
+                android:orientation="vertical"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp"
                 android:paddingTop="30dp"
-                android:paddingBottom="30dp"
-                android:orientation="vertical">
+                android:paddingRight="20dp"
+                android:paddingBottom="30dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:textSize="23sp"
-                    android:textStyle="bold"
                     android:text="눈이 편해지는\n다크 모드를 사용해보세요!"
-                    android:textColor="@color/font" />
+                    android:textColor="@color/font"
+                    android:textSize="23sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
                     android:text="시스템 설정을 선택하시면,\n휴대폰 내 설정에 따라 라이트, 다크 모드가 적용됩니다."
-                    android:textColor="@color/pastel_700" />
+                    android:textColor="@color/pastel_700"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background_sub"
-                android:padding="20dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
-                android:orientation="vertical">
+                android:background="@color/background_sub"
+                android:orientation="vertical"
+                android:padding="20dp">
 
                 <RadioGroup
                     android:id="@+id/modeGroup"
@@ -79,8 +80,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="15dp"
-                        android:textColor="@color/font"
                         android:text="  시스템 설정"
+                        android:textColor="@color/font"
                         android:textSize="18sp" />
 
                     <RadioButton
@@ -88,17 +89,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="15dp"
+                        android:text="  라이트 모드"
                         android:textColor="@color/font"
-                        android:textSize="18sp"
-                        android:text="  라이트 모드" />
+                        android:textSize="18sp" />
 
                     <RadioButton
                         android:id="@+id/darkModeButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:text="  다크 모드"
                         android:textColor="@color/font"
-                        android:textSize="18sp"
-                        android:text="  다크 모드" />
+                        android:textSize="18sp" />
 
                 </RadioGroup>
 
