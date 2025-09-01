@@ -16,3 +16,4 @@
 .cxx
 local.properties
 /app/src/main/java/org/sjhstudio/diary/utils/ApiKey.kt
+/app/release
