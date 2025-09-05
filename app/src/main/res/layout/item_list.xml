@@ -25,8 +25,8 @@
 
             <ImageView
                 android:id="@+id/moodImageView"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:padding="8dp"
@@ -86,7 +86,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:paddingStart="5dp"
+                        android:paddingStart="7dp"
                         android:text="AM 5:00"
                         android:textColor="@color/gray"
                         android:textSize="12sp" />
@@ -119,12 +119,12 @@
                     android:layout_marginBottom="2dp"
                     app:srcCompat="@drawable/star" />
 
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="즐겨찾기"-->
-<!--                    android:textColor="@color/yellow"-->
-<!--                    android:textSize="10sp" />-->
+                <!--                <TextView-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:text="즐겨찾기"-->
+                <!--                    android:textColor="@color/yellow"-->
+                <!--                    android:textSize="10sp" />-->
             </LinearLayout>
         </RelativeLayout>
 
@@ -133,7 +133,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="8dp"
             android:ellipsize="end"
@@ -192,6 +192,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_marginStart="2dp"
                 android:layout_marginEnd="5dp"
                 android:layout_toEndOf="@id/moodImageView2"
                 android:textColor="@color/font"
