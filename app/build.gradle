@@ -11,8 +11,8 @@ android {
         applicationId "org.sjhstudio.diary"
         minSdkVersion 24
         targetSdkVersion 35
-        versionCode 34
-        versionName "1.7.3"
+        versionCode 35
+        versionName "1.7.4"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
