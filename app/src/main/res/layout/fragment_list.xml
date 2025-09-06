@@ -129,6 +129,7 @@
             android:background="@color/background"
             android:clipToPadding="false"
             android:paddingHorizontal="16dp"
+            android:paddingTop="5dp"
             android:paddingBottom="100dp" />
     </FrameLayout>
 </LinearLayout>

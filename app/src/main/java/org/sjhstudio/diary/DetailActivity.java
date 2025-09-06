@@ -78,7 +78,7 @@ public class DetailActivity extends BaseActivity {
 
     private void init() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("일기상세");
+        toolbar.setTitle(R.string.diary_detail);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 

@@ -13,20 +13,17 @@
         android:longClickable="true"
         android:orientation="vertical"
         android:paddingHorizontal="12dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="13dp"
+        android:paddingVertical="12dp"
         android:visibility="visible">
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="3dp">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/moodImageView"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:padding="8dp"
@@ -60,6 +57,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
+                        android:layout_marginStart="2dp"
                         android:layout_marginEnd="10dp"
                         android:layout_toEndOf="@id/dateTextView"
                         android:textColor="@color/pastel_700"
@@ -86,10 +84,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:paddingStart="7dp"
-                        android:text="AM 5:00"
+                        android:layout_marginStart="5dp"
                         android:textColor="@color/gray"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        tools:text="AM 5:00" />
 
                     <ImageView
                         android:id="@+id/existPictureImageView"
@@ -132,12 +130,10 @@
             android:id="@+id/contentsTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="8dp"
+            android:layout_margin="8dp"
             android:ellipsize="end"
             android:lineSpacingExtra="1.5dp"
+            android:paddingBottom="3dp"
             android:textColor="@color/font_contents"
             android:textSize="14sp"
             tools:text="동해물과 백두산이 마르고 닳도록\n하느님이 보우하사 우리나라 만세" />
@@ -146,7 +142,6 @@
             android:id="@+id/rl_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
 
@@ -154,6 +149,7 @@
                 android:id="@+id/locationTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:ellipsize="marquee"
                 android:singleLine="true"

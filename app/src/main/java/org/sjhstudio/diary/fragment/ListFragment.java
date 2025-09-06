@@ -209,7 +209,7 @@ public class ListFragment extends Fragment {
             dialog.show();
             dialog.setOnSearchBtnClickListener(v2 -> {
                 if(dialog.getKeyword().trim().isEmpty()) {
-                    Snackbar.make(dialog.getWindow().getDecorView(), getString(R.string.enter_search_keyword), 700).show();
+                    Snackbar.make(dialog.getWindow().getDecorView(), getString(R.string.hint_search_keyword), 700).show();
                     return;
                 }
                 dialog.dismiss();
@@ -327,8 +327,8 @@ public class ListFragment extends Fragment {
         CustomDeleteDialog dialog = new CustomDeleteDialog(requireContext());
         dialog.show();
 
-        dialog.setTitleTextView(getString(R.string.delete_diary));
-        dialog.setDeleteTextView(getString(R.string.delete_diary_and_cant_restore));
+        dialog.setTitleTextView(getString(R.string.diary_delete));
+        dialog.setDeleteTextView(getString(R.string.alert_delete_diary_and_cant_restore));
         dialog.setDeleteButtonText(getString(R.string.delete));
         dialog.setCancelButton2Text(getString(R.string.cancel));
         dialog.setDeleteButtonOnClickListener(v -> {

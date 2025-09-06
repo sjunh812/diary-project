@@ -254,7 +254,7 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
         // Title
         titleTextView = rootView.findViewById(R.id.titleTextView);
         titleTextView.startAnimation(translateRightTitleAnim);
-        titleTextView.setText(R.string.write_diary);
+        titleTextView.setText(R.string.diary_write);
 
         // Date
         dateTextView = rootView.findViewById(R.id.dateTextView);
@@ -593,7 +593,7 @@ public class WriteFragment extends Fragment implements WriteFragmentListener {
     }
 
     private void syncWithUpdateItem(Boolean updatePhoto) {
-        titleTextView.setText(R.string.edit_diary);
+        titleTextView.setText(R.string.diary_edit);
 
         String date = updateItem.getCreateDateStr();
         String date2Str = updateItem.getCreateDateStr2();

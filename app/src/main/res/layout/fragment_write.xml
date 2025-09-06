@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:text="@string/write_diary"
+            android:text="@string/diary_write"
             android:textColor="@color/font"
             android:textSize="24sp"
             android:textStyle="bold" />

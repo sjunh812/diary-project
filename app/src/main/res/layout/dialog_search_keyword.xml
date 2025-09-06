@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:text="@string/search_diary"
+            android:text="@string/diary_search"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -28,7 +28,7 @@
         android:layout_marginTop="25dp"
         android:layout_marginBottom="2dp"
         android:gravity="center"
-        android:text="@string/enter_search_keyword"
+        android:text="@string/hint_search_keyword"
         android:textColor="@color/font"
         android:textSize="18sp" />
 
@@ -36,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/within_10_characters"
+        android:text="@string/hint_within_10_characters"
         android:textColor="@color/pastel_700"
         android:textSize="13sp" />
 
